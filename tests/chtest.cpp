@@ -22,7 +22,7 @@
 #define ITERATION 5
 #define INDENTSPACE 12
 
-#define INPUTSIZE 1000000
+#define INPUTSIZE 10000000
 #define RANDOM_MAX (INPUTSIZE*100)
 
 
@@ -165,7 +165,7 @@ void test(std::vector<int> &testNumbers)
 
     std::cout << std::setw(INDENTSPACE) << std::left;
     std::cout << "CGAL";
-    testGrahamScan(testPoints);
+    testCGAL(testPoints);
 
 
     std::cout << std::endl;
@@ -219,10 +219,6 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
     std::cout << (double) totalTime/1000;
 
 
-    std::cout << std::endl;
-
-
-
     bool error = false;
 
     typename std::list<Point2D>::iterator it2 = convexHull.end();
@@ -245,6 +241,8 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
     }
     assert(!error);
 
+
+    std::cout << std::endl;
 }
 
 
@@ -289,10 +287,6 @@ void testCGAL(std::vector<Point2D>& testPoints)
     std::cout << (double) totalTime/1000;
 
 
-    std::cout << std::endl;
-
-
-
     bool error = false;
 
     typename std::list<Point2D>::iterator it2 = convexHull.end();
@@ -314,6 +308,10 @@ void testCGAL(std::vector<Point2D>& testPoints)
         std::cout << "ERROR!";
     }
     assert(!error);
+
+
+
+    std::cout << std::endl;
 
 }
 
