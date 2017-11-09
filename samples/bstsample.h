@@ -6,9 +6,9 @@
 
 #include <vector>
 
-namespace BinarySearchTreeSamples {
+namespace BSTSample {
 
-    void sampleBST();
+    void execute();
 
 }
 

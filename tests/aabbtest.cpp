@@ -26,7 +26,7 @@
 #define QUERY_RANDOM_DIV 10
 #define AABBTREEONLY (INPUTSIZE > 20000)
 
-namespace SegmentTests {
+namespace AABBTest {
 
 /* ----- TYPEDEFS ----- */
 
@@ -47,8 +47,6 @@ typedef cg3::AABBValueType AABBValueType;
 
 void printHeader();
 
-
-//For brute force tests
 bool aabbOverlap(const Segment1D& segment1, const Segment1D& segment2);
 bool aabbOverlap(const Segment2D& segment1, const Segment2D& segment2);
 
@@ -66,6 +64,111 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
 void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& randomSegments);
 void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& randomSegment);
+
+
+/* ----- IMPLEMENTATION ----- */
+
+void testHardCases() {
+    //TODO
+}
+
+void testRandom() {
+
+    //Setup random generator
+    std::mt19937 rng;
+    rng.seed(std::random_device()());
+    std::uniform_int_distribution<std::mt19937::result_type>
+            distIn(-RANDOM_MAX,RANDOM_MAX);
+
+    std::vector<int> testNumbers;
+    std::vector<int> randomNumbers;
+
+    //Random test number generation
+    for (int i = 0; i < INPUTSIZE; i++) {
+        int randomValue = distIn(rng);
+        testNumbers.push_back(randomValue);
+    }
+
+    //Random number generation
+    for (int i = 0; i < INPUTSIZE; i++) {
+        int randomValue = distIn(rng);
+        randomNumbers.push_back(randomValue/QUERY_RANDOM_DIV);
+    }
+
+
+    std::cout << " ------ RANDOM ------ " << std::endl << std::endl;
+
+    test(testNumbers, randomNumbers);
+}
+
+
+void testMixed() {
+    //Setup random generator
+    std::mt19937 rng;
+    rng.seed(std::random_device()());
+    std::uniform_int_distribution<std::mt19937::result_type>
+            distIn(-RANDOM_MAX,RANDOM_MAX);
+
+    std::vector<int> testNumbers;
+    std::vector<int> randomNumbers;
+
+    //Progressive number generation
+    for (int i = 0; i < INPUTSIZE/4; i++) {
+        testNumbers.push_back(i);
+    }
+    //Random test number generation
+    for (int i = 0; i < INPUTSIZE/4; i++) {
+        int randomValue = distIn(rng);
+        testNumbers.push_back(randomValue);
+    }
+    //Progressive reversed number generation
+    for (int i = 0; i < INPUTSIZE/4; i++) {
+        testNumbers.push_back(INPUTSIZE-i);
+    }
+    //Random test number generation
+    for (int i = 0; i < INPUTSIZE/4; i++) {
+        int randomValue = distIn(rng);
+        testNumbers.push_back(randomValue);
+    }
+
+    //Random number generation
+    for (int i = 0; i < INPUTSIZE; i++) {
+        int randomValue = distIn(rng);
+        randomNumbers.push_back(randomValue/QUERY_RANDOM_DIV);
+    }
+
+    std::cout << std::endl << " ------ MIXED VALUES VECTOR ------ " << std::endl << std::endl;
+
+    test(testNumbers, randomNumbers);
+}
+
+
+void testProgressive() {
+    //Setup random generator
+    std::mt19937 rng;
+    rng.seed(std::random_device()());
+    std::uniform_int_distribution<std::mt19937::result_type>
+            distIn(-RANDOM_MAX,RANDOM_MAX);
+
+    std::vector<int> testNumbers;
+    std::vector<int> randomNumbers;
+
+    //Progressive reversed number generation
+    for (int i = 0; i < INPUTSIZE; i++) {
+        testNumbers.push_back(INPUTSIZE-i);
+    }
+
+    //Random number generation
+    for (int i = 0; i < INPUTSIZE; i++) {
+        int randomValue = distIn(rng);
+        randomNumbers.push_back(randomValue/QUERY_RANDOM_DIV);
+    }
+
+    std::cout << std::endl << " ------ REVERSE SORTED VECTOR ------ " << std::endl << std::endl;
+
+    test(testNumbers, randomNumbers);
+}
+
 
 
 /* ----- FUNCTION IMPLEMENTATION ----- */
@@ -217,106 +320,6 @@ void printHeader() {
          std::setw(INDENTSPACE) << std::left << "FOUND" <<
          std::setw(INDENTSPACE) << std::left << "TOTAL" <<
          std::endl << std::endl;
-}
-
-
-
-
-void testRandom() {
-
-    //Setup random generator
-    std::mt19937 rng;
-    rng.seed(std::random_device()());
-    std::uniform_int_distribution<std::mt19937::result_type>
-            distIn(-RANDOM_MAX,RANDOM_MAX);
-
-    std::vector<int> testNumbers;
-    std::vector<int> randomNumbers;
-
-    //Random test number generation
-    for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
-        testNumbers.push_back(randomValue);
-    }
-
-    //Random number generation
-    for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
-        randomNumbers.push_back(randomValue/QUERY_RANDOM_DIV);
-    }
-
-
-    std::cout << " ------ RANDOM ------ " << std::endl << std::endl;
-
-    test(testNumbers, randomNumbers);
-}
-
-
-void testMixed() {
-    //Setup random generator
-    std::mt19937 rng;
-    rng.seed(std::random_device()());
-    std::uniform_int_distribution<std::mt19937::result_type>
-            distIn(-RANDOM_MAX,RANDOM_MAX);
-
-    std::vector<int> testNumbers;
-    std::vector<int> randomNumbers;
-
-    //Progressive number generation
-    for (int i = 0; i < INPUTSIZE/4; i++) {
-        testNumbers.push_back(i);
-    }
-    //Random test number generation
-    for (int i = 0; i < INPUTSIZE/4; i++) {
-        int randomValue = distIn(rng);
-        testNumbers.push_back(randomValue);
-    }
-    //Progressive reversed number generation
-    for (int i = 0; i < INPUTSIZE/4; i++) {
-        testNumbers.push_back(INPUTSIZE-i);
-    }
-    //Random test number generation
-    for (int i = 0; i < INPUTSIZE/4; i++) {
-        int randomValue = distIn(rng);
-        testNumbers.push_back(randomValue);
-    }
-
-    //Random number generation
-    for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
-        randomNumbers.push_back(randomValue/QUERY_RANDOM_DIV);
-    }
-
-    std::cout << std::endl << " ------ MIXED VALUES VECTOR ------ " << std::endl << std::endl;
-
-    test(testNumbers, randomNumbers);
-}
-
-
-void testProgressive() {
-    //Setup random generator
-    std::mt19937 rng;
-    rng.seed(std::random_device()());
-    std::uniform_int_distribution<std::mt19937::result_type>
-            distIn(-RANDOM_MAX,RANDOM_MAX);
-
-    std::vector<int> testNumbers;
-    std::vector<int> randomNumbers;
-
-    //Progressive reversed number generation
-    for (int i = 0; i < INPUTSIZE; i++) {
-        testNumbers.push_back(INPUTSIZE-i);
-    }
-
-    //Random number generation
-    for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
-        randomNumbers.push_back(randomValue/QUERY_RANDOM_DIV);
-    }
-
-    std::cout << std::endl << " ------ REVERSE SORTED VECTOR ------ " << std::endl << std::endl;
-
-    test(testNumbers, randomNumbers);
 }
 
 

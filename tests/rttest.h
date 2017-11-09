@@ -4,8 +4,9 @@
 #ifndef RANGETREETEST_H
 #define RANGETREETEST_H
 
-namespace RangeTreeTests {
+namespace RTTests {
 
+    void testHardCases();
     void testRandom();
     void testProgressive();
     void testMixed();

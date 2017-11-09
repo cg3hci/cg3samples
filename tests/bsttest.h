@@ -6,10 +6,13 @@
 
 
 
-namespace BinarySearchTreeTests {
+namespace BSTTests {
+
+    void testHardCases();
     void testRandom();
     void testProgressive();
     void testMixed();
+
 }
 
 

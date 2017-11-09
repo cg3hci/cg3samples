@@ -1,15 +1,13 @@
 /**
     @author Stefano Nuvoli
 */
-#ifndef AABBTREETEST_H
-#define AABBTREETEST_H
+#ifndef AABBTEST_H
+#define AABBTEST_H
 
 
+namespace AABBTest {
 
-
-
-namespace SegmentTests {
-
+void testHardCases();
 void testRandom();
 void testProgressive();
 void testMixed();
@@ -17,4 +15,4 @@ void testMixed();
 }
 
 
-#endif // AABBTREETEST_H
+#endif // AABBTEST_H

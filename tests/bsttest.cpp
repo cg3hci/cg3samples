@@ -28,14 +28,13 @@
 
 
 
-namespace BinarySearchTreeTests {
+namespace BSTTests {
 
 
 /* ----- TYPEDEFS ----- */
 
 typedef std::chrono::high_resolution_clock high_resolution_clock;
 typedef high_resolution_clock::time_point time_point;
-
 
 template <class T> using BSTInner = typename cg3::BSTInner<T>;
 template <class T> using BSTLeaf = typename cg3::BSTLeaf<T>;
@@ -45,7 +44,6 @@ template <class T> using AVLLeaf = typename cg3::AVLLeaf<T>;
 
 
 /* ----- FUNCTION DECLARATION ----- */
-
 
 
 bool intComparator(const int& o1, const int& o2);
@@ -61,41 +59,28 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 template <class B>
 void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 
+template <class B>
+void testHardCases(B bst);
 
-/* ----- FUNCTION IMPLEMENTATION ----- */
 
+/* ----- IMPLEMENTATION ----- */
 
-bool intComparator(const int& o1, const int& o2) {
-    return o1 < o2;
+void testHardCases() {
+    testHardCases(BSTInner<int>());
+    testHardCases(BSTLeaf<int>());
+    testHardCases(AVLInner<int>());
+    testHardCases(AVLLeaf<int>());
 }
+template <class B>
+void testHardCases(B bst) {
+    //Empty BST
+    bst.getMin();
+    bst.getMax();
+    for (int n : bst)
+        ;
 
-void printHeader() {
-    std::cout <<
-         std::setw(INDENTSPACE) << std::left << "STRUCTURE" <<
-         std::setw(INDENTSPACE) << std::left << "CONSTR." <<
-         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
-         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
-         std::setw(INDENTSPACE) << std::left << "QUERY (C)" <<
-         std::setw(INDENTSPACE) << std::left << "FOUND" <<
-         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
-         std::setw(INDENTSPACE) << std::left << "CLEAR" <<
-         std::setw(INDENTSPACE) << std::left << "INSERT" <<
-         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
-         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
-         std::setw(INDENTSPACE) << std::left << "QUERY (D)" <<
-         std::setw(INDENTSPACE) << std::left << "FOUND" <<
-         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
-         std::setw(INDENTSPACE) << std::left << "ERASE" <<
-         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
-         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
-         std::setw(INDENTSPACE) << std::left << "QUERY (E)" <<
-         std::setw(INDENTSPACE) << std::left << "FOUND" <<
-         std::setw(INDENTSPACE) << std::left << "ERASE (IT)" <<
-         std::setw(INDENTSPACE) << std::left << "TOTAL" <<
-         std::endl << std::endl;
+    //TODO
 }
-
-
 
 void testRandom() {
 
@@ -196,6 +181,39 @@ void testProgressive() {
 
 
 
+
+/* ----- FUNCTION IMPLEMENTATION ----- */
+
+
+bool intComparator(const int& o1, const int& o2) {
+    return o1 < o2;
+}
+
+void printHeader() {
+    std::cout <<
+         std::setw(INDENTSPACE) << std::left << "STRUCTURE" <<
+         std::setw(INDENTSPACE) << std::left << "CONSTR." <<
+         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
+         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
+         std::setw(INDENTSPACE) << std::left << "QUERY (C)" <<
+         std::setw(INDENTSPACE) << std::left << "FOUND" <<
+         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
+         std::setw(INDENTSPACE) << std::left << "CLEAR" <<
+         std::setw(INDENTSPACE) << std::left << "INSERT" <<
+         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
+         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
+         std::setw(INDENTSPACE) << std::left << "QUERY (D)" <<
+         std::setw(INDENTSPACE) << std::left << "FOUND" <<
+         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
+         std::setw(INDENTSPACE) << std::left << "ERASE" <<
+         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
+         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
+         std::setw(INDENTSPACE) << std::left << "QUERY (E)" <<
+         std::setw(INDENTSPACE) << std::left << "FOUND" <<
+         std::setw(INDENTSPACE) << std::left << "ERASE (IT)" <<
+         std::setw(INDENTSPACE) << std::left << "TOTAL" <<
+         std::endl << std::endl;
+}
 
 void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 {

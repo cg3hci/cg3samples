@@ -23,12 +23,12 @@
 #define ITERATION 1
 #define INDENTSPACE 12
 
-#define INPUTSIZE 5000
+#define INPUTSIZE 10000
 #define RANDOM_MAX (INPUTSIZE*10)
 #define QUERY_RANDOM_DIV 10
 #define NOBRUTE (INPUTSIZE > 20000)
 
-namespace RangeTreeTests {
+namespace RTTests {
 
 
 /* ----- TYPEDEFS ----- */
@@ -79,77 +79,11 @@ void testRangeTree2D(std::vector<Point2D>& testNumbers, std::vector<Point2D>& ra
 
 
 
-/* ----- FUNCTION IMPLEMENTATION ----- */
+/* ----- IMPLEMENTATION ----- */
 
-
-bool intDimensionComparator(
-        const int& o1,
-        const int& o2,
-        const unsigned int dim)
-{
-    switch (dim) {
-    case 1:
-        return o1 < o2;
-    default:
-        assert(false);
-        return false;
-    }
+void testHardCases() {
+    //TODO
 }
-
-bool point2DDimensionComparator(
-        const Point2D &o1,
-        const Point2D &o2,
-        const unsigned int dim)
-{
-    switch (dim) {
-    case 1:
-        return o1.x() < o2.x();
-    case 2:
-        return o1.y() < o2.y();
-    default:
-        assert(false);
-        return false;
-    }
-}
-
-bool point2DComparator(const Point2D& o1, const Point2D& o2) {
-    if (o1.x() < o2.x())
-        return true;
-    if (o2.x() < o1.x())
-        return false;
-    return o1.y() < o2.y();
-}
-
-
-void printHeader() {
-    std::cout <<
-         std::setw(INDENTSPACE) << std::left << "STRUCTURE" <<
-         std::setw(INDENTSPACE) << std::left << "CONSTR." <<
-         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
-         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
-         std::setw(INDENTSPACE) << std::left << "QUERY (C)" <<
-         std::setw(INDENTSPACE) << std::left << "FOUND" <<
-         std::setw(INDENTSPACE) << std::left << "RQUERY (C)" <<
-         std::setw(INDENTSPACE) << std::left << "FOUND" <<
-         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
-         std::setw(INDENTSPACE) << std::left << "CLEAR" <<
-         std::setw(INDENTSPACE) << std::left << "INSERT" <<
-         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
-         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
-         std::setw(INDENTSPACE) << std::left << "RQUERY (D)" <<
-         std::setw(INDENTSPACE) << std::left << "FOUND" <<
-         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
-         std::setw(INDENTSPACE) << std::left << "ERASE" <<
-         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
-         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
-         std::setw(INDENTSPACE) << std::left << "RQUERY (E)" <<
-         std::setw(INDENTSPACE) << std::left << "FOUND" <<
-         std::setw(INDENTSPACE) << std::left << "TOTAL" <<
-         std::endl << std::endl;
-}
-
-
-
 
 void testRandom() {
 
@@ -249,6 +183,74 @@ void testProgressive() {
 }
 
 
+
+/* ----- FUNCTION IMPLEMENTATION ----- */
+
+bool intDimensionComparator(
+        const int& o1,
+        const int& o2,
+        const unsigned int dim)
+{
+    switch (dim) {
+    case 1:
+        return o1 < o2;
+    default:
+        assert(false);
+        return false;
+    }
+}
+
+bool point2DDimensionComparator(
+        const Point2D &o1,
+        const Point2D &o2,
+        const unsigned int dim)
+{
+    switch (dim) {
+    case 1:
+        return o1.x() < o2.x();
+    case 2:
+        return o1.y() < o2.y();
+    default:
+        assert(false);
+        return false;
+    }
+}
+
+bool point2DComparator(const Point2D& o1, const Point2D& o2) {
+    if (o1.x() < o2.x())
+        return true;
+    if (o2.x() < o1.x())
+        return false;
+    return o1.y() < o2.y();
+}
+
+
+void printHeader() {
+    std::cout <<
+         std::setw(INDENTSPACE) << std::left << "STRUCTURE" <<
+         std::setw(INDENTSPACE) << std::left << "CONSTR." <<
+         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
+         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
+         std::setw(INDENTSPACE) << std::left << "QUERY (C)" <<
+         std::setw(INDENTSPACE) << std::left << "FOUND" <<
+         std::setw(INDENTSPACE) << std::left << "RQUERY (C)" <<
+         std::setw(INDENTSPACE) << std::left << "FOUND" <<
+         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
+         std::setw(INDENTSPACE) << std::left << "CLEAR" <<
+         std::setw(INDENTSPACE) << std::left << "INSERT" <<
+         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
+         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
+         std::setw(INDENTSPACE) << std::left << "RQUERY (D)" <<
+         std::setw(INDENTSPACE) << std::left << "FOUND" <<
+         std::setw(INDENTSPACE) << std::left << "ITERATION" <<
+         std::setw(INDENTSPACE) << std::left << "ERASE" <<
+         std::setw(INDENTSPACE) << std::left << "(NUM)" <<
+         std::setw(INDENTSPACE) << std::left << "(HEIGHT)" <<
+         std::setw(INDENTSPACE) << std::left << "RQUERY (E)" <<
+         std::setw(INDENTSPACE) << std::left << "FOUND" <<
+         std::setw(INDENTSPACE) << std::left << "TOTAL" <<
+         std::endl << std::endl;
+}
 
 
 void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
@@ -585,8 +587,8 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     size_t foundRangeInsert = 0;
     for (size_t i = 0; i < randomNumbers.size()-1; i += 2) {
-        int num1 = randomNumbers.at(i);
-        int num2 = randomNumbers.at(i+1);
+        int& num1 = randomNumbers.at(i);
+        int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
             std::vector<int> out;
@@ -697,8 +699,8 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     size_t foundRangeErase = 0;
     for (size_t i = 0; i < randomNumbers.size()-1; i += 2) {
-        int num1 = randomNumbers.at(i);
-        int num2 = randomNumbers.at(i+1);
+        int& num1 = randomNumbers.at(i);
+        int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
             std::vector<int> out;
@@ -858,8 +860,8 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     for (size_t i = 0; i < randomNumbers.size()-1; i += 2) {
         std::vector<Iterator> out;
 
-        int num1 = randomNumbers.at(i);
-        int num2 = randomNumbers.at(i+1);
+        int& num1 = randomNumbers.at(i);
+        int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
             tree.rangeQuery(num1, num2, out);
@@ -973,8 +975,8 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     for (size_t i = 0; i < randomNumbers.size()-1; i += 2) {
         std::vector<Iterator> out;
 
-        int num1 = randomNumbers.at(i);
-        int num2 = randomNumbers.at(i+1);
+        int& num1 = randomNumbers.at(i);
+        int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
             tree.rangeQuery(num1, num2, out);
@@ -1076,8 +1078,8 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     for (size_t i = 0; i < randomNumbers.size()-1; i += 2) {
         std::vector<Iterator> out;
 
-        int num1 = randomNumbers.at(i);
-        int num2 = randomNumbers.at(i+1);
+        int& num1 = randomNumbers.at(i);
+        int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
             tree.rangeQuery(num1, num2, out);
@@ -1232,8 +1234,8 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     for (size_t i = 0; i < randomNumbers.size()-1; i += 2) {
         std::vector<Iterator> out;
 
-        int num1 = randomNumbers.at(i);
-        int num2 = randomNumbers.at(i+1);
+        int& num1 = randomNumbers.at(i);
+        int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
             tree.rangeQuery(num1, num2, out);
@@ -1347,8 +1349,8 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     for (size_t i = 0; i < randomNumbers.size()-1; i += 2) {
         std::vector<Iterator> out;
 
-        int num1 = randomNumbers.at(i);
-        int num2 = randomNumbers.at(i+1);
+        int& num1 = randomNumbers.at(i);
+        int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
             tree.rangeQuery(num1, num2, out);

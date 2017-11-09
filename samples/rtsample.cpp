@@ -13,57 +13,29 @@
 
 typedef cg3::Point2D<int> Point2D;
 
-/*
- * Comparator for different dimensions. Each range tree layer
- * will use a different dimension value to place the values in
- * tree
- */
-bool Point2DDimensionComparator(
+
+bool point2DDimensionComparator(
         const Point2D& o1,
         const Point2D& o2,
-        const unsigned int dim)
-{
-    switch (dim) {
-    case 1:
-        return o1.x() < o2.x();
-    case 2:
-        return o1.y() < o2.y();
-    default:
-        assert(false);
-    }
-}
+        const unsigned int dim);
 
-/*
- * Default comparator for a 2D object. It is required if
- * no operator < has been defined on Point2D class. It is
- * used to determine whether an object is a duplicated
- * (if the equality test with the dimension comparator has
- * returned true).
- */
-bool point2DCustomComparator(const Point2D& o1, const Point2D& o2) {
-    if (o1.x() < o2.x())
-        return true;
-    if (o2.x() < o1.x())
-        return false;
-    return o1.y() < o2.y();
-}
+bool point2DCustomComparator(const Point2D& o1, const Point2D& o2);
 
-void RangeTreesSamples::sampleRT()
+void RTSample::execute()
 {
     //Defining an alias for range tree
     //The second argument type must have the copy constructor
     typedef cg3::RangeTree<Point2D, std::string> RangeTree;
 
-    //Defining an alias for range tree
-    //The second argument type must have the copy constructor
-    typedef cg3::RangeTree<Point2D*, std::string*> RangeTreeWithPointers;
 
+
+    /* ----- BASIC USAGE ----- */
 
     //Creating 2-dimensional-range-tree (for Point2D)
     std::cout << "Creating range trees with comparators..." << std::endl;
     RangeTree rangeTree(2, //Dimension of the range tree
-                                              &Point2DDimensionComparator, //Dimension comparator
-                                              &point2DCustomComparator); //Default comparator (< is the default)
+                        &point2DDimensionComparator, //Dimension comparator
+                        &point2DCustomComparator); //Default comparator (< is the default)
 
     //Insert objects: [12,15.9], [2,10.1], [45,65.0], [100,52.25], [3,25.0]
     std::cout << "Inserting objects: [12,15.9], [2,10.1], [45,65.0], [100,52.25], [3,25.0]" << std::endl;
@@ -79,15 +51,6 @@ void RangeTreesSamples::sampleRT()
         std::cout << objectString << " ";
     std::cout << std::endl;
 
-    //Get min and max (through iterators). Dimension 1 comparator
-    //(and if there is equality, the general comparator) determines
-    //the min and max
-    RangeTree::Iterator minIterator = rangeTree.getMin();
-    std::string& minObjectString = *minIterator;
-    std::cout << "Minimum node is: " << minObjectString << std::endl;
-
-    std::cout << "Maximum node is: " << *(rangeTree.getMax()) << std::endl;
-
     //Find object [2,10.1]
     RangeTree::Iterator queryIterator = rangeTree.find(Point2D(2,10.1));
     if (queryIterator != rangeTree.end())
@@ -99,6 +62,15 @@ void RangeTreesSamples::sampleRT()
     std::cout << "Erasing object [2,10.1]..." << std::endl;
     rangeTree.erase(Point2D(2,10.1));
 
+    //Range query for the interval [3 - 99, 15.99 - 65.0]
+    std::cout << "Range query for the interval [3 - 99, 15.99 - 65.0]:" << std::endl << "    ";
+    std::vector<RangeTree::Iterator> rangeQueryResults;
+    rangeTree.rangeQuery(Point2D(3,15.99), Point2D(99,65.0), rangeQueryResults);
+    for (RangeTree::Iterator it : rangeQueryResults) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
     //Iteration with explicit iterators
     std::cout << "The range tree contains:" << std::endl << "    ";
     for (RangeTree::Iterator it = rangeTree.begin(); it != rangeTree.end(); it++) {
@@ -106,15 +78,22 @@ void RangeTreesSamples::sampleRT()
     }
     std::cout << std::endl;
 
-    //Range query for the interval [3 - 99, 15.99 - 65.0]
-    std::cout << "Range query for the interval [3 - 99, 15.99 - 65.0]:" << std::endl << "    ";
-    std::vector<RangeTree::Iterator> rangeQueryResults;
-    rangeTree.rangeQuery(Point2D(3,15.99), Point2D(99,65.0), rangeQueryResults);
-    for (RangeTree::Iterator& it : rangeQueryResults) {
-        std::cout << *it << " ";
-    }
+
     std::cout << std::endl;
 
+
+    /* ----- OTHER FUNCTION ----- */
+
+    //Get min and max (through iterators)
+    RangeTree::Iterator minIterator = rangeTree.getMin();
+    if (minIterator != rangeTree.end()) {
+        std::string& minPointString = *minIterator;
+        std::cout << "Minimum node is: " << minPointString << std::endl;
+    }
+    RangeTree::Iterator maxIterator = rangeTree.getMax();
+    if (maxIterator != rangeTree.end()) {
+        std::cout << "Maximum node is: " << *maxIterator << std::endl;
+    }
 
 
     //Size
@@ -123,8 +102,6 @@ void RangeTreesSamples::sampleRT()
     //Clear
     std::cout << "Clear range tree..." << std::endl;
     rangeTree.clear();
-
-
 
     std::cout << std::endl;
 
@@ -140,11 +117,16 @@ void RangeTreesSamples::sampleRT()
     //dimensions of the range tree.
     std::cout << "Creating range trees with pointers to save space!..." << std::endl;
 
+
+    //Defining an alias for range tree
+    //The second argument type must have the copy constructor
+    typedef cg3::RangeTree<Point2D*, std::string*> RangeTreeWithPointers;
+
     //We can use lambda expression for comparators.
     RangeTreeWithPointers rangeTreeWithPointers(
         2,
         [] (Point2D* const& o1, Point2D* const& o2, unsigned int dim) {
-            return Point2DDimensionComparator(*o1, *o2, dim);
+            return point2DDimensionComparator(*o1, *o2, dim);
         },
         [] (Point2D* const& o1, Point2D* const& o2) {
             return point2DCustomComparator(*o1, *o2);
@@ -210,4 +192,42 @@ void RangeTreesSamples::sampleRT()
     delete s3;
     delete s4;
 
+}
+
+
+
+/*
+ * Comparator for different dimensions. Each range tree layer
+ * will use a different dimension value to place the values in
+ * tree
+ */
+bool point2DDimensionComparator(
+        const Point2D& o1,
+        const Point2D& o2,
+        const unsigned int dim)
+{
+    switch (dim) {
+    case 1:
+        return o1.x() < o2.x();
+    case 2:
+        return o1.y() < o2.y();
+    default:
+        assert(false);
+        return false;
+    }
+}
+
+/*
+ * Default comparator for a 2D object. It is required if
+ * no operator < has been defined on Point2D class. It is
+ * used to determine whether an object is a duplicated
+ * (if the equality test with the dimension comparator has
+ * returned true).
+ */
+bool point2DCustomComparator(const Point2D& o1, const Point2D& o2) {
+    if (o1.x() < o2.x())
+        return true;
+    if (o2.x() < o1.x())
+        return false;
+    return o1.y() < o2.y();
 }

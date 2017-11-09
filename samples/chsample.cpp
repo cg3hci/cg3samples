@@ -16,7 +16,7 @@
 
 typedef cg3::Point2D<int> Point2D;
 
-void ConvexHullSamples::sampleConvexHull()
+void CHSamples::execute()
 {
 
     //Insert input points
@@ -46,7 +46,7 @@ void ConvexHullSamples::sampleConvexHull()
 
 
 
-    /**** GRAHAM SCAN *****/
+    /* ----- GRAHAM SCAN ----- */
 
     std::cout << std::endl << std::endl;
 
@@ -99,7 +99,7 @@ void ConvexHullSamples::sampleConvexHull()
 
 
 
-    /**** ITERATIVE CONVEX HULL *****/
+    /* ----- ITERATIVE CONVEX HULL ----- */
 
     std::cout << std::endl << std::endl;
 

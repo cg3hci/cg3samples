@@ -4,9 +4,9 @@
 #ifndef RANGESAMPLE_H
 #define RANGESAMPLE_H
 
-namespace RangeTreesSamples {
+namespace RTSample {
 
-    void sampleRT();
+    void execute();
 
 }
 

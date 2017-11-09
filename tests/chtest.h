@@ -5,10 +5,13 @@
 #define CONVEXHULLTEST_H
 
 
-namespace ConvexHullTests {
+namespace CHTests {
+
+    void testHardCases();
     void testRandom();
     void testProgressive();
     void testMixed();
+
 }
 
 

@@ -48,9 +48,10 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    BinarySearchTreeTests::testRandom();
-    BinarySearchTreeTests::testMixed();
-    BinarySearchTreeTests::testProgressive();
+    BSTTests::testHardCases();
+    BSTTests::testRandom();
+    BSTTests::testMixed();
+    BSTTests::testProgressive();
 
     std::cout << std::endl << std::endl;
 #endif
@@ -62,9 +63,10 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    RangeTreeTests::testRandom();
-    RangeTreeTests::testMixed();
-    RangeTreeTests::testProgressive();
+    RTTests::testHardCases();
+    RTTests::testRandom();
+    RTTests::testMixed();
+    RTTests::testProgressive();
 
     std::cout << std::endl << std::endl;
 #endif
@@ -77,9 +79,10 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    SegmentTests::testRandom();
-    SegmentTests::testMixed();
-    SegmentTests::testProgressive();
+    AABBTest::testHardCases();
+    AABBTest::testRandom();
+    AABBTest::testMixed();
+    AABBTest::testProgressive();
 
     std::cout << std::endl << std::endl;
 #endif
@@ -91,34 +94,35 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    ConvexHullTests::testRandom();
-    ConvexHullTests::testMixed();
-    ConvexHullTests::testProgressive();
+    CHTests::testHardCases();
+    CHTests::testRandom();
+    CHTests::testMixed();
+    CHTests::testProgressive();
 
     std::cout << std::endl << std::endl;
 #endif
 
 #ifdef BSTSAMPLE
     std::cout << "------ Binary search tree sample ------" << std::endl << std::endl;
-    BinarySearchTreeSamples::sampleBST();
+    BSTSample::execute();
     std::cout <<  std::endl << std::endl;
 #endif
 
 #ifdef RTSAMPLE
     std::cout << "------ Range tree sample ------" << std::endl << std::endl;
-    RangeTreesSamples::sampleRT();
+    RTSample::execute();
     std::cout <<  std::endl << std::endl;
 #endif
 
 #ifdef AABBSAMPLE
     std::cout << "------ AABBTree sample ------" << std::endl << std::endl;
-    AABBTreeSamples::sampleAABBTree();
+    AABBSample::execute();
     std::cout <<  std::endl << std::endl;
 #endif
 
 #ifdef CHSAMPLE
     std::cout << "------ Convex hull sample ------" << std::endl << std::endl;
-    ConvexHullSamples::sampleConvexHull();
+    CHSamples::execute();
     std::cout <<  std::endl << std::endl;
 #endif
 

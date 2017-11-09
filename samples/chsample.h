@@ -4,9 +4,9 @@
 #ifndef CONVEXHULLSAMPLE_H
 #define CONVEXHULLSAMPLE_H
 
-namespace ConvexHullSamples {
+namespace CHSamples {
 
-    void sampleConvexHull();
+    void execute();
 
 }
 

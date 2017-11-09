@@ -22,12 +22,12 @@
 #define ITERATION 5
 #define INDENTSPACE 12
 
-#define INPUTSIZE 10000000
+#define INPUTSIZE 1000000
 #define RANDOM_MAX (INPUTSIZE*100)
 
 
 
-namespace ConvexHullTests {
+namespace CHTests {
 
 
 /* ----- TYPEDEFS ----- */
@@ -52,19 +52,88 @@ void testGrahamScan(std::vector<Point2D>& testPoints);
 void testCGAL(std::vector<Point2D>& testPoints);
 
 
-/* ----- FUNCTION IMPLEMENTATION ----- */
+/* ----- IMPLEMENTATION ----- */
 
-void printHeader() {
-    std::cout <<
-         std::setw(INDENTSPACE) << std::left << "METHOD" <<
-         std::setw(INDENTSPACE) << std::left << "INPUTSIZE" <<
-         std::setw(INDENTSPACE) << std::left << "ALGORITHM" <<
-         std::setw(INDENTSPACE) << std::left << "CHSIZE" <<
-         std::setw(INDENTSPACE) << std::left << "TOTAL" <<
-         std::endl << std::endl;
+void testHardCases() {
+    std::vector<Point2D> points;
+    std::list<Point2D> convexHull;
+
+    //No data
+    cg3::getConvexHull2D(points, convexHull);
+    assert(convexHull.size() == 0);
+
+
+    //3 equal points
+    points.clear();
+    convexHull.clear();
+    points.push_back(Point2D(0,0));
+    points.push_back(Point2D(0,0));
+
+    cg3::getConvexHull2D(points, convexHull);
+
+    assert(convexHull.size() == 1);
+
+
+    //3 equal points
+    points.clear();
+    convexHull.clear();
+    points.push_back(Point2D(3,5));
+    points.push_back(Point2D(3,5));
+    points.push_back(Point2D(3,5));
+
+    cg3::getConvexHull2D(points, convexHull);
+
+    assert(convexHull.size() == 1);
+
+    //3 equal points
+    points.clear();
+    convexHull.clear();
+    points.push_back(Point2D(3,5));
+    points.push_back(Point2D(3,5));
+    points.push_back(Point2D(3,5));
+    points.push_back(Point2D(3,5));
+    points.push_back(Point2D(3,5));
+
+    cg3::getConvexHull2D(points, convexHull);
+
+    assert(convexHull.size() == 1);
+
+
+    //2 equal points
+    points.clear();
+    convexHull.clear();
+    points.push_back(Point2D(3,5));
+    points.push_back(Point2D(0,5));
+    points.push_back(Point2D(3,5));
+
+    cg3::getConvexHull2D(points, convexHull);
+
+    assert(convexHull.size() == 2);
+
+
+    //3 collinear points
+    points.clear();
+    convexHull.clear();
+    points.push_back(Point2D(0,1));
+    points.push_back(Point2D(0,5));
+    points.push_back(Point2D(0,10));
+
+    cg3::getConvexHull2D(points, convexHull);
+
+    assert(convexHull.size() == 2);
+
+
+    //Three not collinear points
+    points.clear();
+    convexHull.clear();
+    points.push_back(Point2D(0,1));
+    points.push_back(Point2D(0,5));
+    points.push_back(Point2D(1,1));
+
+    cg3::getConvexHull2D(points, convexHull);
+
+    assert(convexHull.size() == 3);
 }
-
-
 
 void testRandom() {
 
@@ -148,6 +217,18 @@ void testProgressive() {
     }
 }
 
+
+/* ----- FUNCTION DECLARATION ----- */
+
+void printHeader() {
+    std::cout <<
+         std::setw(INDENTSPACE) << std::left << "METHOD" <<
+         std::setw(INDENTSPACE) << std::left << "INPUTSIZE" <<
+         std::setw(INDENTSPACE) << std::left << "ALGORITHM" <<
+         std::setw(INDENTSPACE) << std::left << "CHSIZE" <<
+         std::setw(INDENTSPACE) << std::left << "TOTAL" <<
+         std::endl << std::endl;
+}
 
 
 void test(std::vector<int> &testNumbers)
@@ -239,7 +320,7 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
         std::cout << std::setw(INDENTSPACE) << std::left;
         std::cout << "ERROR!";
     }
-    assert(!error);
+//    assert(!error);
 
 
     std::cout << std::endl;

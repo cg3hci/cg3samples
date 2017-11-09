@@ -1,14 +1,14 @@
 /**
     @author Stefano Nuvoli
 */
-#ifndef SEGMENTSAMPLE_H
-#define SEGMENTSAMPLE_H
+#ifndef AABBSAMPLE_H
+#define AABBSAMPLE_H
 
-namespace AABBTreeSamples {
+namespace AABBSample {
 
-    void sampleAABBTree();
+    void execute();
 
 }
 
 
-#endif // SEGMENTTEST_H
+#endif //AABBSAMPLE_H
