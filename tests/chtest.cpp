@@ -45,7 +45,7 @@ typedef cg3::Point2Dd Point2D;
 void printHeader();
 
 
-void test(std::vector<int>& testNumbers);
+void doTestsOnInput(std::vector<int>& testNumbers);
 
 
 void testGrahamScan(std::vector<Point2D>& testPoints);
@@ -54,7 +54,7 @@ void testCGAL(std::vector<Point2D>& testPoints);
 
 /* ----- IMPLEMENTATION ----- */
 
-void testHardCases() {
+void testCorrectness() {
     std::vector<Point2D> points;
     std::list<Point2D> convexHull;
 
@@ -157,7 +157,7 @@ void testRandom() {
             testNumbers.push_back(randomValue);
         }
 
-        test(testNumbers);
+        doTestsOnInput(testNumbers);
     }
 }
 
@@ -195,7 +195,7 @@ void testMixed() {
             testNumbers.push_back(randomValue);
         }
 
-        test(testNumbers);
+        doTestsOnInput(testNumbers);
     }
 }
 
@@ -213,7 +213,7 @@ void testProgressive() {
             testNumbers.push_back(INPUTSIZE-i);
         }
 
-        test(testNumbers);
+        doTestsOnInput(testNumbers);
     }
 }
 
@@ -231,7 +231,7 @@ void printHeader() {
 }
 
 
-void test(std::vector<int> &testNumbers)
+void doTestsOnInput(std::vector<int> &testNumbers)
 {    
     std::vector<Point2D> testPoints;
 

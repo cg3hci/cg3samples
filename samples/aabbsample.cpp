@@ -57,7 +57,7 @@ void AABBSample::execute()
 
 
     //Find object ([2,4], [3,1])
-    AABBTree::Iterator queryIterator = aabbTree.find(Segment2D(Point2D(2,4),Point2D(3,1)));
+    AABBTree::iterator queryIterator = aabbTree.find(Segment2D(Point2D(2,4),Point2D(3,1)));
     if (queryIterator != aabbTree.end())
         std::cout << "Object ([2,4], [3,1]) is in the AABB tree!" << std::endl;
     else
@@ -69,7 +69,7 @@ void AABBSample::execute()
 
     //Iteration with explicit iterators
     std::cout << "The AABB tree contains:" << std::endl << "    ";
-    for (AABBTree::Iterator it = aabbTree.begin(); it != aabbTree.end(); it++) {
+    for (AABBTree::iterator it = aabbTree.begin(); it != aabbTree.end(); it++) {
         std::cout << *it << " | ";
     }
     std::cout << std::endl;
@@ -92,9 +92,9 @@ void AABBSample::execute()
     std::cout << std::endl;
 
     std::cout << "Results:" << "\t";
-    std::vector<AABBTree::Iterator> aabbQueryResults;
+    std::vector<AABBTree::iterator> aabbQueryResults;
     aabbTree.aabbOverlapQuery(Segment2D(Point2D(0,3),Point2D(8,10)), aabbQueryResults);
-    for (AABBTree::Iterator& it : aabbQueryResults) {
+    for (AABBTree::iterator& it : aabbQueryResults) {
         std::cout << *it << " | ";
     }
     std::cout << std::endl;
@@ -111,9 +111,9 @@ void AABBSample::execute()
     std::cout << std::endl;
 
     std::cout << "Results:" << "\t";
-    std::vector<AABBTree::Iterator> intersectionQueryResults;
+    std::vector<AABBTree::iterator> intersectionQueryResults;
     aabbTree.aabbOverlapQuery(Segment2D(Point2D(0,3),Point2D(8,10)), intersectionQueryResults, &segment2DIntersectionChecker);
-    for (AABBTree::Iterator& it : intersectionQueryResults) {
+    for (AABBTree::iterator& it : intersectionQueryResults) {
         std::cout << *it << " | ";
     }
     std::cout << std::endl;
@@ -131,9 +131,9 @@ void AABBSample::execute()
     std::cout << std::endl;
 
     std::cout << "Results:" << "\t";
-    std::vector<AABBTree::Iterator> intersectionQueryResults2;
+    std::vector<AABBTree::iterator> intersectionQueryResults2;
     aabbTree.aabbOverlapQuery(Segment2D(Point2D(20,30),Point2D(80,10)), intersectionQueryResults2, &segment2DIntersectionChecker);
-    for (AABBTree::Iterator& it : intersectionQueryResults2) {
+    for (AABBTree::iterator& it : intersectionQueryResults2) {
         std::cout << *it << " | ";
     }
     std::cout << std::endl;
@@ -145,12 +145,12 @@ void AABBSample::execute()
     /* ----- OTHER FUNCTIONS ----- */
 
     //Get min and max (through iterators)
-    AABBTree::Iterator minIterator = aabbTree.getMin();
+    AABBTree::iterator minIterator = aabbTree.getMin();
     if (minIterator != aabbTree.end()) {
         std::string& minObjectString = *minIterator;
         std::cout << "Minimum node is: " << minObjectString << std::endl;
     }
-    AABBTree::Iterator maxIterator = aabbTree.getMax();
+    AABBTree::iterator maxIterator = aabbTree.getMax();
     if (maxIterator != aabbTree.end()) {
         std::cout << "Maximum node is: " << *maxIterator << std::endl;
     }

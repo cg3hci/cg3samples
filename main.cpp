@@ -48,7 +48,7 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    BSTTests::testHardCases();
+    BSTTests::testCorrectness();
     BSTTests::testRandom();
     BSTTests::testMixed();
     BSTTests::testProgressive();
@@ -63,7 +63,7 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    RTTests::testHardCases();
+    RTTests::testCorrectness();
     RTTests::testRandom();
     RTTests::testMixed();
     RTTests::testProgressive();
@@ -79,7 +79,7 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    AABBTest::testHardCases();
+    AABBTest::testCorrectness();
     AABBTest::testRandom();
     AABBTest::testMixed();
     AABBTest::testProgressive();
@@ -94,7 +94,7 @@ int main()
                  "##########################################################################" <<
                  std::endl << std::endl;
 
-    CHTests::testHardCases();
+    CHTests::testCorrectness();
     CHTests::testRandom();
     CHTests::testMixed();
     CHTests::testProgressive();

@@ -14,19 +14,20 @@
 
 #include "cg3/geometry/2d/point2d.h"
 
-#include "cg3/data_structures/trees/bst/bstleaf.h"
-#include "cg3/data_structures/trees/bst/avlleaf.h"
-#include "cg3/data_structures/trees/bst/bstinner.h"
-#include "cg3/data_structures/trees/bst/avlinner.h"
+#include "cg3/data_structures/trees/bstinner.h"
+#include "cg3/data_structures/trees/avlinner.h"
+#include "cg3/data_structures/trees/bstleaf.h"
+#include "cg3/data_structures/trees/avlleaf.h"
+
 #include "cg3/data_structures/trees/rangetree.h"
 
 #define ITERATION 1
 #define INDENTSPACE 12
 
 #define INPUTSIZE 10000
-#define RANDOM_MAX (INPUTSIZE*10)
+#define RANDOM_MAX (INPUTSIZE*100)
 #define QUERY_RANDOM_DIV 10
-#define NOBRUTE (INPUTSIZE > 20000)
+#define ONLYEFFICIENT (INPUTSIZE > 20000)
 
 namespace RTTests {
 
@@ -51,23 +52,23 @@ typedef cg3::Point2D<int> Point2D;
 /* ----- FUNCTION DECLARATION ----- */
 
 
-bool intDimensionComparator(
+bool intComparator(
         const int& o1,
-        const int& o2,
-        const unsigned int dim);
+        const int& o2);
 
-bool point2DDimensionComparator(
+bool point2DDimensionComparatorX(
         const Point2D &o1,
-        const Point2D &o2,
-        const unsigned int dim);
+        const Point2D &o2);
 
-bool point2DComparator(
-        const Point2D& o1,
-        const Point2D& o2);
+bool point2DDimensionComparatorY(
+        const Point2D &o1,
+        const Point2D &o2);
+
+bool point2DComparator(const Point2D& o1, const Point2D& o2);
 
 void printHeader();
 
-void test(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
+void doTestsOnInput(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 
 void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 template <class B>
@@ -81,7 +82,7 @@ void testRangeTree2D(std::vector<Point2D>& testNumbers, std::vector<Point2D>& ra
 
 /* ----- IMPLEMENTATION ----- */
 
-void testHardCases() {
+void testCorrectness() {
     //TODO
 }
 
@@ -111,7 +112,7 @@ void testRandom() {
 
     std::cout << " ------ RANDOM ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -152,7 +153,7 @@ void testMixed() {
 
     std::cout << std::endl << " ------ MIXED VALUES VECTOR ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -179,41 +180,40 @@ void testProgressive() {
 
     std::cout << std::endl << " ------ REVERSE SORTED VECTOR ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
 
 /* ----- FUNCTION IMPLEMENTATION ----- */
 
-bool intDimensionComparator(
+bool intComparator(
         const int& o1,
-        const int& o2,
-        const unsigned int dim)
+        const int& o2)
 {
-    switch (dim) {
-    case 1:
-        return o1 < o2;
-    default:
-        assert(false);
-        return false;
-    }
+    return o1 < o2;
 }
 
-bool point2DDimensionComparator(
+bool point2DDimensionComparatorX(
         const Point2D &o1,
-        const Point2D &o2,
-        const unsigned int dim)
+        const Point2D &o2)
 {
-    switch (dim) {
-    case 1:
-        return o1.x() < o2.x();
-    case 2:
-        return o1.y() < o2.y();
-    default:
-        assert(false);
+    if (o1.x() < o2.x())
+        return true;
+    if (o2.x() < o1.x())
         return false;
-    }
+    return point2DComparator(o1,o2);
+}
+
+bool point2DDimensionComparatorY(
+        const Point2D &o1,
+        const Point2D &o2)
+{
+    if (o1.y() < o2.y())
+        return true;
+    if (o2.y() < o1.y())
+        return false;
+    return point2DComparator(o1,o2);
 }
 
 bool point2DComparator(const Point2D& o1, const Point2D& o2) {
@@ -253,7 +253,7 @@ void printHeader() {
 }
 
 
-void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
+void doTestsOnInput(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 {
     std::vector<Point2D> testPoints;
     std::vector<Point2D> randomPoints;
@@ -269,7 +269,7 @@ void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 
     printHeader();
 
-    if (!NOBRUTE) {
+    if (!ONLYEFFICIENT) {
         for (int t = 0; t < ITERATION; t++) {
             std::cout << std::setw(INDENTSPACE) << std::left;
             std::cout << "BRUTE1D";
@@ -301,24 +301,26 @@ void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
     }
 
 
+    if (!ONLYEFFICIENT) {
+        for (int t = 0; t < ITERATION; t++) {
+            std::cout << std::setw(INDENTSPACE) << std::left;
+            std::cout << "BST (I) 1D";
+            testBST<BSTInner<int>>(testNumbers, randomNumbers);
+        }
+        if (ITERATION > 1) {
+            std::cout << std::endl;
+        }
 
-    for (int t = 0; t < ITERATION; t++) {
-        std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << "BST (I) 1D";
-        testBST<BSTInner<int>>(testNumbers, randomNumbers);
-    }
-    if (ITERATION > 1) {
-        std::cout << std::endl;
-    }
 
 
-    for (int t = 0; t < ITERATION; t++) {
-        std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << "BST (L) 1D";
-        testBST<BSTLeaf<int>>(testNumbers, randomNumbers);
-    }
-    if (ITERATION > 1) {
-        std::cout << std::endl;
+        for (int t = 0; t < ITERATION; t++) {
+            std::cout << std::setw(INDENTSPACE) << std::left;
+            std::cout << "BST (L) 1D";
+            testBST<BSTLeaf<int>>(testNumbers, randomNumbers);
+        }
+        if (ITERATION > 1) {
+            std::cout << std::endl;
+        }
     }
 
 
@@ -334,7 +336,7 @@ void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 
     std::cout << std::endl;
 
-    if (!NOBRUTE) {
+    if (!ONLYEFFICIENT) {
         for (int t = 0; t < ITERATION; t++) {
             std::cout << std::setw(INDENTSPACE) << std::left;
             std::cout << "BRUTE2D";
@@ -768,7 +770,7 @@ template <class B>
 void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     B tree;
 
-    typedef typename B::Iterator Iterator;
+    typedef typename B::iterator Iterator;
 
 
 
@@ -1141,9 +1143,12 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
 
 void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
-    RangeTree<int> tree(1, &intDimensionComparator);
+    std::vector<RangeTree<int>::LessComparator> customComparators;
+    customComparators.push_back(&intComparator);
 
-    typedef RangeTree<int>::Iterator Iterator;
+    RangeTree<int> tree(1, customComparators);
+
+    typedef RangeTree<int>::iterator Iterator;
 
 
 
@@ -1919,11 +1924,13 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
 
 void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomPoints) {
+    std::vector<RangeTree<Point2D>::LessComparator> customComparators;
+    customComparators.push_back(&point2DDimensionComparatorX);
+    customComparators.push_back(&point2DDimensionComparatorY);
 
+    RangeTree<Point2D> tree(2, customComparators);
 
-    RangeTree<Point2D> tree(2, &point2DDimensionComparator, &point2DComparator);
-
-    typedef RangeTree<Point2D>::Iterator Iterator;
+    typedef RangeTree<Point2D>::iterator Iterator;
 
 
 

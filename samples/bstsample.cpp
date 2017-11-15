@@ -64,7 +64,7 @@ void BSTSample::execute()
     std::cout << std::endl;
 
     //Find number 2
-    BSTInt::Iterator queryIterator = bst.find(2);
+    BSTInt::iterator queryIterator = bst.find(2);
     if (queryIterator != bst.end())
         std::cout << "Number 2 is in the binary search tree!" << std::endl;
     else
@@ -82,7 +82,7 @@ void BSTSample::execute()
 
     //Iteration with explicit iterators
     std::cout << "The BST contains:" << std::endl << "    ";
-    for (BSTInt::Iterator it = bst.begin(); it != bst.end(); it++) {
+    for (BSTInt::iterator it = bst.begin(); it != bst.end(); it++) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
@@ -95,34 +95,34 @@ void BSTSample::execute()
     /* ----- OTHER FUNCTION ----- */
 
     //Get min and max (through iterators)
-    BSTInt::Iterator minIterator = bst.getMin();
+    BSTInt::iterator minIterator = bst.getMin();
     if (minIterator != bst.end()) {
         int& minInt = *minIterator;
         std::cout << "Minimum node is: " << minInt << std::endl;
     }
-    BSTInt::Iterator maxIterator = bst.getMax();
+    BSTInt::iterator maxIterator = bst.getMax();
     if (maxIterator != bst.end()) {
         std::cout << "Maximum node is: " << *maxIterator << std::endl;
     }
 
     //Range query in the interval 8 - 45
     std::cout << "Range query in the interval 8 - 45:" << std::endl << "    ";
-    std::vector<BSTInt::Iterator> rangeQueryResults;
+    std::vector<BSTInt::iterator> rangeQueryResults;
     bst.rangeQuery(8, 45, rangeQueryResults);
-    for (BSTInt::Iterator& it : rangeQueryResults) {
+    for (BSTInt::iterator& it : rangeQueryResults) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
 
     //Erase the next of 52 (erase with iterators)
     std::cout << "Erasing the next of 52..." << std::endl;
-    BSTInt::Iterator it52 = bst.find(52);
+    BSTInt::iterator it52 = bst.find(52);
     it52++;
     bst.erase(it52);
 
     //Erase values less than 30 (erase with iterators)
     std::cout << "Erasing numbers less than 30..." << std::endl;
-    for (BSTInt::Iterator it = bst.begin(); it != bst.end();) {
+    for (BSTInt::iterator it = bst.begin(); it != bst.end();) {
         if (*it < 30)
             bst.erase(it++); //When an iterator is erased, iterator is not automatically incremented!
         else
@@ -178,6 +178,11 @@ void BSTSample::execute()
     for (std::string& number : bst2)
         std::cout << number << " ";
     std::cout << std::endl;
+
+
+
+
+    //TODO CONST ITERATION AND REVERSE ITERATOR
 
     std::cout << std::endl;
 }

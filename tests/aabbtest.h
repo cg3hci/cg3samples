@@ -7,7 +7,7 @@
 
 namespace AABBTest {
 
-void testHardCases();
+void testCorrectness();
 void testRandom();
 void testProgressive();
 void testMixed();

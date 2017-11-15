@@ -24,7 +24,7 @@
 #define RANDOM_MAX (INPUTSIZE*100)
 #define MAXLENGTH RANDOM_MAX/100
 #define QUERY_RANDOM_DIV 10
-#define AABBTREEONLY (INPUTSIZE > 20000)
+#define ONLYEFFICIENT (INPUTSIZE > 10000)
 
 namespace AABBTest {
 
@@ -47,6 +47,7 @@ typedef cg3::AABBValueType AABBValueType;
 
 void printHeader();
 
+
 bool aabbOverlap(const Segment1D& segment1, const Segment1D& segment2);
 bool aabbOverlap(const Segment2D& segment1, const Segment2D& segment2);
 
@@ -57,7 +58,7 @@ bool segmentIntersection(const Segment1D& segment1, const Segment1D& segment2);
 bool segmentIntersection(const Segment2D& segment1, const Segment2D& segment2);
 
 
-void test(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
+void doTestsOnInput(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 
 void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& randomSegments);
 void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& randomSegments);
@@ -68,7 +69,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
 /* ----- IMPLEMENTATION ----- */
 
-void testHardCases() {
+void testCorrectness() {
     //TODO
 }
 
@@ -98,7 +99,7 @@ void testRandom() {
 
     std::cout << " ------ RANDOM ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -139,7 +140,7 @@ void testMixed() {
 
     std::cout << std::endl << " ------ MIXED VALUES VECTOR ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -166,7 +167,7 @@ void testProgressive() {
 
     std::cout << std::endl << " ------ REVERSE SORTED VECTOR ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -326,7 +327,7 @@ void printHeader() {
 
 
 
-void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
+void doTestsOnInput(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 {
     std::vector<Segment1D> testSegment1D;
     std::vector<Segment1D> randomSegment1D;
@@ -394,7 +395,7 @@ void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 
     printHeader();
 
-    if (!AABBTREEONLY) {
+    if (!ONLYEFFICIENT) {
         for (int t = 0; t < ITERATION; t++) {            
             std::cout << std::setw(INDENTSPACE) << std::left;
             std::cout << "BRUTE1D";
@@ -417,7 +418,7 @@ void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 
     std::cout << std::endl;
 
-    if (!AABBTREEONLY) {
+    if (!ONLYEFFICIENT) {
         for (int t = 0; t < ITERATION; t++) {            
             std::cout << std::setw(INDENTSPACE) << std::left;
             std::cout << "BRUTE2D";
@@ -859,7 +860,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& randomSegments) {
     AABBTree<1, Segment1D>* tree = new AABBTree<1, Segment1D>(&aabbValueExtractor);
 
-    typedef AABBTree<1,Segment1D>::Iterator Iterator;
+    typedef AABBTree<1,Segment1D>::iterator Iterator;
 
 
 
@@ -1682,7 +1683,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     AABBTree<2, Segment2D>* tree = new AABBTree<2, Segment2D>(&aabbValueExtractor);
 
-    typedef AABBTree<2,Segment2D>::Iterator Iterator;
+    typedef AABBTree<2,Segment2D>::iterator Iterator;
 
 
 

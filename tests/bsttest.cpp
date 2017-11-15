@@ -12,17 +12,17 @@
 #include <set>
 #include <vector>
 
-#include "cg3/data_structures/trees/bst/bstinner.h"
-#include "cg3/data_structures/trees/bst/bstleaf.h"
-#include "cg3/data_structures/trees/bst/avlinner.h"
-#include "cg3/data_structures/trees/bst/avlleaf.h"
+#include "cg3/data_structures/trees/bstinner.h"
+#include "cg3/data_structures/trees/avlinner.h"
+#include "cg3/data_structures/trees/bstleaf.h"
+#include "cg3/data_structures/trees/avlleaf.h"
 
 #define ITERATION 1
 #define INDENTSPACE 12
 
-#define INPUTSIZE 10000
-#define RANDOM_MAX (INPUTSIZE*10)
-#define ONLYAUTOBALANCING (INPUTSIZE > 200000)
+#define INPUTSIZE 20000
+#define RANDOM_MAX (INPUTSIZE)
+#define ONLYEFFICIENT (INPUTSIZE > 50000)
 
 
 
@@ -51,35 +51,189 @@ bool intComparator(const int& o1, const int& o2);
 void printHeader();
 
 
-void test(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 
+template <class B>
+void testCorrectness();
+
+
+
+
+void doTestsOnInput(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 
 void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 
 template <class B>
 void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
 
-template <class B>
-void testHardCases(B bst);
 
 
 /* ----- IMPLEMENTATION ----- */
 
-void testHardCases() {
-    testHardCases(BSTInner<int>());
-    testHardCases(BSTLeaf<int>());
-    testHardCases(AVLInner<int>());
-    testHardCases(AVLLeaf<int>());
+void testCorrectness() {
+    testCorrectness<BSTInner<int>>();
+    testCorrectness<BSTLeaf<int>>();
+    testCorrectness<AVLInner<int>>();
+    testCorrectness<AVLLeaf<int>>();
 }
 template <class B>
-void testHardCases(B bst) {
-    //Empty BST
-    bst.getMin();
-    bst.getMax();
-    for (int n : bst)
-        ;
+void testCorrectness() {
+    B bst1;
+    B bst2;
 
-    //TODO
+    typename B::iterator minIt = bst1.end();
+    typename B::iterator maxIt = bst1.end();
+    typename B::reverse_iterator minRIt = bst1.rend();
+    typename B::reverse_iterator maxRIt = bst1.rend();
+
+    //Empty BST
+    minIt = bst1.getMin();
+    assert(minIt == bst1.end());
+    maxIt = bst1.getMax();
+    assert(maxIt == bst1.end());
+    assert(bst1.end()-1 == bst1.end());
+
+    minIt = bst1.begin();
+    assert(minIt == bst1.end());
+    maxIt = bst1.end()-1;
+    assert(maxIt == bst1.end());
+    assert(bst1.end()-1 == bst1.end());
+
+
+    //Inserting data
+    typename B::insert_iterator outIt = bst1.inserter();
+    *outIt = 3;
+    outIt++;
+    *outIt = 1;
+    outIt++;
+
+    bst1.insert(2);
+
+
+    std::vector<int> vec;
+    vec.push_back(9);
+    vec.push_back(7);
+    vec.push_back(5);
+
+    //Insert iterator correctness
+    std::copy(vec.begin(), vec.end(), bst2.inserter());
+    std::copy(bst1.begin()+2, bst1.end(), bst2.inserter());
+    assert(*bst2.begin() == 3);
+    assert(*(bst2.end()-1) == 9);
+    assert(*(++bst2.begin()) == 5);
+
+    for (typename B::reverse_iterator it = bst2.rbegin(); it != bst2.rend(); it++) {
+        *it = 3;
+    }
+    for (typename B::const_iterator it = bst2.cbegin(); it != bst2.cend(); it++) {
+        assert(*it == 3);
+    }
+    for (typename B::iterator it = bst2.begin(); it != bst2.end(); it++) {
+        *it = 4;
+    }
+    for (typename B::const_reverse_iterator it = bst2.crbegin(); it != bst2.crend(); it++) {
+        assert(*it == 4);
+    }
+    bst2.clear();
+    for (typename B::iterator it = bst2.begin(); it != bst2.end(); it++) {
+        assert(false);
+    }
+    for (typename B::const_iterator it = bst2.cbegin(); it != bst2.cend(); it++) {
+        assert(false);
+    }
+    for (typename B::reverse_iterator it = bst2.rbegin(); it != bst2.rend(); it++) {
+        assert(false);
+    }
+    for (typename B::const_reverse_iterator it = bst2.crbegin(); it != bst2.crend(); it++) {
+        assert(false);
+    }
+
+
+    //Iterator correctness
+    minIt = bst1.begin();
+    assert(*minIt == 1);
+
+    minIt++;
+    assert(*minIt == 2);
+
+    maxIt = bst1.end()-1;
+    assert(*maxIt == 3);
+    assert(*(maxIt-1) == 2);
+
+    maxIt--;
+    assert(*maxIt == 2);
+
+    maxIt = bst1.end()-1;
+    assert(*maxIt == 3);
+    assert(*(maxIt-1) == 2);
+
+    assert(*(bst1.end()-1) == 3);
+    assert(*(bst1.end()-2) == 2);
+    assert(*(bst1.end()-3) == 1);
+    assert((bst1.end()-4) == bst1.end());
+
+
+    //Reverse iterator correctness
+    minRIt = bst1.rbegin();
+    assert(*minRIt == 3);
+
+    minRIt++;
+    assert(*minRIt == 2);
+
+    maxRIt = bst1.rend()-1;
+    assert(*maxRIt == 1);
+    assert(*(maxRIt-1) == 2);
+
+    maxRIt--;
+    assert(*maxRIt == 2);
+
+    maxRIt = bst1.rend()-1;
+    assert(*maxRIt == 1);
+    assert(*(maxRIt-1) == 2);
+
+    assert(*(bst1.rend()-1) == 1);
+    assert(*(bst1.rend()-2) == 2);
+    assert(*(bst1.rend()-3) == 3);
+    assert((bst1.rend()-4) == bst1.rend());
+
+    minRIt = bst1.rbegin();
+    bst1.erase(minRIt);
+    minRIt = bst1.rbegin();
+    assert(*minRIt == 2);
+
+    typename B::iterator findResult = bst1.find(2);
+    try {
+        bst2.erase(findResult);
+        assert(false);
+    }
+    catch (...) {
+
+    }
+
+    try {
+        bst1.erase(findResult);
+    }
+    catch (...) {
+        assert(false);
+    }
+
+    minRIt = bst1.rbegin();
+    assert(*minRIt == 1);
+
+    bst1.erase(1);
+
+
+    //Empty BST
+    minIt = bst1.getMin();
+    assert(minIt == bst1.end());
+    maxIt = bst1.getMax();
+    assert(maxIt == bst1.end());
+    assert(bst1.end()-1 == bst1.end());
+
+    minIt = bst1.begin();
+    assert(minIt == bst1.end());
+    maxIt = bst1.end()-1;
+    assert(maxIt == bst1.end());
+    assert(bst1.end()-1 == bst1.end());
 }
 
 void testRandom() {
@@ -108,7 +262,7 @@ void testRandom() {
 
     std::cout << " ------ RANDOM ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -149,7 +303,7 @@ void testMixed() {
 
     std::cout << std::endl << " ------ MIXED VALUES VECTOR ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -176,7 +330,7 @@ void testProgressive() {
 
     std::cout << std::endl << " ------ REVERSE SORTED VECTOR ------ " << std::endl << std::endl;
 
-    test(testNumbers, randomNumbers);
+    doTestsOnInput(testNumbers, randomNumbers);
 }
 
 
@@ -215,7 +369,7 @@ void printHeader() {
          std::endl << std::endl;
 }
 
-void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
+void doTestsOnInput(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
 {
     printHeader();
 
@@ -251,7 +405,7 @@ void test(std::vector<int> &testNumbers, std::vector<int> &randomNumbers)
         std::cout << std::endl;
     }
 
-    if (!ONLYAUTOBALANCING) {
+    if (!ONLYEFFICIENT) {
 
         for (int t = 0; t < ITERATION; t++) {
             std::cout << std::setw(INDENTSPACE) << std::left;
@@ -621,7 +775,7 @@ template <class B>
 void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     B tree(&intComparator);
 
-    typedef typename B::Iterator Iterator;
+    typedef typename B::iterator iterator;
 
 
 
@@ -666,7 +820,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     size_t foundConstruction = 0;
 
     for (const int& number : testNumbers) {
-        Iterator it = tree.find(number);
+        iterator it = tree.find(number);
         bool found = (it != tree.end());
 
         if (found)
@@ -676,7 +830,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     }
 
     for (const int& number : randomNumbers) {
-        Iterator it = tree.find(number);
+        iterator it = tree.find(number);
         if (it != tree.end()) {
             foundConstruction++;
             assert(*it == number);
@@ -776,7 +930,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     size_t foundInsert = 0;
 
     for (const int& number : testNumbers) {
-        Iterator it = tree.find(number);
+        iterator it = tree.find(number);
         bool found = (it != tree.end());
 
         if (found)
@@ -786,7 +940,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     }
 
     for (const int& number : randomNumbers) {
-        Iterator it = tree.find(number);
+        iterator it = tree.find(number);
         if (it != tree.end()) {
             foundInsert++;
             assert(*it == number);
@@ -878,7 +1032,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     size_t foundErase = 0;
 
     for (const int& number : randomNumbers) {
-        Iterator it = tree.find(number);
+        iterator it = tree.find(number);
         if (it != tree.end()) {
             assert(*it == number);
             foundErase++;
@@ -918,7 +1072,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     //Erasing all elements iterating on it
     size_t numberOfElementsBeforeEraseIteration = tree.size();
     size_t numOfEntries = 0;
-    for (Iterator it = tree.begin(); it != tree.end();) {
+    for (iterator it = tree.begin(); it != tree.end();) {
         tree.erase(it++);
         numOfEntries++;
     }

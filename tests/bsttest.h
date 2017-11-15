@@ -8,7 +8,7 @@
 
 namespace BSTTests {
 
-    void testHardCases();
+    void testCorrectness();
     void testRandom();
     void testProgressive();
     void testMixed();
