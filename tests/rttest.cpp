@@ -853,7 +853,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(number, number, out);
+        tree.rangeQuery(number, number, std::back_inserter(out));
 
         assert(out.size() == 1);
     }
@@ -866,7 +866,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
-            tree.rangeQuery(num1, num2, out);
+            tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeConstruction += out.size();
 
             for (Iterator outIt : out)
@@ -968,7 +968,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(number, number, out);
+        tree.rangeQuery(number, number, std::back_inserter(out));
 
         assert(out.size() == 1);
     }
@@ -981,7 +981,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
-            tree.rangeQuery(num1, num2, out);
+            tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeInsert += out.size();
 
             for (Iterator outIt : out)
@@ -1073,7 +1073,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(number, number, out);
+        tree.rangeQuery(number, number, std::back_inserter(out));
     }
 
     size_t foundRangeErase = 0;
@@ -1084,7 +1084,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
-            tree.rangeQuery(num1, num2, out);
+            tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeErase += out.size();
 
             for (Iterator outIt : out)
@@ -1124,7 +1124,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     assert(tree.empty());
 
     std::vector<Iterator> out;
-    tree.rangeQuery(-RANDOM_MAX, RANDOM_MAX, out);
+    tree.rangeQuery(-RANDOM_MAX, RANDOM_MAX, std::back_inserter(out));
     assert(out.size() == 0);
 
 
@@ -1230,7 +1230,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(number, number, out);
+        tree.rangeQuery(number, number, std::back_inserter(out));
 
         assert(out.size() == 1);
     }
@@ -1243,7 +1243,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
-            tree.rangeQuery(num1, num2, out);
+            tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeConstruction += out.size();
 
             for (Iterator outIt : out)
@@ -1345,7 +1345,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(number, number, out);
+        tree.rangeQuery(number, number, std::back_inserter(out));
 
         assert(out.size() == 1);
     }
@@ -1358,7 +1358,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
-            tree.rangeQuery(num1, num2, out);
+            tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeInsert += out.size();
 
             for (Iterator outIt : out)
@@ -1450,7 +1450,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(number, number, out);
+        tree.rangeQuery(number, number, std::back_inserter(out));
     }
 
     size_t foundRangeErase = 0;
@@ -1461,7 +1461,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         int& num2 = randomNumbers.at(i+1);
 
         if (num1 <= num2) {
-            tree.rangeQuery(num1, num2, out);
+            tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeErase += out.size();
 
             for (Iterator outIt : out)
@@ -1499,7 +1499,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     assert(tree.empty());
 
     std::vector<Iterator> out;
-    tree.rangeQuery(-RANDOM_MAX, RANDOM_MAX, out);
+    tree.rangeQuery(-RANDOM_MAX, RANDOM_MAX, std::back_inserter(out));
     assert(out.size() == 0);
 
 
@@ -2013,7 +2013,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
     for (const Point2D& point : testPoints) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(point, point, out);
+        tree.rangeQuery(point, point, std::back_inserter(out));
 
         assert(out.size() == 1);
     }
@@ -2026,7 +2026,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         Point2D& p2 = randomPoints.at(i+1);
 
         if (p1.x() <= p2.x() && p1.y() <= p2.y()) {
-            tree.rangeQuery(p1, p2, out);
+            tree.rangeQuery(p1, p2, std::back_inserter(out));
             foundRangeConstruction += out.size();
 
             for (Iterator outIt : out)
@@ -2126,7 +2126,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
     for (const Point2D& point : testPoints) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(point, point, out);
+        tree.rangeQuery(point, point, std::back_inserter(out));
 
         assert(out.size() == 1);
     }
@@ -2139,7 +2139,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         Point2D& p2 = randomPoints.at(i+1);
 
         if (p1.x() <= p2.x() && p1.y() <= p2.y()) {
-            tree.rangeQuery(p1, p2, out);
+            tree.rangeQuery(p1, p2, std::back_inserter(out));
             foundRangeInsert += out.size();
 
             for (Iterator outIt : out)
@@ -2229,7 +2229,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
     for (const Point2D& point : testPoints) {
         std::vector<Iterator> out;
 
-        tree.rangeQuery(point, point, out);
+        tree.rangeQuery(point, point, std::back_inserter(out));
     }
 
     size_t foundRangeErase = 0;
@@ -2240,7 +2240,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         Point2D& p2 = randomPoints.at(i+1);
 
         if (p1.x() <= p2.x() && p1.y() <= p2.y()) {
-            tree.rangeQuery(p1, p2, out);
+            tree.rangeQuery(p1, p2, std::back_inserter(out));
             foundRangeErase += out.size();
 
             for (Iterator outIt : out)

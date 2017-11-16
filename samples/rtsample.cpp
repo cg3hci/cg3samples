@@ -48,21 +48,28 @@ void RTSample::execute()
 
     /* ----- BASIC USAGE ----- */
 
-    //Creating vector of comparators
+    //Creating vector of comparators for each dimension
     std::vector<RangeTree::LessComparator> customComparators;
     customComparators.push_back(&point2DDimensionComparatorX);
     customComparators.push_back(&point2DDimensionComparatorY);
 
+    //Creating vector for construction with object [12,15.9], [2,10.1], [45,65.0]
+    std::cout << "Construction objects: [12,15.9], [2,10.1], [45,65.0], [100,52.25], [45,20], [3,25.0]" << std::endl;
+    std::vector<std::pair<Point2D, std::string>> pointVec;
+    pointVec.push_back(std::make_pair(Point2D(12,15.9), "[12,15.9]"));
+    pointVec.push_back(std::make_pair(Point2D(2,10.1), "[2,10.1]"));
+    pointVec.push_back(std::make_pair(Point2D(45,65.0), "[45,65.0]"));
+
     //Creating 2-dimensional-range-tree (for Point2D)
     std::cout << "Creating range trees with comparators..." << std::endl;
-    RangeTree rangeTree(2, //Dimension of the range tree
-                        customComparators); //Vector of comparators
+    RangeTree rangeTree(
+                2, //Dimension of the range tree
+                pointVec,
+                customComparators); //Vector of comparators
 
-    //Insert objects: [12,15.9], [2,10.1], [45,65.0], [100,52.25], [45,20], [3,25.0]
-    std::cout << "Inserting objects: [12,15.9], [2,10.1], [45,65.0], [100,52.25], [45,20], [3,25.0]" << std::endl;
-    rangeTree.insert(Point2D(12,15.9), "[12,15.9]");
-    rangeTree.insert(Point2D(2,10.1), "[2,10.1]");
-    rangeTree.insert(Point2D(45,65.0), "[45,65.0]");
+    //Insert objects: [100,52.25], [45,20], [3,25.0]
+    std::cout << "Inserting objects: [100,52.25], [45,20], [3,25.0]" << std::endl;
+
     rangeTree.insert(Point2D(100,52.25), "[100,52.25]");
     rangeTree.insert(Point2D(45,20), "[45,20]");
     rangeTree.insert(Point2D(3,25.0), "[3,25.0]");
@@ -85,9 +92,13 @@ void RTSample::execute()
     rangeTree.erase(Point2D(2,10.1));
 
     //Range query for the interval [3 - 99, 15.99 - 65.0]
-    std::cout << "Range query for the interval [3 - 99, 15.99 - 65.0]:" << std::endl << "    ";
+    std::cout << "Range query for the interval [3 - 99, 15.99 - 65.0]" << std::endl << "    ";
     std::vector<RangeTree::iterator> rangeQueryResults;
-    rangeTree.rangeQuery(Point2D(3,15.99), Point2D(99,65.0), rangeQueryResults);
+    rangeTree.rangeQuery(
+                Point2D(3,15.99),
+                Point2D(99,65.0),
+                std::back_inserter(rangeQueryResults));
+
     for (RangeTree::iterator it : rangeQueryResults) {
         std::cout << *it << " ";
     }
@@ -104,7 +115,8 @@ void RTSample::execute()
     std::cout << std::endl;
 
 
-    /* ----- OTHER FUNCTION ----- */
+
+    /* ----- OTHER FUNCTIONS ----- */
 
     //Get min and max (through iterators)
     RangeTree::iterator minIterator = rangeTree.getMin();
@@ -195,15 +207,22 @@ void RTSample::execute()
     std::vector<RangeTreeWithPointers::iterator> rangeQueryPointerResults;
     Point2D* startPointer = new Point2D(3,12);
     Point2D* endPointer = new Point2D(15,13);
-    rangeTreeWithPointers.rangeQuery(startPointer, endPointer, rangeQueryPointerResults);
+
+    rangeTreeWithPointers.rangeQuery(
+                startPointer,
+                endPointer,
+                std::back_inserter(rangeQueryPointerResults));
+
     for (RangeTreeWithPointers::iterator& it : rangeQueryPointerResults) {
         std::cout << *(*it) << " ";
     }
     std::cout << std::endl;
+
+
+    //Deleting data
     delete startPointer;
     delete endPointer;
 
-    //Deleting data
     delete p1;
     delete p2;
     delete p3;

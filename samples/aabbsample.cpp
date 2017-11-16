@@ -35,16 +35,23 @@ void AABBSample::execute()
     typedef cg3::AABBTree<2, Segment2D, std::string> AABBTree;
 
 
+    //Creating vector for construction with object ([2,4], [3,1]) | ([5,9], [8,1])
+    std::cout << "Construction objects: ([2,4], [3,1]) | ([5,9], [8,1])" << std::endl;
+    std::vector<std::pair<Segment2D, std::string>> segmentVec;
+    segmentVec.push_back(std::make_pair(Segment2D(Point2D(2,4),Point2D(3,1)), "([2,4], [3,1])"));
+    segmentVec.push_back(std::make_pair(Segment2D(Point2D(5,9),Point2D(8,1)), "([5,9], [8,1])"));
+
+
     //Creating AABBtree (for Segment2D)
     std::cout << "Creating AABB trees with comparators..." << std::endl;
-    AABBTree aabbTree(&aabbValueExtractor, //AABB value extractor
-                      &segment2DCustomComparator); //Default comparator (< is the default)
+    AABBTree aabbTree(
+                segmentVec,
+                &aabbValueExtractor, //AABB value extractor
+                &segment2DCustomComparator); //Comparator (if omitted, < is the default)
 
 
-    //Insert objects: ([2,4], [3,1]) | ([5,9], [8,1]) | ([-1,-5], [3,2]) | ([1,2], [4,3]) | ([4,3], [4,8])
-    std::cout << "Inserting objects: ([2,4], [3,1]) | ([5,9], [8,1]) | ([-1,-5], [3,2]) | ([1,2], [4,3]) | ([4,3], [4,8])" << std::endl;
-    aabbTree.insert(Segment2D(Point2D(2,4),Point2D(3,1)), "([2,4], [3,1])");
-    aabbTree.insert(Segment2D(Point2D(5,9),Point2D(8,1)), "([5,9], [8,1])");
+    //Insert objects: ([-1,-5], [3,2]) | ([1,2], [4,3]) | ([4,3], [4,8])
+    std::cout << "Inserting objects: ([-1,-5], [3,2]) | ([1,2], [4,3]) | ([4,3], [4,8])" << std::endl;
     aabbTree.insert(Segment2D(Point2D(-1,-5),Point2D(3,2)), "([-1,-5], [3,2])");
     aabbTree.insert(Segment2D(Point2D(1,2),Point2D(4,3)), "([1,2], [4,3])");
     aabbTree.insert(Segment2D(Point2D(4,3),Point2D(4,8)), "([4,3], [4,8])");
@@ -89,11 +96,13 @@ void AABBSample::execute()
     else {
         std::cout << "Found NO overlaps";
     }
-    std::cout << std::endl;
+    std::cout << std::endl << " ->    ";
 
-    std::cout << "Results:" << "\t";
     std::vector<AABBTree::iterator> aabbQueryResults;
-    aabbTree.aabbOverlapQuery(Segment2D(Point2D(0,3),Point2D(8,10)), aabbQueryResults);
+    aabbTree.aabbOverlapQuery(
+                Segment2D(Point2D(0,3),Point2D(8,10)),
+                std::back_inserter(aabbQueryResults));
+
     for (AABBTree::iterator& it : aabbQueryResults) {
         std::cout << *it << " | ";
     }
@@ -101,18 +110,21 @@ void AABBSample::execute()
 
 
     //Overlap query (with custom intersection checker) for the segment ([0,3], [8,10])
-    std::cout << "Intersections: segment ([0,3], [8,10]) -> ";
+    std::cout << "Intersections with custom intersection checker: segment ([0,3], [8,10]) -> ";
     if (aabbTree.aabbOverlapCheck(Segment2D(Point2D(0,3),Point2D(8,10))), &segment2DIntersectionChecker) {
         std::cout << "Found at least an overlap";
     }
     else {
         std::cout << "Found NO overlaps";
     }
-    std::cout << std::endl;
+    std::cout << std::endl << " ->    ";
 
-    std::cout << "Results:" << "\t";
     std::vector<AABBTree::iterator> intersectionQueryResults;
-    aabbTree.aabbOverlapQuery(Segment2D(Point2D(0,3),Point2D(8,10)), intersectionQueryResults, &segment2DIntersectionChecker);
+    aabbTree.aabbOverlapQuery(
+                Segment2D(Point2D(0,3),Point2D(8,10)),
+                std::back_inserter(intersectionQueryResults),
+                &segment2DIntersectionChecker);
+
     for (AABBTree::iterator& it : intersectionQueryResults) {
         std::cout << *it << " | ";
     }
@@ -121,18 +133,21 @@ void AABBSample::execute()
 
 
     //Overlap query (with custom intersection checker) for the segment ([20,30], [80,10])
-    std::cout << "Intersections: segment ([20,30], [80,10]) -> ";
+    std::cout << "Intersections with custom intersection checker: segment ([20,30], [80,10]) -> ";
     if (aabbTree.aabbOverlapCheck(Segment2D(Point2D(20,30),Point2D(80,10)), &segment2DIntersectionChecker)) {
         std::cout << "Found at least an overlap";
     }
     else {
         std::cout << "Found NO overlaps";
     }
-    std::cout << std::endl;
+    std::cout << std::endl << " ->    ";
 
-    std::cout << "Results:" << "\t";
     std::vector<AABBTree::iterator> intersectionQueryResults2;
-    aabbTree.aabbOverlapQuery(Segment2D(Point2D(20,30),Point2D(80,10)), intersectionQueryResults2, &segment2DIntersectionChecker);
+    aabbTree.aabbOverlapQuery(
+                Segment2D(Point2D(20,30),Point2D(80,10)),
+                std::back_inserter(intersectionQueryResults2),
+                &segment2DIntersectionChecker);
+
     for (AABBTree::iterator& it : intersectionQueryResults2) {
         std::cout << *it << " | ";
     }
@@ -157,6 +172,13 @@ void AABBSample::execute()
 
     //Size
     std::cout << "The AABB tree contains " << aabbTree.size() << " elements" << std::endl;
+
+    //Iteration with explicit iterators
+    std::cout << "The AABB tree contains (reverse):" << std::endl << "    ";
+    for (AABBTree::reverse_iterator it = aabbTree.rbegin(); it != aabbTree.rend(); it++) {
+        std::cout << *it << " | ";
+    }
+    std::cout << std::endl;
 
     //Clear
     std::cout << "Clear AABB tree..." << std::endl;

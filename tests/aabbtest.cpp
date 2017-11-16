@@ -941,7 +941,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     for (const Segment1D& segment : testSegments) {
         std::vector<Iterator> out;
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
 
         assert(out.size() >= 1);
 
@@ -956,7 +956,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
         Segment1D& segment = randomSegments.at(i);
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapConstruction += out.size();
 
         for (Iterator outIt : out)
@@ -1083,7 +1083,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     for (const Segment1D& segment : testSegments) {
         std::vector<Iterator> out;
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
 
         assert(out.size() >= 1);
 
@@ -1097,7 +1097,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         std::vector<Iterator> out;
 
         Segment1D& segment = randomSegments.at(i);
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapInsert += out.size();
 
         for (Iterator outIt : out) {
@@ -1186,7 +1186,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     for (const Segment1D& segment : testSegments) {
         std::vector<Iterator> out;
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
     }
 
     size_t foundOverlapErase = 0;
@@ -1195,7 +1195,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
         Segment1D& segment = randomSegments.at(i);
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapErase += out.size();
 
         for (Iterator outIt : out)
@@ -1234,7 +1234,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     Segment1D sampleSegment(1,1);
 
     std::vector<Iterator> out;
-    tree->aabbOverlapQuery(sampleSegment, out);
+    tree->aabbOverlapQuery(sampleSegment, std::back_inserter(out));
     assert(out.size() == 0);
 
 
@@ -1764,7 +1764,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     for (const Segment2D& segment : testSegments) {
         std::vector<Iterator> out;
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
 
         assert(out.size() >= 1);
 
@@ -1779,7 +1779,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
         Segment2D& segment = randomSegments.at(i);
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapConstruction += out.size();
 
         for (Iterator outIt : out)
@@ -1907,7 +1907,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     for (const Segment2D& segment : testSegments) {
         std::vector<Iterator> out;
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
 
         assert(out.size() >= 1);
 
@@ -1921,7 +1921,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         std::vector<Iterator> out;
 
         Segment2D& segment = randomSegments.at(i);
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapInsert += out.size();
 
         for (Iterator outIt : out) {
@@ -2013,7 +2013,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     for (const Segment2D& segment : testSegments) {
         std::vector<Iterator> out;
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
     }
 
     size_t foundOverlapErase = 0;
@@ -2022,7 +2022,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
         Segment2D& segment = randomSegments.at(i);
 
-        tree->aabbOverlapQuery(segment, out);
+        tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapErase += out.size();
 
         for (Iterator outIt : out)
@@ -2063,7 +2063,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     Segment2D sampleSegment(p1,p2);
 
     std::vector<Iterator> out;
-    tree->aabbOverlapQuery(sampleSegment, out);
+    tree->aabbOverlapQuery(sampleSegment, std::back_inserter(out));
     assert(out.size() == 0);
 
 
