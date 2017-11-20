@@ -8,6 +8,7 @@
 #include <set>
 
 #include "cg3/algorithms/convexhull2d.h"
+#include "cg3/algorithms/convexhull2d_iterative.h"
 
 #include "cg3/geometry/2d/point2d.h"
 
@@ -64,14 +65,19 @@ void CHSamples::execute()
         plane[it->x()][it->y()] = 'o';
     }
 
+    //Output container
+    std::list<Point2D> outputConvexHull;
+
     //Computing convex hull
-    std::list<Point2D> convexHull;
     //Template <double> would be not needed
-    cg3::getConvexHull2D<int>(points, convexHull);
+    cg3::getConvexHull2D<int>(points.begin(), points.end(), std::back_inserter(outputConvexHull));
+
+    //Alternative with containers
+//    cg3::getConvexHull2D<int>(points, outputConvexHull);
 
 
     //Set all convex hull points to "x"
-    for (std::list<Point2D>::iterator it = convexHull.begin(); it != convexHull.end(); it++) {
+    for (std::list<Point2D>::iterator it = outputConvexHull.begin(); it != outputConvexHull.end(); it++) {
         plane[it->x()][it->y()] = 'x';
     }
 
@@ -91,7 +97,7 @@ void CHSamples::execute()
 
     //Printing solution
     std::cout << "Solution:" << std::endl;
-    for (std::list<Point2D>::iterator it = convexHull.begin(); it != convexHull.end(); it++) {
+    for (std::list<Point2D>::iterator it = outputConvexHull.begin(); it != outputConvexHull.end(); it++) {
         Point2D point = *it;
         std::cout << "(" << point.x() << "," << point.y() << ")" << " - ";
     }
@@ -116,5 +122,54 @@ void CHSamples::execute()
     for (std::vector<Point2D>::iterator it = points.begin(); it != points.end(); it++) {
         plane[it->x()][it->y()] = 'o';
     }
+
+
+
+    //Add points in different ways
+    cg3::IterativeConvexHull2D<int> iterativeConvexHull(points.begin(), points.end()-4);
+
+    iterativeConvexHull.addPoints(points.end()-4, points.end()-3);
+
+    Point2D p2 = *(points.end()-2);
+    iterativeConvexHull.addPoint(p2);
+
+    Point2D p1 = *(points.end()-1);
+    cg3::addPointToConvexHull(p1, iterativeConvexHull);
+
+    //Alternative with container
+//    cg3::IterativeConvexHull2D<int> iterativeConvexHull(points);
+
+    //Output convex hull
+    std::list<Point2D> outputIterativeConvexHull;
+    iterativeConvexHull.getConvexHull(std::back_inserter(outputIterativeConvexHull));
+
+    //Set all convex hull points to "x"
+    for (std::list<Point2D>::iterator it = outputIterativeConvexHull.begin(); it != outputIterativeConvexHull.end(); it++) {
+        plane[it->x()][it->y()] = 'x';
+    }
+
+    //Draw the plane
+    for ( int y = PLANE_HEIGHT-1; y >= 0 ; --y ) {
+        std::cout << y << "  " ;
+        for ( int x = 0; x < PLANE_WIDTH; ++x ) {
+            std::cout << plane[x][y] << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "   ";
+    for ( int x = 0; x < PLANE_WIDTH; ++x ) {
+        std::cout << x << " ";
+    }
+    std::cout << std::endl << std::endl;
+
+    //Printing solution
+    std::cout << "Solution:" << std::endl;
+    for (std::list<Point2D>::iterator it = outputIterativeConvexHull.begin(); it != outputIterativeConvexHull.end(); it++) {
+        Point2D point = *it;
+        std::cout << "(" << point.x() << "," << point.y() << ")" << " - ";
+    }
+    std::cout << std::endl;
+
+    iterativeConvexHull.clear();
 }
 
