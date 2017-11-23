@@ -72,7 +72,21 @@ void testCorrectness() {
     assert(convexHullIterative.size() == 0);
 
 
-    //3 equal points
+    //1 point
+    points.clear();
+    convexHull.clear();
+    points.push_back(Point2D(0,0));
+
+    cg3::getConvexHull2D(points, convexHull);
+    assert(convexHull.size() == 1);
+
+    convexHullIterative.clear();
+    ch = cg3::IterativeConvexHull2D<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIterative));
+    assert(convexHullIterative.size() == 1);
+
+
+    //2 equal points
     points.clear();
     convexHull.clear();
     points.push_back(Point2D(0,0));
@@ -104,7 +118,7 @@ void testCorrectness() {
 
 
 
-    //3 equal points
+    //5 equal points
     points.clear();
     convexHull.clear();
     points.push_back(Point2D(3,5));
@@ -122,7 +136,7 @@ void testCorrectness() {
     assert(convexHullIterative.size() == 1);
 
 
-    //2 equal points
+    //2 equal points and one different
     points.clear();
     convexHull.clear();
     points.push_back(Point2D(3,5));

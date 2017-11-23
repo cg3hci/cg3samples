@@ -610,6 +610,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *set) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -726,6 +727,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *set) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -764,6 +766,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
     /* Erase check */
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
         const Segment1D& number = testSegments.at(i);
+        CG3_SUPPRESS_WARNING(number);
         assert(set->find(number) == set->end());
     }
 
@@ -946,6 +949,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         assert(out.size() >= 1);
 
         for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
         }
     }
@@ -959,8 +963,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapConstruction += out.size();
 
-        for (Iterator outIt : out)
+        for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
+        }
     }
 
     t2 = high_resolution_clock::now();
@@ -1013,6 +1019,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *tree) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -1088,6 +1095,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         assert(out.size() >= 1);
 
         for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
         }
     }
@@ -1101,6 +1109,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         foundOverlapInsert += out.size();
 
         for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
         }
     }
@@ -1126,6 +1135,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *tree) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -1164,6 +1174,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     /* Erase check */
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
         const Segment1D& segment = testSegments.at(i);
+        CG3_SUPPRESS_WARNING(segment);
         assert(tree->find(segment) == tree->end());
     }
 
@@ -1198,8 +1209,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapErase += out.size();
 
-        for (Iterator outIt : out)
+        for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
+        }
     }
 
     t2 = high_resolution_clock::now();
@@ -1429,6 +1442,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *set) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -1545,6 +1559,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *set) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -1583,6 +1598,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
     /* Erase check */
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
         const Segment2D& number = testSegments.at(i);
+        CG3_SUPPRESS_WARNING(number);
         assert(set->find(number) == set->end());
     }
 
@@ -1769,6 +1785,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         assert(out.size() >= 1);
 
         for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
         }
     }
@@ -1782,8 +1799,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapConstruction += out.size();
 
-        for (Iterator outIt : out)
+        for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
+        }
     }
 
     t2 = high_resolution_clock::now();
@@ -1837,6 +1856,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *tree) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -1912,6 +1932,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         assert(out.size() >= 1);
 
         for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
         }
     }
@@ -1925,6 +1946,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         foundOverlapInsert += out.size();
 
         for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
         }
     }
@@ -1953,6 +1975,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *tree) {
+            CG3_SUPPRESS_WARNING(segment);
             numOfEntries++;
         }
 
@@ -1991,6 +2014,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     /* Erase check */
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
         const Segment2D& segment = testSegments.at(i);
+        CG3_SUPPRESS_WARNING(segment);
         assert(tree->find(segment) == tree->end());
     }
 
@@ -2025,8 +2049,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         tree->aabbOverlapQuery(segment, std::back_inserter(out));
         foundOverlapErase += out.size();
 
-        for (Iterator outIt : out)
+        for (Iterator outIt : out) {
+            CG3_SUPPRESS_WARNING(outIt);
             assert(aabbOverlap(*outIt, segment));
+        }
     }
 
     t2 = high_resolution_clock::now();

@@ -16,6 +16,7 @@
 #include "cg3/data_structures/trees/avlinner.h"
 #include "cg3/data_structures/trees/bstleaf.h"
 #include "cg3/data_structures/trees/avlleaf.h"
+#include "cg3/utilities/const.h"
 
 #define ITERATION 1
 #define INDENTSPACE 12
@@ -77,6 +78,9 @@ void testCorrectness() {
 }
 template <class B>
 void testCorrectness() {
+
+    //Test correctness of iterators
+
     B bst1;
     B bst2;
 
@@ -518,6 +522,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : set) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -631,6 +636,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : set) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -672,6 +678,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Erase check */
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
         const int& number = testNumbers.at(i);
+        CG3_SUPPRESS_WARNING(number);
         assert(set.find(number) == set.end());
     }
 
@@ -739,6 +746,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         set.erase(it++);
         numOfEntries++;
     }
+    CG3_SUPPRESS_WARNING(numberOfElementsBeforeEraseIteration);
     assert(numOfEntries == numberOfElementsBeforeEraseIteration);
 
     t2 = high_resolution_clock::now();
@@ -857,6 +865,8 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : tree) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -970,6 +980,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : tree) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -1011,6 +1022,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Erase check */
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
         const int& number = testNumbers.at(i);
+        CG3_SUPPRESS_WARNING(number);
         assert(tree.find(number) == tree.end());
     }
 
@@ -1076,6 +1088,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         tree.erase(it++);
         numOfEntries++;
     }
+    CG3_SUPPRESS_WARNING(numberOfElementsBeforeEraseIteration);
     assert(numOfEntries == numberOfElementsBeforeEraseIteration);
 
     t2 = high_resolution_clock::now();

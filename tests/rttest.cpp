@@ -478,8 +478,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
             foundRangeConstruction += out.size();
 
-            for (const int& outNumber : out)
+            for (const int& outNumber : out) {
                 assert(num1 <= outNumber && outNumber <= num2);
+                CG3_SUPPRESS_WARNING(outNumber);
+            }
         }
     }
 
@@ -505,6 +507,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : set) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -602,8 +605,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
             foundRangeInsert += out.size();
 
-            for (const int& outNumber : out)
+            for (const int& outNumber : out) {
                 assert(num1 <= outNumber && outNumber <= num2);
+                CG3_SUPPRESS_WARNING(outNumber);
+            }
         }
     }
 
@@ -629,6 +634,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : set) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -668,8 +674,9 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
 
     /* Erase check */
-    for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
+    for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {        
         const int& number = testNumbers.at(i);
+        CG3_SUPPRESS_WARNING(number);
         assert(set.find(number) == set.end());
     }
 
@@ -715,8 +722,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
             foundRangeErase += out.size();
 
 
-            for (const int& outNumber : out)
+            for (const int& outNumber : out) {
+                CG3_SUPPRESS_WARNING(outNumber);
                 assert(num1 <= outNumber && outNumber <= num2);
+            }
         }
     }
 
@@ -894,7 +903,8 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     t1 = high_resolution_clock::now();
         {
         size_t numOfEntries = 0;
-        int lastNumber = INT32_MIN;
+        int lastNumber = INT32_MIN;        
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : tree) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -1009,7 +1019,8 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     t1 = high_resolution_clock::now();
         {
         size_t numOfEntries = 0;
-        int lastNumber = INT32_MIN;
+        int lastNumber = INT32_MIN;        
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : tree) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -1051,6 +1062,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Erase check */
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
         const int& number = testNumbers.at(i);
+        CG3_SUPPRESS_WARNING(number);
         assert(tree.find(number) == tree.end());
     }
 
@@ -1246,8 +1258,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
             tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeConstruction += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(num1 <= *outIt && *outIt <= num2);
+            }
         }
     }
 
@@ -1272,6 +1286,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : tree) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -1361,8 +1376,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
             tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeInsert += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(num1 <= *outIt && *outIt <= num2);
+            }
         }
     }
 
@@ -1387,6 +1404,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
+        CG3_SUPPRESS_WARNING(lastNumber);
         for (const int& number : tree) {
             assert(lastNumber < number);
             lastNumber = number;
@@ -1428,6 +1446,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     /* Erase check */
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
         const int& number = testNumbers.at(i);
+        CG3_SUPPRESS_WARNING(number);
         assert(tree.find(number) == tree.end());
     }
 
@@ -1464,8 +1483,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
             tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeErase += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(num1 <= *outIt && *outIt <= num2);
+            }
         }
     }
 
@@ -1630,9 +1651,11 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
             foundRangeConstruction += out.size();
 
-            for (const Point2D& outPoint : out)
+            for (const Point2D& outPoint : out) {
+                CG3_SUPPRESS_WARNING(outPoint);
                 assert(p1.x() <= outPoint.x() && outPoint.x() <= p2.x() &&
                        p1.y() <= outPoint.y() && outPoint.y() <= p2.y());
+            }
         }
     }
 
@@ -1658,6 +1681,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
         {
         size_t numOfEntries = 0;
         for (const Point2D& p : set) {
+            CG3_SUPPRESS_WARNING(p);
             numOfEntries++;
         }
 
@@ -1756,9 +1780,11 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
             foundRangeInsert += out.size();
 
-            for (const Point2D& outPoint : out)
+            for (const Point2D& outPoint : out) {
+                CG3_SUPPRESS_WARNING(outPoint);
                 assert(p1.x() <= outPoint.x() && outPoint.x() <= p2.x() &&
                        p1.y() <= outPoint.y() && outPoint.y() <= p2.y());
+            }
         }
     }
 
@@ -1784,6 +1810,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
     {
         size_t numOfEntries = 0;
         for (const Point2D& point : set) {
+            CG3_SUPPRESS_WARNING(point);
             numOfEntries++;
         }
 
@@ -1822,6 +1849,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
     /* Erase check */
     for (size_t i = testPoints.size()/2; i < testPoints.size(); i++) {
         const Point2D& point = testPoints.at(i);
+        CG3_SUPPRESS_WARNING(point);
         assert(set.find(point) == set.end());
     }
 
@@ -1870,9 +1898,11 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
             foundRangeErase += out.size();
 
-            for (const Point2D& outNumber : out)
+            for (const Point2D& outNumber : out) {
+                CG3_SUPPRESS_WARNING(outNumber);
                 assert(p1.x() <= outNumber.x() && outNumber.x() <= p2.x() &&
                        p1.y() <= outNumber.y() && outNumber.y() <= p2.y());
+            }
         }
     }
     t2 = high_resolution_clock::now();
@@ -2029,9 +2059,11 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
             tree.rangeQuery(p1, p2, std::back_inserter(out));
             foundRangeConstruction += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(p1.x() <= (*outIt).x() && (*outIt).x() <= p2.x() &&
                        p1.y() <= (*outIt).y() && (*outIt).y() <= p2.y());
+            }
         }
     }
 
@@ -2056,6 +2088,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         {
         size_t numOfEntries = 0;
         for (const Point2D& point : tree) {
+            CG3_SUPPRESS_WARNING(point);
             numOfEntries++;
         }
 
@@ -2142,9 +2175,11 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
             tree.rangeQuery(p1, p2, std::back_inserter(out));
             foundRangeInsert += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(p1.x() <= (*outIt).x() && (*outIt).x() <= p2.x() &&
                        p1.y() <= (*outIt).y() && (*outIt).y() <= p2.y());
+            }
         }
     }
 
@@ -2169,6 +2204,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         {
         size_t numOfEntries = 0;
         for (const Point2D& point : tree) {
+            CG3_SUPPRESS_WARNING(point);
             numOfEntries++;
         }
 
@@ -2207,6 +2243,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
     /* Erase check */
     for (size_t i = testPoints.size()/2; i < testPoints.size(); i++) {
         const Point2D& point = testPoints.at(i);
+        CG3_SUPPRESS_WARNING(point);
         assert(tree.find(point) == tree.end());
     }
 
@@ -2243,9 +2280,11 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
             tree.rangeQuery(p1, p2, std::back_inserter(out));
             foundRangeErase += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(p1.x() <= (*outIt).x() && (*outIt).x() <= p2.x() &&
                        p1.y() <= (*outIt).y() && (*outIt).y() <= p2.y());
+            }
         }
     }
 
