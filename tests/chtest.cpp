@@ -18,7 +18,9 @@
 #include "cg3/algorithms/convexhull2d.h"
 #include "cg3/algorithms/convexhull2d_iterative.h"
 
+#ifdef CG3_CGAL_DEFINED
 #include "cg3/cgal/cgal_convexhull.h"
+#endif
 
 #define ITERATION 5
 #define INDENTSPACE 12
@@ -51,8 +53,10 @@ void doTestsOnInput(std::vector<int>& testNumbers);
 
 void testGrahamScan(std::vector<Point2D>& testPoints);
 void testIterative(std::vector<Point2D>& testPoints);
-void testCGAL(std::vector<Point2D>& testPoints);
 
+#ifdef CG3_CGAL_DEFINED
+void testCGAL(std::vector<Point2D>& testPoints);
+#endif
 
 /* ----- IMPLEMENTATION ----- */
 
@@ -297,10 +301,11 @@ void doTestsOnInput(std::vector<int> &testNumbers)
     std::cout << "ITERATIVE";
     testIterative(testPoints);
 
+#ifdef CG3_CGAL_DEFINED
     std::cout << std::setw(INDENTSPACE) << std::left;
     std::cout << "CGAL";
     testCGAL(testPoints);
-
+#endif
 
     std::cout << std::endl;
 
@@ -452,7 +457,7 @@ void testIterative(std::vector<Point2D>& testPoints)
     std::cout << std::endl;
 }
 
-
+#ifdef CG3_CGAL_DEFINED
 void testCGAL(std::vector<Point2D>& testPoints)
 {
     std::cout << std::setw(INDENTSPACE) << std::left;
@@ -521,7 +526,7 @@ void testCGAL(std::vector<Point2D>& testPoints)
     std::cout << std::endl;
 
 }
-
+#endif
 
 
 
