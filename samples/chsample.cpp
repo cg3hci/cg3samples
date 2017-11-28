@@ -7,8 +7,8 @@
 
 #include <set>
 
-#include "cg3/algorithms/convexhull2d.h"
-#include "cg3/algorithms/convexhull2d_iterative.h"
+#include "cg3/algorithms/2d/convexhull2d.h"
+#include "cg3/algorithms/2d/convexhull2d_iterative.h"
 
 #include "cg3/geometry/2d/point2d.h"
 

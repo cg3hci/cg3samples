@@ -15,11 +15,11 @@
 #include "cg3/geometry/2d/point2d.h"
 #include "cg3/geometry/segment.h"
 
-#include "cg3/algorithms/convexhull2d.h"
-#include "cg3/algorithms/convexhull2d_iterative.h"
+#include "cg3/algorithms/2d/convexhull2d.h"
+#include "cg3/algorithms/2d/convexhull2d_iterative.h"
 
 #ifdef CG3_CGAL_DEFINED
-#include "cg3/cgal/cgal_convexhull.h"
+#include "cg3/cgal/2d/cgal_convexhull2d.h"
 #endif
 
 #define ITERATION 5
