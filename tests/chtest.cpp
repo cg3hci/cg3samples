@@ -96,7 +96,7 @@ void testCorrectness() {
     points.push_back(Point2D(0,0));
     points.push_back(Point2D(0,0));
 
-    cg3::getConvexHull2D(points, convexHull);    
+    cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
     convexHullIterative.clear();
@@ -472,7 +472,7 @@ void testCGAL(std::vector<Point2D>& testPoints)
     t1 = high_resolution_clock::now();
 
     std::list<Point2D> convexHull;
-    cg3::cgal::getConvexHull2D(testPoints, convexHull);
+    cg3::cgal::getCGALConvexHull2D(testPoints, convexHull);
 
     t2 = high_resolution_clock::now();
 
