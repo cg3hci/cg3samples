@@ -5,16 +5,16 @@ void BipartiteGraphSample::execute() {
     //this bipartite graph connects strings to integers
     //every string represent an integer.
     cg3::BipartiteGraph<std::string, int> bigraph;
-    bigraph.addUNode("2");
-    bigraph.addUNode("3");
-    bigraph.addUNode("4");
-    bigraph.addUNode("5");
-    bigraph.addVNode(10);
-    bigraph.addVNode(12);
-    bigraph.addVNode(15);
-    bigraph.addVNode(17);
-    bigraph.addVNode(20);
-    bigraph.addVNode(24);
+    bigraph.addLeftNode("2");
+    bigraph.addLeftNode("3");
+    bigraph.addLeftNode("4");
+    bigraph.addLeftNode("5");
+    bigraph.addRightNode(10);
+    bigraph.addRightNode(12);
+    bigraph.addRightNode(15);
+    bigraph.addRightNode(17);
+    bigraph.addRightNode(20);
+    bigraph.addRightNode(24);
 
     //every arc between u and v means that u is divisor of v
     bigraph.addArc("2", 10);
@@ -32,18 +32,18 @@ void BipartiteGraphSample::execute() {
     bigraph.addArc("5", 20);
 
     std::cout << "Multiples of 3: \n";
-    for (const int& v : bigraph.adjacentUNodeIterator("3")){
+    for (const int& v : bigraph.adjacentLeftNodeIterator("3")){
         std::cout << "\t" << std::to_string(v) << "\n";
     }
 
     std::cout << "Divisors of 24: \n";
-    for (const std::string& u : bigraph.adjacentVNodeIterator(24)){
+    for (const std::string& u : bigraph.adjacentRightNodeIterator(24)){
         std::cout << "\t" << u << "\n";
     }
 
     try {
         std::cout << "\nDivisors of 22: \n";
-        for (const std::string& u : bigraph.adjacentVNodeIterator(22)){
+        for (const std::string& u : bigraph.adjacentRightNodeIterator(22)){
             std::cout << "\t" << u << "\n";
         }
     }
@@ -51,9 +51,9 @@ void BipartiteGraphSample::execute() {
         std::cout << e.what() << ": 22 not found.\n\n";
     }
 
-    bigraph.deleteUNode("4");
+    bigraph.deleteLeftNode("4");
     std::cout << "Divisors of 24 after removing unode 4: \n";
-    for (const std::string& u : bigraph.adjacentVNodeIterator(24)){
+    for (const std::string& u : bigraph.adjacentRightNodeIterator(24)){
         std::cout << "\t" << u << "\n";
     }
 
