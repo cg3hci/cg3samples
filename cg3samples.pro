@@ -16,14 +16,12 @@ FINAL_RELEASE {
 }
 
 TEMPLATE = app
-CONFIG += console c++11
+CONFIG += c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    main.cpp \
-    samples/aabbsample.cpp \
-    tests/aabbtest.cpp
+    main.cpp
 
 #cg3lib module
 include (cg3lib/cg3.pri)
@@ -33,6 +31,8 @@ CONFIG += TESTS
 #uncomment if you want to include sample programs
 CONFIG += SAMPLES
 
+DEFINES += "CG3_SAMPLES_HOME=$$_PRO_FILE_PWD_"
+message($$_PRO_FILE_PWD_)
 
 TESTS {
     DEFINES += TESTS
@@ -51,13 +51,15 @@ TESTS {
     SOURCES += \
         tests/bsttest.cpp \
         tests/rttest.cpp \
-        tests/chtest.cpp
+        tests/chtest.cpp \
+        tests/aabbtest.cpp
 
 
     HEADERS += \
         tests/bsttest.h \
         tests/rttest.h \
-        tests/chtest.h
+        tests/chtest.h \
+        tests/aabbtest.h
 }
 SAMPLES {
     DEFINES += SAMPLES
@@ -70,22 +72,31 @@ SAMPLES {
     DEFINES += AABBSAMPLE
     #uncomment if you want to run convex hull test programs
     DEFINES += CHSAMPLE
+    #uncomment if you want to run bipartite graph test programs
+    DEFINES += BIPARTITEGRAPHSAMPLE
+    #uncomment if you want to run convex hull 3d test programs
+    DEFINES += CH3DSAMPLE
 
 
     SOURCES += \
         samples/bstsample.cpp \
         samples/rtsample.cpp \
-        samples/chsample.cpp
-
+        samples/chsample.cpp \
+        samples/aabbsample.cpp \
+        samples/bipartitegraphsample.cpp \
+        samples/ch3dsamples.cpp
 
     HEADERS += \
         samples/bstsample.h \
         samples/rtsample.h \
-        samples/chsample.h
+        samples/chsample.h \
+        samples/aabbsample.h \
+        samples/bipartitegraphsample.h \
+        samples/ch3dsamples.h
+
 }
 
-HEADERS += \
-    samples/aabbsample.h \
-    tests/aabbtest.h
+
+
 
 

@@ -2,6 +2,7 @@
     @author Stefano Nuvoli
 */
 
+#include <cg3/cg3lib.h>
 
 #ifdef BSTTEST
 #include "tests/bsttest.h"
@@ -33,6 +34,14 @@
 
 #ifdef CHSAMPLE
 #include "samples/chsample.h"
+#endif
+
+#ifdef BIPARTITEGRAPHSAMPLE
+#include "samples/bipartitegraphsample.h"
+#endif
+
+#ifdef CH3DSAMPLE
+#include "samples/ch3dsamples.h"
 #endif
 
 
@@ -123,6 +132,18 @@ int main()
 #ifdef CHSAMPLE
     std::cout << "------ Convex hull sample ------" << std::endl << std::endl;
     CHSamples::execute();
+    std::cout <<  std::endl << std::endl;
+#endif
+
+#ifdef BIPARTITEGRAPHSAMPLE
+    std::cout << "------ Bipartite Graph sample ------" << std::endl << std::endl;
+    BipartiteGraphSample::execute();
+    std::cout <<  std::endl << std::endl;
+#endif
+
+#ifdef CH3DSAMPLE
+    std::cout << "------ Convex Hull 3D sample ------" << std::endl << std::endl;
+    CH3DSamples::execute();
     std::cout <<  std::endl << std::endl;
 #endif
 
