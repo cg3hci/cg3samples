@@ -5,6 +5,7 @@
 #define BSTSAMPLE_H
 
 #include <vector>
+#include <string>
 
 namespace BSTSample {
 

@@ -44,11 +44,9 @@
 #include "samples/ch3dsamples.h"
 #endif
 
-
 #include <iostream>
 
-int main()
-{
+int main() {
 
 #ifdef BSTTEST
     std::cout << std::endl << std::endl <<

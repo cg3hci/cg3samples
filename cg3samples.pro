@@ -32,7 +32,6 @@ CONFIG += TESTS
 CONFIG += SAMPLES
 
 DEFINES += "CG3_SAMPLES_HOME=$$_PRO_FILE_PWD_"
-message($$_PRO_FILE_PWD_)
 
 TESTS {
     DEFINES += TESTS
@@ -77,15 +76,6 @@ SAMPLES {
     #uncomment if you want to run convex hull 3d test programs
     DEFINES += CH3DSAMPLE
 
-
-    SOURCES += \
-        samples/bstsample.cpp \
-        samples/rtsample.cpp \
-        samples/chsample.cpp \
-        samples/aabbsample.cpp \
-        samples/bipartitegraphsample.cpp \
-        samples/ch3dsamples.cpp
-
     HEADERS += \
         samples/bstsample.h \
         samples/rtsample.h \
@@ -94,9 +84,11 @@ SAMPLES {
         samples/bipartitegraphsample.h \
         samples/ch3dsamples.h
 
+    SOURCES += \
+        samples/bstsample.cpp \
+        samples/rtsample.cpp \
+        samples/chsample.cpp \
+        samples/aabbsample.cpp \
+        samples/bipartitegraphsample.cpp \
+        samples/ch3dsamples.cpp
 }
-
-
-
-
-
