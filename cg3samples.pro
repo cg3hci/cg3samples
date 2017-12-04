@@ -24,7 +24,9 @@ SOURCES += \
     main.cpp
 
 #cg3lib module
+CONFIG += CG3_CORE CG3_DATA_STRUCTURES CG3_DCEL CG3_ALGORITHMS #CG3_VIEWER
 include (cg3lib/cg3.pri)
+message($$MODULES)
 
 #uncomment if you want to include test programs
 CONFIG += TESTS
@@ -37,13 +39,15 @@ TESTS {
     DEFINES += TESTS
 
     #uncomment if you want to run BST test programs
-    DEFINES += BSTTEST
+    #DEFINES += BSTTEST
     #uncomment if you want to run Range tree test programs
-    DEFINES += RTTEST
+    #DEFINES += RTTEST
     #uncomment if you want to run AABBTree test programs
-    DEFINES += AABBTEST
+    #DEFINES += AABBTEST
     #uncomment if you want to run convex hull test programs
     DEFINES += CHTEST
+    #uncomment if you want to run convex hull test programs
+    DEFINES += VIEWERTEST
 
 
 
