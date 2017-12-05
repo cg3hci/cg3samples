@@ -5,12 +5,12 @@
 
 #include <iostream>
 
-#include <set>
+#include <vector>
 
-#include "cg3/algorithms/2d/convexhull2d.h"
-#include "cg3/algorithms/2d/convexhull2d_iterative.h"
+#include <cg3/algorithms/2d/convexhull2d.h>
+#include <cg3/algorithms/2d/convexhull2d_iterative.h>
 
-#include "cg3/geometry/2d/point2d.h"
+#include <cg3/geometry/2d/point2d.h>
 
 #define PLANE_WIDTH 10
 #define PLANE_HEIGHT 10

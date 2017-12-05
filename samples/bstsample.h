@@ -4,9 +4,6 @@
 #ifndef BSTSAMPLE_H
 #define BSTSAMPLE_H
 
-#include <vector>
-#include <string>
-
 namespace BSTSample {
 
     void execute();

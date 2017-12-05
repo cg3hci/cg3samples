@@ -7,9 +7,9 @@
 #include <sstream>
 #include <set>
 
-#include "cg3/data_structures/trees/rangetree.h"
+#include <cg3/data_structures/trees/rangetree.h>
 
-#include "cg3/geometry/2d/point2d.h"
+#include <cg3/geometry/2d/point2d.h>
 
 typedef cg3::Point2Dd Point2Dd;
 

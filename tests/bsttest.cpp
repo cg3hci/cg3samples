@@ -12,11 +12,11 @@
 #include <set>
 #include <vector>
 
-#include "cg3/data_structures/trees/bstinner.h"
-#include "cg3/data_structures/trees/avlinner.h"
-#include "cg3/data_structures/trees/bstleaf.h"
-#include "cg3/data_structures/trees/avlleaf.h"
-#include "cg3/utilities/const.h"
+#include <cg3/data_structures/trees/bstinner.h>
+#include <cg3/data_structures/trees/avlinner.h>
+#include <cg3/data_structures/trees/bstleaf.h>
+#include <cg3/data_structures/trees/avlleaf.h>
+#include <cg3/utilities/const.h>
 
 #define ITERATION 1
 #define INDENTSPACE 12
@@ -47,16 +47,12 @@ template <class T> using AVLLeaf = typename cg3::AVLLeaf<T>;
 /* ----- FUNCTION DECLARATION ----- */
 
 
-bool intComparator(const int& o1, const int& o2);
-
 void printHeader();
 
 
 
 template <class B>
 void testCorrectness();
-
-
 
 
 void doTestsOnInput(std::vector<int>& testNumbers, std::vector<int>& randomNumbers);
@@ -225,8 +221,34 @@ void testCorrectness() {
 
     bst1.erase(1);
 
+    bst1.insert(3);
+    bst1.insert(9);
+    bst1.insert(5);
+
+    //Lower
+    assert(bst1.findLower(-1) == bst1.end());
+    assert(bst1.findLower(2) == bst1.end());
+    assert(*(bst1.findLower(3)) == 3);
+    assert(*(bst1.findLower(4)) == 3);
+    assert(*(bst1.findLower(5)) == 5);
+    assert(*(bst1.findLower(6)) == 5);
+    assert(*(bst1.findLower(9)) == 9);
+    assert(*(bst1.findLower(10)) == 9);
+
+    //Upper
+    assert(*(bst1.findUpper(-1)) == 3);
+    assert(*(bst1.findUpper(2)) == 3);
+    assert(*(bst1.findUpper(3)) == 5);
+    assert(*(bst1.findUpper(4)) == 5);
+    assert(*(bst1.findUpper(5)) == 9);
+    assert(*(bst1.findUpper(6)) == 9);
+    assert(bst1.findUpper(9) == bst1.end());
+    assert(bst1.findUpper(10) == bst1.end());
+
 
     //Empty BST
+    bst1.clear();
+
     minIt = bst1.getMin();
     assert(minIt == bst1.end());
     maxIt = bst1.getMax();
@@ -343,9 +365,6 @@ void testProgressive() {
 /* ----- FUNCTION IMPLEMENTATION ----- */
 
 
-bool intComparator(const int& o1, const int& o2) {
-    return o1 < o2;
-}
 
 void printHeader() {
     std::cout <<
@@ -781,7 +800,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
 template <class B>
 void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
-    B tree(&intComparator);
+    B tree;
 
     typedef typename B::iterator iterator;
 

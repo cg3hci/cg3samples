@@ -1,5 +1,9 @@
 #include "bipartitegraphsample.h"
 
+#include <iostream>
+
+#include <cg3/data_structures/graphs/bipartite_graph.h>
+
 void BipartiteGraphSample::execute() {
 
     //this bipartite graph connects strings to integers

@@ -7,10 +7,10 @@
 
 #include <set>
 
-#include "cg3/data_structures/trees/aabbtree.h"
+#include <cg3/data_structures/trees/aabbtree.h>
 
-#include "cg3/geometry/2d/point2d.h"
-#include "cg3/geometry/segment.h"
+#include <cg3/geometry/2d/point2d.h>
+#include <cg3/geometry/segment.h>
 
 typedef cg3::AABBValueType AABBValueType;
 typedef cg3::Point2D<int> Point2D;

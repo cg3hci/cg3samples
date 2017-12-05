@@ -5,11 +5,13 @@
 
 #include <iostream>
 
-#include "cg3/data_structures/trees/bst.h"
-//#include "trees/avlleaf.h"
-//#include "trees/avlinner.h"
-//#include "trees/bstinner.h"
-//#include "trees/bstleaf.h"
+#include <vector>
+
+#include <cg3/data_structures/trees/bst.h>
+//#include <cg3/data_structures/trees/avlleaf.h>
+//#include <cg3/data_structures/trees/avlinner.h>
+//#include <cg3/data_structures/trees/bstinner.h>
+//#include <cg3/data_structures/trees/bstleaf.h>
 
 /* Choose the one you prefer, you can use each one in the same way! */
 
