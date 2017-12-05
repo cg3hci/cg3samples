@@ -33,17 +33,17 @@ CONFIG += TESTS
 #uncomment if you want to include sample programs
 CONFIG += SAMPLES
 
-DEFINES += "CG3_SAMPLES_HOME=$$_PRO_FILE_PWD_"
+DEFINES += "CG3_SAMPLES_HOME='$$_PRO_FILE_PWD_'"
 
 TESTS {
     DEFINES += TESTS
 
     #uncomment if you want to run BST test programs
-    #DEFINES += BSTTEST
+    DEFINES += BSTTEST
     #uncomment if you want to run Range tree test programs
-    #DEFINES += RTTEST
+    DEFINES += RTTEST
     #uncomment if you want to run AABBTree test programs
-    #DEFINES += AABBTEST
+    DEFINES += AABBTEST
     #uncomment if you want to run convex hull test programs
     DEFINES += CHTEST
     #uncomment if you want to run convex hull test programs
