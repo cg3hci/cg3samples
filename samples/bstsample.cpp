@@ -98,6 +98,37 @@ void BSTSample::execute()
 
 
 
+    /* ----- RANGE BASED ITERATIONS ----- */
+
+    //Iteration
+    std::cout << "The BST contains (default iterator):" << std::endl << "    ";
+    for (int& number : bst.getIterator())
+        std::cout << number << " ";
+    std::cout << std::endl;
+
+    //Const iteration
+    std::cout << "The BST contains (const):" << std::endl << "    ";
+    for (const int& number : bst.getConstIterator())
+        std::cout << number << " ";
+    std::cout << std::endl;
+
+    //Reverse iteration
+    std::cout << "The BST contains (reverse):" << std::endl << "    ";
+    for (int& number : bst.getReverseIterator())
+        std::cout << number << " ";
+    std::cout << std::endl;
+
+    //Reverse const iteration
+    std::cout << "The BST contains (const reverse):" << std::endl << "    ";
+    for (const int& number : bst.getConstReverseIterator())
+        std::cout << number << " ";
+    std::cout << std::endl;
+
+
+
+    std::cout << std::endl;
+
+
     /* ----- OTHER FUNCTIONS ----- */
 
     //Get min and max (through iterators)
@@ -163,7 +194,7 @@ void BSTSample::execute()
     bst2.insert(10, "Ten");
     bst2.insert(50, "Fifty");
 
-    //Reverse iteration
+    //Reverse iteration (explicit)
     std::cout << "The BST contains (reverse):" << std::endl << "    ";
     for (BSTIntString::reverse_iterator it = bst2.rbegin(); it != bst2.rend(); it++)
         std::cout << *it << " ";
