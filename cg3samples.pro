@@ -29,7 +29,7 @@ include (cg3lib/cg3.pri)
 message($$MODULES)
 
 #uncomment if you want to include test programs
-CONFIG += TESTS
+#CONFIG += TESTS
 #uncomment if you want to include sample programs
 CONFIG += SAMPLES
 
@@ -47,6 +47,8 @@ TESTS {
     #uncomment if you want to run convex hull test programs
     DEFINES += CHTEST
     #uncomment if you want to run convex hull test programs
+    DEFINES += GRAPHTEST
+    #uncomment if you want to run convex hull test programs
     DEFINES += VIEWERTEST
 
 
@@ -54,15 +56,17 @@ TESTS {
     SOURCES += \
         tests/bsttest.cpp \
         tests/rttest.cpp \
+        tests/aabbtest.cpp \
         tests/chtest.cpp \
-        tests/aabbtest.cpp
+        tests/graphtest.cpp
 
 
     HEADERS += \
         tests/bsttest.h \
         tests/rttest.h \
+        tests/aabbtest.h \
         tests/chtest.h \
-        tests/aabbtest.h
+        tests/graphtest.h
 }
 SAMPLES {
     DEFINES += SAMPLES
@@ -75,6 +79,8 @@ SAMPLES {
     DEFINES += AABBSAMPLE
     #uncomment if you want to run convex hull test programs
     DEFINES += CHSAMPLE
+    #uncomment if you want to run convex hull test programs
+    DEFINES += GRAPHSAMPLE
     #uncomment if you want to run bipartite graph test programs
     DEFINES += BIPARTITEGRAPHSAMPLE
     #uncomment if you want to run convex hull 3d test programs
@@ -83,16 +89,18 @@ SAMPLES {
     HEADERS += \
         samples/bstsample.h \
         samples/rtsample.h \
-        samples/chsample.h \
         samples/aabbsample.h \
+        samples/chsample.h \
+        samples/graphsample.h \
         samples/bipartitegraphsample.h \
-        samples/ch3dsamples.h
+        samples/ch3dsample.h
 
     SOURCES += \
         samples/bstsample.cpp \
         samples/rtsample.cpp \
-        samples/chsample.cpp \
         samples/aabbsample.cpp \
+        samples/chsample.cpp \
+        samples/graphsample.cpp \
         samples/bipartitegraphsample.cpp \
-        samples/ch3dsamples.cpp
+        samples/ch3dsample.cpp
 }

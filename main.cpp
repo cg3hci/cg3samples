@@ -60,6 +60,10 @@
 #include "tests/chtest.h"
 #endif
 
+#ifdef GRAPHTEST
+#include "tests/graphtest.h"
+#endif
+
 #ifdef BSTSAMPLE
 #include "samples/bstsample.h"
 #endif
@@ -76,13 +80,18 @@
 #include "samples/chsample.h"
 #endif
 
+#ifdef GRAPHSAMPLE
+#include "samples/graphsample.h"
+#endif
+
 #ifdef BIPARTITEGRAPHSAMPLE
 #include "samples/bipartitegraphsample.h"
 #endif
 
 #ifdef CH3DSAMPLE
-#include "samples/ch3dsamples.h"
+#include "samples/ch3dsample.h"
 #endif
+
 
 #include <iostream>
 
@@ -151,6 +160,19 @@ int main(int argc, char *argv[]) {
     std::cout << std::endl << std::endl;
 #endif
 
+#ifdef GRAPHTEST
+    std::cout << std::endl << std::endl <<
+                 "##########################################################################" <<
+                 " Graph test " <<
+                 "##########################################################################" <<
+                 std::endl << std::endl;
+
+    GraphTests::testCorrectness();
+    GraphTests::testDijkstra();
+
+    std::cout << std::endl << std::endl;
+#endif
+
 #ifdef BSTSAMPLE
     std::cout << "------ Binary search tree sample ------" << std::endl << std::endl;
     BSTSample::execute();
@@ -172,6 +194,12 @@ int main(int argc, char *argv[]) {
 #ifdef CHSAMPLE
     std::cout << "------ Convex hull sample ------" << std::endl << std::endl;
     CHSamples::execute();
+    std::cout <<  std::endl << std::endl;
+#endif
+
+#ifdef GRAPHSAMPLE
+    std::cout << "------ Graph sample ------" << std::endl << std::endl;
+    GraphSamples::execute();
     std::cout <<  std::endl << std::endl;
 #endif
 

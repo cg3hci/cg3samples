@@ -1,4 +1,4 @@
-#include "ch3dsamples.h"
+#include "ch3dsample.h"
 
 void CH3DSamples::execute() {
     cg3::Dcel mesh(CG3_STRINGIFY(CG3_SAMPLES_HOME) "/data/airplane.obj");

@@ -1,7 +1,7 @@
 /**
     @author Stefano Nuvoli
 */
-#include "bsttest.h"
+#include "chtest.h"
 
 #include <iostream>
 #include <random>
@@ -9,7 +9,6 @@
 #include <assert.h>
 #include <iomanip>
 
-#include <set>
 #include <vector>
 
 #include "cg3/geometry/2d/point2d.h"
@@ -22,7 +21,7 @@
 #include "cg3/cgal/2d/cgal_convexhull2d.h"
 #endif
 
-#define ITERATION 5
+#define ITERATION 3
 #define INDENTSPACE 12
 
 #define INPUTSIZE 1000000
