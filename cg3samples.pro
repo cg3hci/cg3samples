@@ -29,7 +29,7 @@ include (cg3lib/cg3.pri)
 message($$MODULES)
 
 #uncomment if you want to include test programs
-#CONFIG += TESTS
+CONFIG += TESTS
 #uncomment if you want to include sample programs
 CONFIG += SAMPLES
 

@@ -51,7 +51,7 @@ void CHSamples::execute()
 
     std::cout << std::endl << std::endl;
 
-    std::cout << "***** GRAHAM SCAN *****" << std::endl << std::endl;
+    std::cout << " >> GRAHAM SCAN" << std::endl << std::endl;
 
     //Clear/initialize the plane
     for (int x = 0; x < PLANE_WIDTH; x++) {
@@ -109,7 +109,7 @@ void CHSamples::execute()
 
     std::cout << std::endl << std::endl;
 
-    std::cout << "***** ITERATIVE CONVEX HULL *****" << std::endl << std::endl;
+    std::cout << " >> ITERATIVE CONVEX HULL" << std::endl << std::endl;
 
     //Clear/initialize the plane
     for (int x = 0; x < PLANE_WIDTH; x++) {

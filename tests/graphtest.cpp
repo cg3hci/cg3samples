@@ -67,25 +67,25 @@ void testCorrectness() {
     assert(!graph.isAdjacent(2, 3));
     assert(!graph.isAdjacent(n2, n3));
 
-    graph.addArc(2,3);
+    graph.addEdge(2,3);
     assert(graph.isAdjacent(2, 3));
     assert(!graph.isAdjacent(3, 2));
     assert(graph.isAdjacent(n2, n3));
     assert(!graph.isAdjacent(n3, n2));
 
-    graph.deleteArc(n2,n3);
+    graph.deleteEdge(n2,n3);
     assert(!graph.isAdjacent(2, 3));
     assert(!graph.isAdjacent(3, 2));
     assert(!graph.isAdjacent(n2, n3));
     assert(!graph.isAdjacent(n3, n2));
 
-    graph.addArc(n2,n3);
+    graph.addEdge(n2,n3);
     assert(graph.isAdjacent(2, 3));
     assert(!graph.isAdjacent(3, 2));
     assert(graph.isAdjacent(n2, n3));
     assert(!graph.isAdjacent(n3, n2));
 
-    graph.deleteArc(2,3);
+    graph.deleteEdge(2,3);
     assert(!graph.isAdjacent(2, 3));
     assert(!graph.isAdjacent(3, 2));
     assert(!graph.isAdjacent(n2, n3));
@@ -116,25 +116,25 @@ void testCorrectness() {
     assert(!undirectedGraph.isAdjacent(2, 3));
     assert(!undirectedGraph.isAdjacent(n2, n3));
 
-    undirectedGraph.addArc(2,3);
+    undirectedGraph.addEdge(2,3);
     assert(undirectedGraph.isAdjacent(2, 3));
     assert(undirectedGraph.isAdjacent(3, 2));
     assert(undirectedGraph.isAdjacent(n2, n3));
     assert(undirectedGraph.isAdjacent(n3, n2));
 
-    undirectedGraph.deleteArc(n2,n3);
+    undirectedGraph.deleteEdge(n2,n3);
     assert(!undirectedGraph.isAdjacent(2, 3));
     assert(!undirectedGraph.isAdjacent(3, 2));
     assert(!undirectedGraph.isAdjacent(n2, n3));
     assert(!undirectedGraph.isAdjacent(n3, n2));
 
-    undirectedGraph.addArc(n2,n3);
+    undirectedGraph.addEdge(n2,n3);
     assert(undirectedGraph.isAdjacent(2, 3));
     assert(undirectedGraph.isAdjacent(3, 2));
     assert(undirectedGraph.isAdjacent(n2, n3));
     assert(undirectedGraph.isAdjacent(n3, n2));
 
-    undirectedGraph.deleteArc(2,3);
+    undirectedGraph.deleteEdge(2,3);
     assert(!undirectedGraph.isAdjacent(2, 3));
     assert(!undirectedGraph.isAdjacent(3, 2));
     assert(!undirectedGraph.isAdjacent(n2, n3));
@@ -148,6 +148,54 @@ void testCorrectness() {
         assert(number == checkNumberUndirected);
         checkNumberUndirected++;
     }
+
+
+    int number = 0;
+    for (const int& n : undirectedGraph.adjacentNodeIterator(n4)) {
+        CG3_SUPPRESS_WARNING(n);
+        number++;
+    }
+    assert(number == 0);
+
+    number = 0;
+    for (std::pair<const int, const int> pair : undirectedGraph.edgeIterator()) {
+        CG3_SUPPRESS_WARNING(pair);
+        number++;
+    }
+    assert(number == 0);
+
+
+
+    undirectedGraph.addEdge(n4, n2);
+
+
+    number = 0;
+    for (std::pair<const int, const int> pair : undirectedGraph.edgeIterator()) {
+        CG3_SUPPRESS_WARNING(pair);
+        number++;
+
+        assert(undirectedGraph.findNode(pair.first) != undirectedGraph.nodeIteratorEnd());
+        assert(undirectedGraph.findNode(pair.second) != undirectedGraph.nodeIteratorEnd());
+    }
+    assert(number == 2);
+
+    number = 0;
+    for (const int& n : undirectedGraph.adjacentNodeIterator(n4)) {
+        CG3_SUPPRESS_WARNING(n);
+        number++;
+
+        assert(n == 2);
+    }
+    assert(number == 1);
+
+    number = 0;
+    for (const int& n : undirectedGraph.adjacentNodeIterator(n2)) {
+        CG3_SUPPRESS_WARNING(n);
+        number++;
+
+        assert(n == 4);
+    }
+    assert(number == 1);
 }
 
 
@@ -183,6 +231,8 @@ void testDijkstra()
             testNumbers.push_back(randomValue);
         }
     }
+
+    //TODO
 }
 
 

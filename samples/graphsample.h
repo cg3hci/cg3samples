@@ -7,6 +7,7 @@
 namespace GraphSamples {
 
     void execute();
+    void sampleBasic();
     void sampleDirected();
     void sampleUndirected();
     void sampleWeighted();

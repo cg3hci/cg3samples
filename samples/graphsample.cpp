@@ -11,6 +11,8 @@
 
 void GraphSamples::execute()
 {
+    sampleBasic();
+    std::cout << std::endl;
     sampleDirected();
     std::cout << std::endl;
     sampleUndirected();
@@ -20,6 +22,125 @@ void GraphSamples::execute()
     sampleIterators();
 }
 
+
+
+/**
+ * @brief Directed graph sample
+ */
+void GraphSamples::sampleBasic() {
+
+    std::cout<< std::endl << " >> BASIC" << std::endl << std::endl;
+
+    std::cout << "Create a directed graph..." << std::endl;
+    //In constructor, cg3::GraphType::DIRECTED is the default type
+    cg3::Graph<int> graph(cg3::GraphType::DIRECTED);
+
+    //Add node 1 and 2
+    std::cout << "Add node 1 and 2" << std::endl;
+    cg3::Graph<int>::NodeIterator it1 = graph.addNode(1);
+    cg3::Graph<int>::NodeIterator it2 = graph.addNode(2);
+
+
+    if (graph.isAdjacent(1, 2))
+        std::cout << "1 is adjacent to 2" << std::endl;
+    else
+        std::cout << "1 is NOT adjacent to 2" << std::endl;
+
+    //Add edge (1,2) with weight 15.5
+    std::cout << "Add edge (1,2) with weight 15.5" << std::endl;
+    graph.addEdge(1, 2, 15.5);
+
+    if (graph.isAdjacent(it1, it2))
+        std::cout << "1 is adjacent to 2" << std::endl;
+    else
+        std::cout << "1 is NOT adjacent to 2" << std::endl;
+
+    if (graph.isAdjacent(2, 1))
+        std::cout << "2 is adjacent to 1" << std::endl;
+    else
+        std::cout << "2 is NOT adjacent to 1" << std::endl;
+
+
+    //Change edge (1,2) weight to 10
+    std::cout << "Change weight of (1,2) to 10" << std::endl;
+    graph.setWeight(1, 2, 10.0);
+
+    //Add edge (1,2) with weight 5
+    std::cout << "Add edge (2,1) with weight 5" << std::endl;
+    graph.addEdge(it2, it1, 5);
+
+    //Print weights
+    std::cout << "(1,2) weight is " << graph.getWeight(it1,it2) << std::endl;
+    std::cout << "(2,1) weight is " << graph.getWeight(2,1) << std::endl;
+
+
+    //Add node 3 and edge (3,2)
+    std::cout << "Add node 3 and edge (3,2) with no weight" << std::endl;
+    graph.addNode(3);
+    cg3::Graph<int>::NodeIterator it3 = graph.findNode(3); //We can use find to get iterators
+    graph.addEdge(it3,it2);
+
+    std::cout << "(3,2) weight is " << graph.getWeight(3,2) << " (default weight)" << std::endl;
+    std::cout << "(2,3) weight is " << graph.getWeight(2,3) << " (infinite because the edge does not exists)" << std::endl;
+
+    //Iteration on graph nodes
+    std::cout << "Nodes of the graph: ";
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: " << std::endl;
+    for (std::pair<const int, const int> pair : graph.edgeIterator()) {
+        std::cout << "\t(" << pair.first << "," << pair.second << ") with weight " << graph.getWeight(pair.first, pair.second) << std::endl;
+    }
+
+
+    //Delete node 3
+    std::cout << "Delete node 3" << std::endl;
+    graph.deleteNode(it3);
+    std::cout << "(3,2) weight is " << graph.getWeight(3,2) << " (infinite)" << std::endl;
+
+    //Print data
+    std::cout << "Graph: " << std::endl;
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " -> adjacent to: ";
+        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+            std::cout << adjacentNode << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: " << std::endl;
+    for (std::pair<const int, const int> pair : graph.edgeIterator()) {
+        std::cout << "\t(" << pair.first << "," << pair.second << ") with weight " << graph.getWeight(pair.first, pair.second) << std::endl;
+    }
+
+
+    //Delete edge
+    std::cout << "Delete nodes and edges" << std::endl;
+    graph.deleteEdge(1,2);
+    graph.deleteEdge(it2,it1);
+    graph.deleteNode(2);
+    graph.deleteNode(it1);
+
+
+    //Iteration on graph nodes
+    std::cout << "Nodes of the graph: ";
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: " << std::endl;
+    for (std::pair<const int, const int> pair : graph.edgeIterator()) {
+        std::cout << "\t(" << pair.first << "," << pair.second << ") with weight " << graph.getWeight(pair.first, pair.second) << std::endl;
+    }
+
+}
 
 /**
  * @brief Directed graph sample
@@ -46,66 +167,83 @@ void GraphSamples::sampleDirected() {
 
     //Check adjacency with iterators (faster)
     if (dGraph.isAdjacent(it1, it2)) {
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     }
     else {
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
     }
 
     //Check adjacency with values (slower)
     if (dGraph.isAdjacent(1,2)) {
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     }
     else {
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
     }
 
 
-    //Create arc
-    std::cout << "Create arc between 1 and 2..." << std::endl;
+    //Create edge
+    std::cout << "Create edge between 1 and 2..." << std::endl;
 
     //Faster using iterators
-    dGraph.addArc(it1, it2);
+    dGraph.addEdge(it1, it2);
 
-    //No changes: the graph has already that arc
+    //No changes: the graph has already that edge
     //Slow using values
-    dGraph.addArc(1, 2);
+    dGraph.addEdge(1, 2);
+
+
+
+    //Iteration on graph nodes
+    std::cout << "Nodes of the graph: ";
+    for (const int& node : dGraph.nodeIterator()) {
+        std::cout << node << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: " << std::endl;
+    for (std::pair<const int, const int> pair : dGraph.edgeIterator()) {
+        std::cout << "\t(" << pair.first << "," << pair.second << ") with weight " << dGraph.getWeight(pair.first, pair.second) << std::endl;
+    }
+
+
 
     //Check adjacency (slow)
     if (dGraph.isAdjacent(1, 2))
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     else
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
 
     if (dGraph.isAdjacent(2, 1))
-        std::cout << "Node 2 has an arc to node 1." << std::endl;
+        std::cout << "Node 2 has an edge to node 1." << std::endl;
     else
-        std::cout << "Node 2 has not an arc to node 1." << std::endl;
+        std::cout << "Node 2 has not an edge to node 1." << std::endl;
 
 
 
 
-    std::cout << "Delete arc between node 1 and node 2" << std::endl;
-    //Delete arc (fast with iterators)
-    dGraph.deleteArc(it1, it2);
+    std::cout << "Delete edge between node 1 and node 2" << std::endl;
+    //Delete edge (fast with iterators)
+    dGraph.deleteEdge(it1, it2);
 
-    //No changes: the graph has already that arc
+    //No changes: the graph has already that edge
     //Slow using values
-    dGraph.deleteArc(1, 2);
+    dGraph.deleteEdge(1, 2);
 
 
 
     //Check adjacency (fast)
     if (dGraph.isAdjacent(it1, it2))
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     else
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
 
     //Check adjacency (slow)
     if (dGraph.isAdjacent(2, 1))
-        std::cout << "Node 2 has an arc to node 1." << std::endl;
+        std::cout << "Node 2 has an edge to node 1." << std::endl;
     else
-        std::cout << "Node 2 has not an arc to node 1." << std::endl;
+        std::cout << "Node 2 has not an edge to node 1." << std::endl;
 
 
 
@@ -122,14 +260,14 @@ void GraphSamples::sampleDirected() {
     //Delete node with iterator (it is not slower)
     bool deleteResult = dGraph.deleteNode(2);
     if (deleteResult)
-        std::cout << "Node 2 was in the graph and it has been deleted." << std::endl;
+        std::cout << "Node 2 has been found in the graph and it has been deleted." << std::endl;
     else
-        std::cout << "Node 2 was not in the graph. No changes." << std::endl;
+        std::cout << "Node 2 has not been found in the graph. No changes." << std::endl;
 
     //Delete node with iterator (it is not faster)
     deleteResult = dGraph.deleteNode(itFind);
     if (deleteResult)
-        std::cout << "Node 2 was in the graph and it has been deleted." << std::endl;
+        std::cout << "Node 2 has been found in the graph and it has been deleted." << std::endl;
     else
         std::cout << "Node 2 has not been found in the graph. No changes." << std::endl;
 
@@ -169,68 +307,84 @@ void GraphSamples::sampleUndirected() {
 
     //Check adjacency with iterators (faster)
     if (uGraph.isAdjacent(it1, it2)) {
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     }
     else {
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
     }
 
     //Check adjacency with values (slower)
     if (uGraph.isAdjacent(1,2)) {
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     }
     else {
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
     }
 
 
 
-    //Create arc
-    std::cout << "Create arc between 1 and 2..." << std::endl;
+    //Create edge
+    std::cout << "Create edge between 1 and 2..." << std::endl;
 
     //Faster using iterators
-    uGraph.addArc(it1, it2);
+    uGraph.addEdge(it1, it2);
 
-    //No changes: the graph has already that arc
+    //No changes: the graph has already that edge
     //Slow using values
-    uGraph.addArc(1, 2);
+    uGraph.addEdge(1, 2);
+
+
+
+    //Iteration on graph nodes
+    std::cout << "Nodes of the graph: ";
+    for (const int& node : uGraph.nodeIterator()) {
+        std::cout << node << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: " << std::endl;
+    for (std::pair<const int, const int> pair : uGraph.edgeIterator()) {
+        std::cout << "\t(" << pair.first << "," << pair.second << ") with weight " << uGraph.getWeight(pair.first, pair.second) << std::endl;
+    }
+
 
 
 
     //Check adjacency (slow)
     if (uGraph.isAdjacent(1, 2))
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     else
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
 
     if (uGraph.isAdjacent(2, 1))
-        std::cout << "Node 2 has an arc to node 1." << std::endl;
+        std::cout << "Node 2 has an edge to node 1." << std::endl;
     else
-        std::cout << "Node 2 has not an arc to node 1." << std::endl;
+        std::cout << "Node 2 has not an edge to node 1." << std::endl;
 
 
 
-    std::cout << "Delete arc between node 1 and node 2" << std::endl;
-    //Delete arc (fast with iterators)
-    uGraph.deleteArc(it1, it2);
+    std::cout << "Delete edge between node 1 and node 2" << std::endl;
+    //Delete edge (fast with iterators)
+    uGraph.deleteEdge(it1, it2);
 
-    //No changes: the graph has already that arc
+    //No changes: the graph has already that edge
     //Slow using values
-    uGraph.deleteArc(1, 2);
+    uGraph.deleteEdge(1, 2);
 
 
 
     //Check adjacency (fast)
     if (uGraph.isAdjacent(it1, it2))
-        std::cout << "Node 1 has an arc to node 2." << std::endl;
+        std::cout << "Node 1 has an edge to node 2." << std::endl;
     else
-        std::cout << "Node 1 has not an arc to node 2." << std::endl;
+        std::cout << "Node 1 has not an edge to node 2." << std::endl;
 
     //Check adjacency (slow)
     if (uGraph.isAdjacent(2, 1))
-        std::cout << "Node 2 has an arc to node 1." << std::endl;
+        std::cout << "Node 2 has an edge to node 1." << std::endl;
     else
-        std::cout << "Node 2 has not an arc to node 1." << std::endl;
+        std::cout << "Node 2 has not an edge to node 1." << std::endl;
 
 
 
@@ -246,18 +400,16 @@ void GraphSamples::sampleUndirected() {
     //Delete node with iterator (it is not faster)
     bool deleteResult = uGraph.deleteNode(itFind);
     if (deleteResult)
-        std::cout << "Node 2 was in the graph and it has been deleted." << std::endl;
+        std::cout << "Node 2 has been found in the graph and it has been deleted." << std::endl;
     else
-        std::cout << "Node 2 was not in the graph. No changes." << std::endl;
+        std::cout << "Node 2 has not been found in the graph. No changes." << std::endl;
 
-    //Delete node with iterator (it is not slower)
+    //Delete node with value (it is not slower)
     deleteResult = uGraph.deleteNode(2);
     if (deleteResult)
-        std::cout << "Node 2 was in the graph and it has been deleted." << std::endl;
+        std::cout << "Node 2 has been found in the graph and it has been deleted." << std::endl;
     else
-        std::cout << "Node 2 was not in the graph. No changes." << std::endl;
-
-
+        std::cout << "Node 2 has not been found in the graph. No changes." << std::endl;
 
 
 
@@ -298,42 +450,42 @@ void GraphSamples::sampleWeighted() {
 
     //No weight
     weight = graph.getWeight(it1, it2);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 2 are not adjacent! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,2): Weight is: " << weight << std::endl;
 
 
-    //Add arc with undefined weight
-    std::cout << "Add arc between nodes 1 and 2 (no weight defined)..." << std::endl;
-    graph.addArc(1, 2); //Default weight: 0
+    //Add edge with undefined weight
+    std::cout << "Add edge between nodes 1 and 2 (no weight defined)..." << std::endl;
+    graph.addEdge(1, 2); //Default weight: 0
 
     weight = graph.getWeight(it1, it2);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 2 are not adjacent! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,2): Weight is: " << weight << std::endl;
 
 
 
-    //Add arc with weight 10 (replacing)
-    std::cout << "Add arc between nodes 1 and 2 (weight 10)... It replaces the last weight of the arc." << std::endl;
-    graph.addArc(1, 2, 10); //It replaces the weight
+    //Add edge with weight 10 (replacing)
+    std::cout << "Add edge between nodes 1 and 2 (weight 10)... It replaces the last weight of the edge." << std::endl;
+    graph.addEdge(1, 2, 10); //It replaces the weight
 
     weight = graph.getWeight(it1, it2);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 2 are not adjacent! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,2): Weight is: " << weight << std::endl;
 
 
 
-    //Add arc with weight 10
+    //Add edge with weight 10
     std::cout << "Set weight to 27..." << std::endl;
     graph.setWeight(it1, it2, 27);
 
     weight = graph.getWeight(it1, it2);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 2 are not adjacent! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,2): Weight is: " << weight << std::endl;
@@ -345,20 +497,20 @@ void GraphSamples::sampleWeighted() {
     graph.setWeight(1, 2, graph.getWeight(1, 2) * 2); //Double the weight
 
     weight = graph.getWeight(1, 2);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 2 are not adjacent! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,2): Weight is: " << weight << std::endl;
 
 
 
-    std::cout << "Setting weight of an arc of the node 3 (that is not in the graph)..." << std::endl;
+    std::cout << "Setting weight of an edge of the node 3 (that is not in the graph)..." << std::endl;
     //Setting the weight with a node (3) that is not in the graph
     graph.setWeight(1, 3, 10); //No effect
 
     //Getting the weight with a node (3) that is not in the graph
     weight = graph.getWeight(1, 3);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 3 are not adjacent or a node does not exist! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,3): Weight is: " << weight << std::endl;
@@ -370,26 +522,26 @@ void GraphSamples::sampleWeighted() {
 
 
 
-    std::cout << "Setting weight of the arc (1,3) (that is not in the graph)..." << std::endl;
-    //Setting the weight of an arc (1,3) that is not in the graph
+    std::cout << "Setting weight of the edge (1,3) (that is not in the graph)..." << std::endl;
+    //Setting the weight of an edge (1,3) that is not in the graph
     graph.setWeight(1, 3, 10); //No effect
 
-    //Getting the weight of an arc (1,3) that is not in the graph
+    //Getting the weight of an edge (1,3) that is not in the graph
     weight = graph.getWeight(1, 3);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 3 are not adjacent or a node does not exist! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,3): Weight is: " << weight << std::endl;
 
 
 
-    //Add arc
-    std::cout << "Add arc (3,1) with weight 20..." << std::endl;
-    graph.addArc(3, 1, 20);
+    //Add edge
+    std::cout << "Add edge (3,1) with weight 20..." << std::endl;
+    graph.addEdge(3, 1, 20);
 
-    //Getting the weight of an arc (1,3) that is not in the graph
+    //Getting the weight of an edge (1,3) that is not in the graph
     weight = graph.getWeight(1, 3);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 3 are not adjacent or a node does not exist! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,3): Weight is: " << weight << std::endl;
@@ -397,24 +549,38 @@ void GraphSamples::sampleWeighted() {
 
 
 
-    std::cout << "Setting weight of the arc (1,3) to 40 (the graph is undirected)..." << std::endl;
-    //Setting the weight of an arc (1,3) that is not in the graph
+    std::cout << "Setting weight of the edge (1,3) to 40 (the graph is undirected)..." << std::endl;
+    //Setting the weight of an edge (1,3) that is not in the graph
     graph.setWeight(1, 3, 40); //No effect
 
-    //Getting the weight of an arc (1,3) that is not in the graph
+    //Getting the weight of an edge (1,3) that is not in the graph
     weight = graph.getWeight(1, 3);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 1 and 3 are not adjacent or a node does not exist! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(1,3): Weight is: " << weight << std::endl;
 
-    //Getting the weight of an arc (1,3) that is not in the graph
+    //Getting the weight of an edge (1,3) that is not in the graph
     weight = graph.getWeight(3,1);
-    if (weight == DBL_MAX)
+    if (weight == cg3::Graph<int>::MAX_WEIGHT)
         std::cout << "The nodes 3 and 1 are not adjacent or a node does not exist! Weight returned is: " << weight << std::endl;
     else
         std::cout << "(3,1): Weight is: " << weight << std::endl;
 
+
+
+    //Iteration on graph nodes
+    std::cout << "Nodes of the graph: ";
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: " << std::endl;
+    for (std::pair<const int, const int> pair : graph.edgeIterator()) {
+        std::cout << "\t(" << pair.first << "," << pair.second << ") with weight " << graph.getWeight(pair.first, pair.second) << std::endl;
+    }
 
 }
 
@@ -438,16 +604,31 @@ void GraphSamples::sampleIterators() {
     }
     std::cout << std::endl;
 
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: ";
+    for (std::pair<const int, const int> pair : graph.edgeIterator()) {
+        std::cout << "(" << pair.first << "," << pair.second << ") - ";
+    }
+    std::cout << std::endl;
+
+
+    std::cout << std::endl;
+
+
     //Add elements to the graphs
-    std::cout << "Add nodes 1, 2, 4, 3 and arcs (1,2) - (1,3) - (1,4) - (2,1)" << std::endl;
+    std::cout << "Add nodes 1, 2, 4, 3 and edges (1,1) - (1,2) - (1,3) - (1,4) - (2,1) - (3,1) - (3,2) - (4,3)" << std::endl;
     graph.addNode(1);
     graph.addNode(2);
     graph.addNode(4);
     graph.addNode(3);
-    graph.addArc(1,2);
-    graph.addArc(1,3);
-    graph.addArc(1,4);
-    graph.addArc(2,1);
+    graph.addEdge(1,1);
+    graph.addEdge(1,2);
+    graph.addEdge(1,3);
+    graph.addEdge(1,4);
+    graph.addEdge(2,1);    
+    graph.addEdge(3,1);
+    graph.addEdge(3,2);
+    graph.addEdge(4,3);
 
     //Iteration on graph nodes
     std::cout << "Nodes of the graph: ";
@@ -456,16 +637,93 @@ void GraphSamples::sampleIterators() {
     }
     std::cout << std::endl;
 
+    //Iteration on graph edges
+    std::cout << "Edges of the graph: ";
+    for (std::pair<const int, const int> pair : graph.edgeIterator()) {
+        std::cout << "(" << pair.first << "," << pair.second << ") - ";
+    }
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+
+
+
+    //Adjacencies
+    std::cout << "Adjacencies: " << std::endl;
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " -> ";
+        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+            std::cout << adjacentNode << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+    std::cout << std::endl;
+
+    //Adjacencies with explicit iterators
+    std::cout << "Adjacencies (explicit iterators): " << std::endl;
+    for (cg3::Graph<int>::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+        std::cout << *it << " -> ";
+        for (cg3::Graph<int>::AdjacentNodeIterator itAdj = graph.adjacentNodeIteratorBegin(it); itAdj != graph.adjacentNodeIteratorEnd(it); itAdj++) {
+            std::cout << *itAdj << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+    std::cout << std::endl;
+
+
     //Iteration on graph using explicit node iterators
-    std::cout << "Nodes of the graph: ";
+    std::cout << "Nodes of the graph (explicit): ";
     for (cg3::Graph<int>::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
 
+    //Iteration on graph using explicit edge iterators
+    std::cout << "Edges of the graph (explicit): ";
+    for (cg3::Graph<int>::EdgeIterator it = graph.edgeIteratorBegin(); it != graph.edgeIteratorEnd(); it++) {
+        std::pair<const int, const int> edge = *it;
+        std::cout << "(" << edge.first << "," << edge.second << ") - ";
+    }
+    std::cout << std::endl;
 
 
-    //TODO ARC ITERATOR
+    std::cout << std::endl;
 
-    //TODO ADJACENT NODE ITERATOR
+
+
+    //Iteration on adjacent nodes of node "1"
+    std::cout << "Node 1 -> ";
+    for (const int& adjacentNode : graph.adjacentNodeIterator(1)) {
+        std::cout << adjacentNode << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on adjacent nodes of node "2" using iterators
+    std::cout << "Node 2 -> ";
+    cg3::Graph<int>::NodeIterator nodeIt2 = graph.findNode(2);
+    for (const int& adjacentNode : graph.adjacentNodeIterator(nodeIt2)) {
+        std::cout << adjacentNode << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on adjacent nodes of node "3" using explicit iterators
+    std::cout << "Node 3 -> ";
+    for (cg3::Graph<int>::AdjacentNodeIterator itAdj = graph.adjacentNodeIteratorBegin(3); itAdj != graph.adjacentNodeIteratorEnd(3); itAdj++) {
+        std::cout << *itAdj << " ";
+    }
+    std::cout << std::endl;
+
+    //Iteration on adjacent nodes of node "4" using explicit iterators with a node iterator
+    std::cout << "Node 4 -> ";
+    cg3::Graph<int>::NodeIterator nodeIt4 = graph.findNode(4);
+    for (cg3::Graph<int>::AdjacentNodeIterator itAdj = graph.adjacentNodeIteratorBegin(nodeIt4); itAdj != graph.adjacentNodeIteratorEnd(nodeIt4); itAdj++) {
+        std::cout << *itAdj << " ";
+    }
+    std::cout << std::endl;
+
+
 }
