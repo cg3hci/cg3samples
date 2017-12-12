@@ -12,6 +12,7 @@ namespace GraphSamples {
     void sampleUndirected();
     void sampleWeighted();
     void sampleIterators();
+    void sampleDijkstra();
 
 }
 

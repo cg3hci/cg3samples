@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <cg3/data_structures/graphs/graph.h>
+#include <cg3/algorithms/graph_algorithms.h>
 
 void GraphSamples::execute()
 {
@@ -20,6 +21,8 @@ void GraphSamples::execute()
     sampleWeighted();
     std::cout << std::endl;
     sampleIterators();
+    std::cout << std::endl;
+    sampleDijkstra();
 }
 
 
@@ -725,5 +728,146 @@ void GraphSamples::sampleIterators() {
     }
     std::cout << std::endl;
 
+    std::cout << std::endl;
+
+
+
+    //Delete nodes using adjacent node iterators
+    std::cout << "Delete nodes adjacent to node 4...";
+    for (cg3::Graph<int>::AdjacentNodeIterator it = graph.adjacentNodeIteratorBegin(nodeIt4); it != graph.adjacentNodeIteratorEnd(nodeIt4);) {
+        graph.deleteNode(it++);
+    }
+    std::cout << std::endl;
+
+    //Adjacencies
+    std::cout << "Adjacencies: " << std::endl;
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " -> ";
+        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+            std::cout << adjacentNode << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl;
+
+
+
+    //Delete edges using adjacent node iterators
+    std::cout << "Delete edges of node 1...";
+    cg3::Graph<int>::NodeIterator nodeIt1 = graph.findNode(1);
+    for (cg3::Graph<int>::AdjacentNodeIterator it = graph.adjacentNodeIteratorBegin(nodeIt1); it != graph.adjacentNodeIteratorEnd(nodeIt1);) {
+        graph.deleteEdge(nodeIt1, it++);
+    }
+    std::cout << std::endl;
+
+    //Adjacencies
+    std::cout << "Adjacencies: " << std::endl;
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " -> ";
+        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+            std::cout << adjacentNode << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
+
+
+
+/**
+ * @brief Dijkstra sample
+ */
+void GraphSamples::sampleDijkstra() {
+
+    std::cout << std::endl << " >> DIJKSTRA" << std::endl << std::endl;
+
+    std::cout << "Create a graph of 10 nodes with some edges..." << std::endl;
+
+    cg3::Graph<int> g(cg3::GraphType::UNDIRECTED);
+
+    //Add nodes
+    g.addNode(0);
+    g.addNode(1);
+    g.addNode(2);
+    g.addNode(3);
+    g.addNode(4);
+    g.addNode(5);
+    g.addNode(6);
+    g.addNode(7);
+    g.addNode(8);
+    g.addNode(9);
+
+    //Add edges
+    g.addEdge(0, 1, 4);
+    g.addEdge(0, 7, 8);
+    g.addEdge(1, 2, 8);
+    g.addEdge(1, 7, 11);
+    g.addEdge(2, 3, 7);
+    g.addEdge(2, 8, 2);
+    g.addEdge(2, 5, 4);
+    g.addEdge(3, 4, 9);
+    g.addEdge(3, 5, 14);
+    g.addEdge(4, 5, 10);
+    g.addEdge(5, 6, 2);
+    g.addEdge(6, 7, 1);
+    g.addEdge(6, 8, 6);
+    g.addEdge(7, 8, 7);
+
+    //Execute dijkstra
+    std::cout << "Execute Dijkstra algorithm (source is 0)..." << std::endl;
+    cg3::DijkstraResult<int> pathMap0 = cg3::dijkstra(g, 0);
+
+    std::cout << std::endl;
+
+    for (const int& node : g.nodeIterator()) {
+        cg3::DijkstraResult<int>::iterator findIt = pathMap0.find(node);
+
+        std::cout << "0 to " << node << "\t->\t";
+
+        if (findIt != pathMap0.end()) {
+            cg3::GraphPath<int>& graphPath = findIt->second;
+
+            std::cout << "Cost: " << graphPath.cost << "\tPath: ";
+
+            for (int pathNode : graphPath.path) {
+                std::cout << pathNode << " ";
+            }
+        }
+        else {
+            std::cout << "No path found!";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl;
+
+    //Execute dijkstra (we use std::map<int, cg3::GraphPath<int>> instead of DijkstraResult<int>)
+    std::cout << "Execute Dijkstra algorithm (source is 1)..." << std::endl;
+    std::map<int, cg3::GraphPath<int>> pathMap1 = cg3::dijkstra(g, 1);
+
+    std::cout << std::endl;
+
+    for (const int& node : g.nodeIterator()) {
+        std::map<int, cg3::GraphPath<int>>::iterator findIt = pathMap1.find(node);
+
+        std::cout << "1 to " << node << "\t->\t";
+
+        if (findIt != pathMap1.end()) {
+            cg3::GraphPath<int>& graphPath = findIt->second;
+
+            std::cout << "Cost: " << graphPath.cost << "\tPath: ";
+
+            for (int pathNode : graphPath.path) {
+                std::cout << pathNode << " ";
+            }
+        }
+        else {
+            std::cout << "No path found!";
+        }
+        std::cout << std::endl;
+    }
 
 }
