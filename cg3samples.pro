@@ -24,7 +24,10 @@ SOURCES += \
     main.cpp
 
 #cg3lib module
-CONFIG += CG3_CORE CG3_DATA_STRUCTURES CG3_DCEL CG3_ALGORITHMS CG3_CGAL CG3_VIEWER
+CONFIG += CG3_CORE CG3_DATA_STRUCTURES CG3_DCEL CG3_ALGORITHMS CG3_VIEWER CG3_EIGENMESH CG3_CGAL
+CG3_VIEWER {
+    CONFIG += qt
+}
 include (cg3lib/cg3.pri)
 message($$MODULES)
 
@@ -58,7 +61,8 @@ TESTS {
         tests/rttest.cpp \
         tests/aabbtest.cpp \
         tests/chtest.cpp \
-        tests/graphtest.cpp
+        tests/graphtest.cpp \
+        tests/viewertest.cpp
 
 
     HEADERS += \
@@ -66,7 +70,8 @@ TESTS {
         tests/rttest.h \
         tests/aabbtest.h \
         tests/chtest.h \
-        tests/graphtest.h
+        tests/graphtest.h \
+        tests/viewertest.h
 }
 SAMPLES {
     DEFINES += SAMPLES
