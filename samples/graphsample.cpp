@@ -816,6 +816,9 @@ void GraphSamples::sampleDijkstra() {
     g.addEdge(6, 8, 6);
     g.addEdge(7, 8, 7);
 
+    std::cout << std::endl;
+
+
     //Execute dijkstra
     std::cout << "Execute Dijkstra algorithm (source is 0)..." << std::endl;
     cg3::DijkstraResult<int> pathMap0 = cg3::dijkstra(g, 0);
@@ -870,4 +873,40 @@ void GraphSamples::sampleDijkstra() {
         std::cout << std::endl;
     }
 
+
+    std::cout << std::endl;
+
+    //Execute dijkstra to get the shortest path from source to destination.
+    //We do not need a map
+    cg3::GraphPath<int> path14 = cg3::dijkstra(g, 1, 4);
+    std::cout << "Single path: 1 to 4 -> ";
+    if (!path14.path.empty()) {
+        std::cout << "Cost: " << path14.cost << "\tPath: ";
+
+        for (int pathNode : path14.path) {
+            std::cout << pathNode << " ";
+        }
+    }
+    else {
+        std::cout << "No path found!";
+    }
+
+    std::cout << std::endl;
+
+    //Execute dijkstra to get the shortest path from source to destination.
+    //We do not need a map
+    cg3::GraphPath<int> path29 = cg3::dijkstra(g, 2, 9);
+    std::cout << "Single path: 2 to 9 -> ";
+    if (!path29.path.empty()) {
+        std::cout << "Cost: " << path29.cost << "\tPath: ";
+
+        for (int pathNode : path29.path) {
+            std::cout << pathNode << " ";
+        }
+    }
+    else {
+        std::cout << "No path found!";
+    }
+
+    std::cout << std::endl;
 }
