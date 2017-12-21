@@ -83,7 +83,33 @@ void testRangeTree2D(std::vector<Point2D>& testNumbers, std::vector<Point2D>& ra
 /* ----- IMPLEMENTATION ----- */
 
 void testCorrectness() {
-    //TODO
+    std::vector<RangeTree<Point2D>::LessComparator> customComparators;
+    customComparators.push_back(&point2DDimensionComparatorX);
+    customComparators.push_back(&point2DDimensionComparatorY);
+
+    RangeTree<Point2D> tree1(2, customComparators);
+    RangeTree<Point2D> tree2(2, customComparators);
+
+    tree1.insert(Point2D(1,2));
+    tree1.insert(Point2D(3,54));
+    tree1.insert(Point2D(19,10));
+    tree1.insert(Point2D(43,2));
+
+    //Check copy constructor and move constructor
+    tree2 = tree1;
+    tree2.clear();
+
+    std::vector<Point2D> vec;
+    for (int i = 0; i < 2000; i+=2)
+        vec.push_back(Point2D(i,i+1));
+
+    tree2 = RangeTree<Point2D>(2, vec, customComparators);
+    tree2.clear();
+
+    RangeTree<Point2D> tree3(
+                std::move(
+                    RangeTree<Point2D>(2, vec, customComparators)));
+    tree3.clear();
 }
 
 void testRandom() {

@@ -70,7 +70,29 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 /* ----- IMPLEMENTATION ----- */
 
 void testCorrectness() {
-    //TODO
+    AABBTree<2, Segment2D> tree1(&aabbValueExtractor);
+    AABBTree<2, Segment2D> tree2(&aabbValueExtractor);
+
+    tree1.insert(Segment2D(Point2D(1,2), Point2D(2,4)));
+    tree1.insert(Segment2D(Point2D(1,22), Point2D(3,10)));
+    tree1.insert(Segment2D(Point2D(10,3), Point2D(4,10)));
+    tree1.insert(Segment2D(Point2D(1,6), Point2D(10,5)));
+
+    //Check copy constructor and move constructor
+    tree2 = tree1;
+    tree2.clear();
+
+    std::vector<Segment2D> vec;
+    for (int i = 0; i < 2000; i+=4)
+        vec.push_back(Segment2D(Point2D(i,i+1), Point2D(i+2,i+3)));
+
+    tree2 = AABBTree<2, Segment2D>(vec, &aabbValueExtractor);
+    tree2.clear();
+
+    AABBTree<2, Segment2D> tree3(
+                std::move(
+                    AABBTree<2, Segment2D>(vec, &aabbValueExtractor)));
+    tree3.clear();
 }
 
 void testRandom() {

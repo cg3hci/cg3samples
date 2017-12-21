@@ -147,6 +147,20 @@ void testCorrectness() {
         assert(false);
     }
 
+    //Check copy constructor and move constructor
+    bst2 = bst1;
+    bst2.clear();
+
+    for (int i = 0; i < 2000; i++)
+        vec.push_back(i);
+    bst2 = B(vec);
+    bst2.insert(3);
+    bst2.clear();
+
+    B bst3(std::move(B(vec)));
+    bst3.insert(2);
+    bst3.clear();
+
 
     //Iterator correctness
     minIt = bst1.begin();
