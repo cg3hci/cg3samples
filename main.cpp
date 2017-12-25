@@ -32,10 +32,6 @@
 #include "tests/graphtest.h"
 #endif
 
-#ifdef VIEWERTEST
-#include "tests/viewertest.h"
-#endif
-
 #ifdef BSTSAMPLE
 #include "samples/bstsample.h"
 #endif
@@ -62,6 +58,10 @@
 
 #ifdef CH3DSAMPLE
 #include "samples/ch3dsample.h"
+#endif
+
+#ifdef VIEWERSAMPLE
+#include "samples/viewersample.h"
 #endif
 
 
@@ -187,8 +187,8 @@ int main(int argc, char *argv[]) {
     std::cout <<  std::endl << std::endl;
 #endif
 
-#ifdef VIEWERTEST
-    return ViewerTest::viewer(argc, argv);
+#ifdef VIEWERSAMPLE
+    return ViewerSample::viewer(argc, argv);
 #else
     return 0;
 #endif

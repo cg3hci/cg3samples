@@ -51,8 +51,6 @@ TESTS {
     DEFINES += CHTEST
     #uncomment if you want to run convex hull test programs
     DEFINES += GRAPHTEST
-    #uncomment if you want to run convex hull test programs
-    DEFINES += VIEWERTEST
 
 
 
@@ -61,8 +59,7 @@ TESTS {
         tests/rttest.cpp \
         tests/aabbtest.cpp \
         tests/chtest.cpp \
-        tests/graphtest.cpp \
-        tests/viewertest.cpp
+        tests/graphtest.cpp
 
 
     HEADERS += \
@@ -70,8 +67,7 @@ TESTS {
         tests/rttest.h \
         tests/aabbtest.h \
         tests/chtest.h \
-        tests/graphtest.h \
-        tests/viewertest.h
+        tests/graphtest.h
 }
 SAMPLES {
     DEFINES += SAMPLES
@@ -90,6 +86,8 @@ SAMPLES {
     DEFINES += BIPARTITEGRAPHSAMPLE
     #uncomment if you want to run convex hull 3d test programs
     DEFINES += CH3DSAMPLE
+    #uncomment if you want to run viewer test programs
+    DEFINES += VIEWERSAMPLE
 
     HEADERS += \
         samples/bstsample.h \
@@ -98,7 +96,8 @@ SAMPLES {
         samples/chsample.h \
         samples/graphsample.h \
         samples/bipartitegraphsample.h \
-        samples/ch3dsample.h
+        samples/ch3dsample.h \
+        samples/viewersample.h
 
     SOURCES += \
         samples/bstsample.cpp \
@@ -107,5 +106,6 @@ SAMPLES {
         samples/chsample.cpp \
         samples/graphsample.cpp \
         samples/bipartitegraphsample.cpp \
-        samples/ch3dsample.cpp
+        samples/ch3dsample.cpp \
+        samples/viewersample.cpp
 }

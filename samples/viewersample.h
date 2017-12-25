@@ -1,5 +1,5 @@
-#ifndef VIEWERTEST_H
-#define VIEWERTEST_H
+#ifndef VIEWERSAMPLE_H
+#define VIEWERSAMPLE_H
 
 ///Test cg3 viewer module
 #ifdef CG3_VIEWER_DEFINED
@@ -31,8 +31,8 @@
 #endif
 #endif
 
-namespace ViewerTest {
+namespace ViewerSample {
 int viewer(int argc, char *argv[]);
 }
 
-#endif // VIEWERTEST_H
+#endif // VIEWERSAMPLE_H

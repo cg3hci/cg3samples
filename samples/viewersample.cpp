@@ -1,7 +1,7 @@
-#include "viewertest.h"
+#include "viewersample.h"
 
 
-int ViewerTest::viewer(int argc, char *argv[]) {
+int ViewerSample::viewer(int argc, char *argv[]) {
     ///Test viewer.pri:
     QApplication app(argc, argv);
     int id;
