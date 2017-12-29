@@ -1,6 +1,5 @@
 #include "viewersample.h"
 
-
 int ViewerSample::viewer(int argc, char *argv[]) {
     ///Test viewer.pri:
     QApplication app(argc, argv);
