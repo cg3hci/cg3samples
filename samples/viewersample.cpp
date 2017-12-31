@@ -5,24 +5,24 @@ int ViewerSample::viewer(int argc, char *argv[]) {
     QApplication app(argc, argv);
     int id;
 
-    MainWindow gui;  // finestra principale, contiene la canvas di QGLViewer
+    cg3::viewer::MainWindow gui;  // finestra principale, contiene la canvas di QGLViewer
 
     //Test eigenmeshmanager.pri
 #ifdef CG3_EIGENMESH_DEFINED
-    EigenMeshManager em(&gui);
+    cg3::viewer::EigenMeshManager em(&gui);
     id = gui.addManager(&em, "EigenMesh");
 
 
     //Test booleansmanager.pri
 #if defined(CG3_LIBIGL_DEFINED) && defined(CG3_CGAL_DEFINED)
-    BooleansManager bm(&gui);
+    cg3::viewer::BooleansManager bm(&gui);
     id = gui.addManager(&bm, "Booleans");
 #endif
 #endif
 
     //Test dcelmanager.pri
 #ifdef CG3_DCEL_DEFINED
-    DcelManager dm(&gui);
+    cg3::viewer::DcelManager dm(&gui);
     id = gui.addManager(&dm, "Dcel");
 #endif
 

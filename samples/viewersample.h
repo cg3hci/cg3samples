@@ -13,7 +13,7 @@
 #include <cg3/meshes/dcel/dcel.h>
 //dcel manager
 #ifdef CG3_VIEWER_DEFINED
-#include <cg3/viewer/managers/dcel_manager/dcel_manager.h>
+#include <cg3/viewer/managers/dcel_manager.h>
 #endif
 #endif
 
@@ -22,7 +22,7 @@
 #include <cg3/meshes/eigenmesh/eigenmesh.h>
 ///Test trimeshviewer.pri: uncomment to test trimesh module
 #ifdef CG3_VIEWER_DEFINED
-#include <cg3/viewer/managers/eigenmesh_manager/eigenmesh_manager.h>
+#include <cg3/viewer/managers/eigenmesh_manager.h>
 #ifdef CG3_CGAL_DEFINED
 #ifdef CG3_LIBIGL_DEFINED
 #include <cg3/viewer/managers/booleans_manager/booleans_manager.h>
