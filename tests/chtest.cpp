@@ -366,7 +366,7 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
             const cg3::Segment<Point2D> seg(*it1, *it2);
             const Point2D& point = *it3;
 
-            if (cg3::isPointAtRight(seg, point)) {
+            if (cg3::isPointAtLeft(seg, point)) {
                 error = true;
             }
         }
@@ -439,7 +439,7 @@ void testIterative(std::vector<Point2D>& testPoints)
             const cg3::Segment<Point2D> seg(*it1, *it2);
             const Point2D& point = *it3;
 
-            if (cg3::isPointAtRight(seg, point)) {
+            if (cg3::isPointAtLeft(seg, point)) {
                 error = true;
             }
         }
@@ -507,7 +507,7 @@ void testCGAL(std::vector<Point2D>& testPoints)
             const cg3::Segment<Point2D> seg(*it1, *it2);
             const Point2D& point = *it3;
 
-            if (cg3::isPointAtRight(seg, point)) {
+            if (cg3::isPointAtLeft(seg, point)) {
                 error = true;
             }
         }
