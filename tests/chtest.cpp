@@ -18,7 +18,7 @@
 #include "cg3/geometry/segment.h"
 
 #include "cg3/algorithms/2d/convexhull2d.h"
-#include "cg3/algorithms/2d/convexhull2d_iterative.h"
+#include "cg3/algorithms/2d/convexhull2d_incremental.h"
 
 #ifdef CG3_CGAL_DEFINED
 #include "cg3/cgal/2d/cgal_convexhull2d.h"
@@ -54,7 +54,7 @@ void doTestsOnInput(std::vector<int>& testNumbers);
 
 
 void testGrahamScan(std::vector<Point2D>& testPoints);
-void testIterative(std::vector<Point2D>& testPoints);
+void testIncremental(std::vector<Point2D>& testPoints);
 
 #ifdef CG3_CGAL_DEFINED
 void testCGAL(std::vector<Point2D>& testPoints);
@@ -66,16 +66,16 @@ void testCorrectness() {
     std::vector<Point2D> points;
     std::list<Point2D> convexHull;
 
-    cg3::IterativeConvexHull2D<double> ch;
-    std::list<Point2D> convexHullIterative;
+    cg3::IncrementalConvexHull<double> ch;
+    std::list<Point2D> convexHullIncremental;
 
     //No data
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 0);
 
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 0);
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 0);
 
 
     //1 point
@@ -86,10 +86,10 @@ void testCorrectness() {
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
-    convexHullIterative.clear();
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 1);
+    convexHullIncremental.clear();
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 1);
 
 
     //2 equal points
@@ -101,10 +101,10 @@ void testCorrectness() {
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
-    convexHullIterative.clear();
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 1);
+    convexHullIncremental.clear();
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 1);
 
 
     //3 equal points
@@ -117,10 +117,10 @@ void testCorrectness() {
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
-    convexHullIterative.clear();
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 1);
+    convexHullIncremental.clear();
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 1);
 
 
 
@@ -136,10 +136,10 @@ void testCorrectness() {
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
-    convexHullIterative.clear();
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 1);
+    convexHullIncremental.clear();
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 1);
 
 
     //2 equal points and one different
@@ -152,10 +152,10 @@ void testCorrectness() {
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 2);
 
-    convexHullIterative.clear();
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 2);
+    convexHullIncremental.clear();
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 2);
 
 
     //3 collinear points
@@ -168,10 +168,10 @@ void testCorrectness() {
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 2);
 
-    convexHullIterative.clear();
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 2);
+    convexHullIncremental.clear();
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 2);
 
 
     //Three not collinear points
@@ -184,10 +184,10 @@ void testCorrectness() {
     cg3::getConvexHull2D(points, convexHull);
     assert(convexHull.size() == 3);
 
-    convexHullIterative.clear();
-    ch = cg3::IterativeConvexHull2D<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIterative));
-    assert(convexHullIterative.size() == 3);
+    convexHullIncremental.clear();
+    ch = cg3::IncrementalConvexHull<double>(points);
+    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    assert(convexHullIncremental.size() == 3);
 }
 
 void testRandom() {
@@ -300,8 +300,8 @@ void doTestsOnInput(std::vector<int> &testNumbers)
     testGrahamScan(testPoints);
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << "ITERATIVE";
-    testIterative(testPoints);
+    std::cout << "INCREMENTAL";
+    testIncremental(testPoints);
 
 #ifdef CG3_CGAL_DEFINED
     std::cout << std::setw(INDENTSPACE) << std::left;
@@ -388,7 +388,7 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
 
 
 
-void testIterative(std::vector<Point2D>& testPoints)
+void testIncremental(std::vector<Point2D>& testPoints)
 {
     std::cout << std::setw(INDENTSPACE) << std::left;
     std::cout << testPoints.size();
@@ -401,12 +401,12 @@ void testIterative(std::vector<Point2D>& testPoints)
 
     t1 = high_resolution_clock::now();
 
-    cg3::IterativeConvexHull2D<double> iterativeConvexHull;
+    cg3::IncrementalConvexHull<double> incrementalConvexHull;
     for (Point2D p : testPoints)
-        iterativeConvexHull.addPoint(p);
+        incrementalConvexHull.addPoint(p);
 
     std::list<Point2D> convexHull;
-    iterativeConvexHull.getConvexHull(std::back_inserter(convexHull));
+    incrementalConvexHull.getConvexHull(std::back_inserter(convexHull));
 
     t2 = high_resolution_clock::now();
 

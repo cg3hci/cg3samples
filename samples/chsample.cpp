@@ -11,7 +11,7 @@
 #include <vector>
 
 #include <cg3/algorithms/2d/convexhull2d.h>
-#include <cg3/algorithms/2d/convexhull2d_iterative.h>
+#include <cg3/algorithms/2d/convexhull2d_incremental.h>
 
 #include <cg3/geometry/2d/point2d.h>
 
@@ -108,11 +108,11 @@ void CHSamples::execute()
 
 
 
-    /* ----- ITERATIVE CONVEX HULL ----- */
+    /* ----- INCREMENTAL CONVEX HULL ----- */
 
     std::cout << std::endl << std::endl;
 
-    std::cout << " >> ITERATIVE CONVEX HULL" << std::endl << std::endl;
+    std::cout << " >> INCREMENTAL CONVEX HULL" << std::endl << std::endl;
 
     //Clear/initialize the plane
     for (int x = 0; x < PLANE_WIDTH; x++) {
@@ -129,25 +129,25 @@ void CHSamples::execute()
 
 
     //Add points in different ways
-    cg3::IterativeConvexHull2D<int> iterativeConvexHull(points.begin(), points.end()-4);
+    cg3::IncrementalConvexHull<int> incrementalConvexHull(points.begin(), points.end()-4);
 
-    iterativeConvexHull.addPoints(points.end()-4, points.end()-3);
+    incrementalConvexHull.addPoints(points.end()-4, points.end()-3);
 
     Point2D p2 = *(points.end()-2);
-    iterativeConvexHull.addPoint(p2);
+    incrementalConvexHull.addPoint(p2);
 
     Point2D p1 = *(points.end()-1);
-    cg3::addPointToConvexHull(p1, iterativeConvexHull);
+    cg3::addPointToConvexHull(p1, incrementalConvexHull);
 
     //Alternative with container
-//    cg3::IterativeConvexHull2D<int> iterativeConvexHull(points);
+//    cg3::IncrementalConvexHull2D<int> incrementalConvexHull(points);
 
     //Output convex hull
-    std::list<Point2D> outputIterativeConvexHull;
-    iterativeConvexHull.getConvexHull(std::back_inserter(outputIterativeConvexHull));
+    std::list<Point2D> outputIncrementalConvexHull;
+    incrementalConvexHull.getConvexHull(std::back_inserter(outputIncrementalConvexHull));
 
     //Set all convex hull points to "x"
-    for (std::list<Point2D>::iterator it = outputIterativeConvexHull.begin(); it != outputIterativeConvexHull.end(); it++) {
+    for (std::list<Point2D>::iterator it = outputIncrementalConvexHull.begin(); it != outputIncrementalConvexHull.end(); it++) {
         plane[it->x()][it->y()] = 'x';
     }
 
@@ -167,12 +167,12 @@ void CHSamples::execute()
 
     //Printing solution
     std::cout << "Solution:" << std::endl;
-    for (std::list<Point2D>::iterator it = outputIterativeConvexHull.begin(); it != outputIterativeConvexHull.end(); it++) {
+    for (std::list<Point2D>::iterator it = outputIncrementalConvexHull.begin(); it != outputIncrementalConvexHull.end(); it++) {
         Point2D point = *it;
         std::cout << "(" << point.x() << "," << point.y() << ")" << " - ";
     }
     std::cout << std::endl;
 
-    iterativeConvexHull.clear();
+    incrementalConvexHull.clear();
 }
 
