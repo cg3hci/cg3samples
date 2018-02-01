@@ -24,9 +24,9 @@
 #define ITERATION 1
 #define INDENTSPACE 12
 
-#define INPUTSIZE 20000
+#define INPUTSIZE 15000
 #define RANDOM_MAX (INPUTSIZE)
-#define ONLYEFFICIENT (INPUTSIZE > 50000)
+#define ONLYEFFICIENT (INPUTSIZE > 15000)
 
 
 
@@ -285,20 +285,20 @@ void testRandom() {
     std::mt19937 rng;
     rng.seed(std::random_device()());
     std::uniform_int_distribution<std::mt19937::result_type>
-            distIn(-RANDOM_MAX,RANDOM_MAX);
+            distIn(0,RANDOM_MAX*2);
 
     std::vector<int> testNumbers;
     std::vector<int> randomNumbers;
 
     //Random test number generation
     for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
+        int randomValue = distIn(rng)-RANDOM_MAX;
         testNumbers.push_back(randomValue);
     }
 
     //Random number generation
     for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
+        int randomValue = distIn(rng)-RANDOM_MAX;
         randomNumbers.push_back(randomValue);
     }
 
@@ -314,7 +314,7 @@ void testMixed() {
     std::mt19937 rng;
     rng.seed(std::random_device()());
     std::uniform_int_distribution<std::mt19937::result_type>
-            distIn(-RANDOM_MAX,RANDOM_MAX);
+            distIn(0,RANDOM_MAX*2);
 
     std::vector<int> testNumbers;
     std::vector<int> randomNumbers;
@@ -325,7 +325,7 @@ void testMixed() {
     }
     //Random test number generation
     for (int i = 0; i < INPUTSIZE/4; i++) {
-        int randomValue = distIn(rng);
+        int randomValue = distIn(rng)-RANDOM_MAX;
         testNumbers.push_back(randomValue);
     }
     //Progressive reversed number generation
@@ -334,13 +334,13 @@ void testMixed() {
     }
     //Random test number generation
     for (int i = 0; i < INPUTSIZE/4; i++) {
-        int randomValue = distIn(rng);
+        int randomValue = distIn(rng)-RANDOM_MAX;
         testNumbers.push_back(randomValue);
     }
 
     //Random number generation
     for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
+        int randomValue = distIn(rng)-RANDOM_MAX;
         randomNumbers.push_back(randomValue);
     }
 
@@ -355,7 +355,7 @@ void testProgressive() {
     std::mt19937 rng;
     rng.seed(std::random_device()());
     std::uniform_int_distribution<std::mt19937::result_type>
-            distIn(-RANDOM_MAX,RANDOM_MAX);
+            distIn(0,RANDOM_MAX*2);
 
     std::vector<int> testNumbers;
     std::vector<int> randomNumbers;
@@ -367,7 +367,7 @@ void testProgressive() {
 
     //Random number generation
     for (int i = 0; i < INPUTSIZE; i++) {
-        int randomValue = distIn(rng);
+        int randomValue = distIn(rng)-RANDOM_MAX;
         randomNumbers.push_back(randomValue);
     }
 
