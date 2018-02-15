@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <random>
-#include <chrono>
 #include <assert.h>
 #include <iomanip>
 
@@ -19,7 +18,9 @@
 #include <cg3/data_structures/trees/avlinner.h>
 #include <cg3/data_structures/trees/bstleaf.h>
 #include <cg3/data_structures/trees/avlleaf.h>
-#include <cg3/utilities/const.h>
+
+#include <cg3/cg3lib.h>
+#include <cg3/utilities/timer.h>
 
 #define ITERATION 1
 #define INDENTSPACE 12
@@ -36,9 +37,6 @@ namespace BSTTests {
 
 
 /* ----- TYPEDEFS ----- */
-
-typedef std::chrono::high_resolution_clock high_resolution_clock;
-typedef high_resolution_clock::time_point time_point;
 
 template <class T> using BSTInner = typename cg3::BSTInner<T>;
 template <class T> using BSTLeaf = typename cg3::BSTLeaf<T>;
@@ -480,25 +478,22 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     typedef std::set<int>::iterator Iterator;
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     std::set<int> set(testNumbers.begin(), testNumbers.end());
 
-    t2 = high_resolution_clock::now();
-
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -516,7 +511,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -538,12 +533,11 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
+
 
 
     /* Number of results */
@@ -554,7 +548,8 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
+
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -568,48 +563,41 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     set.clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(set.size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& testNumber : testNumbers) {
         set.insert(testNumber);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -627,7 +615,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundInsert = 0;
 
@@ -650,12 +638,11 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     }
 
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto queryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) queryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -668,7 +655,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -682,12 +669,10 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -695,7 +680,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
@@ -703,12 +688,10 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         set.erase(number);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -731,7 +714,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundErase = 0;
 
@@ -743,12 +726,11 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto eraseQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -772,7 +754,7 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Iteration (erase) */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
 
     //Erasing all elements iterating on it
@@ -785,12 +767,11 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     CG3_SUPPRESS_WARNING(numberOfElementsBeforeEraseIteration);
     assert(numOfEntries == numberOfElementsBeforeEraseIteration);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto eraseIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseIterationTime/1000;
+    std::cout << timer.delay();
 
 
     assert(set.empty());
@@ -800,12 +781,11 @@ void testSTL(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
+    totalTimer.stop();
 
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
 
@@ -822,26 +802,23 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     typedef typename B::iterator iterator;
 
 
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point tstart = high_resolution_clock::now();
-
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.construction(testNumbers);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -859,7 +836,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -881,12 +858,11 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -897,7 +873,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -913,47 +889,44 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     }
 
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(tree.size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& testNumber : testNumbers) {
         tree.insert(testNumber);
     }
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -971,7 +944,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundInsert = 0;
 
@@ -994,12 +967,11 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     }
 
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto queryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) queryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1012,7 +984,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
     {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -1026,12 +998,11 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1039,7 +1010,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
@@ -1047,12 +1018,11 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         tree.erase(number);
     }
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -1075,7 +1045,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundErase = 0;
 
@@ -1087,12 +1057,11 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto eraseQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1114,7 +1083,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Iteration (erase) */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
 
     //Erasing all elements iterating on it
@@ -1127,12 +1096,11 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     CG3_SUPPRESS_WARNING(numberOfElementsBeforeEraseIteration);
     assert(numOfEntries == numberOfElementsBeforeEraseIteration);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-    auto eraseIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseIterationTime/1000;
+    std::cout << timer.delay();
 
 
     assert(tree.empty());
@@ -1142,12 +1110,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
 

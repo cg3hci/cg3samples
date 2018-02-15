@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <random>
-#include <chrono>
 #include <assert.h>
 #include <iomanip>
 
@@ -24,6 +23,9 @@
 #include "cg3/cgal/2d/cgal_convexhull2d.h"
 #endif
 
+#include <cg3/cg3lib.h>
+#include <cg3/utilities/timer.h>
+
 #define ITERATION 3
 #define INDENTSPACE 12
 
@@ -36,9 +38,6 @@ namespace CHTests {
 
 
 /* ----- TYPEDEFS ----- */
-
-typedef std::chrono::high_resolution_clock high_resolution_clock;
-typedef high_resolution_clock::time_point time_point;
 
 typedef cg3::Point2Dd Point2D;
 
@@ -324,24 +323,22 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
     std::cout << std::setw(INDENTSPACE) << std::left;
     std::cout << testPoints.size();
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     std::list<Point2D> convexHull;
     cg3::getConvexHull2D(testPoints, convexHull);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto algorithmTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) algorithmTime/1000;
+    std::cout << timer.delay();
 
 
     /* CH size */
@@ -350,16 +347,16 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
     std::cout << convexHull.size();
 
 
+
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
+    //Check if it is a convex hull
     bool error = false;
 
     typename std::list<Point2D>::iterator it2 = convexHull.end();
@@ -393,13 +390,14 @@ void testIncremental(std::vector<Point2D>& testPoints)
     std::cout << std::setw(INDENTSPACE) << std::left;
     std::cout << testPoints.size();
 
-    time_point tstart = high_resolution_clock::now();
 
-    time_point t1;
-    time_point t2;
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
+
+    totalTimer.start();
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     cg3::IncrementalConvexHull<double> incrementalConvexHull;
     for (Point2D p : testPoints)
@@ -408,14 +406,11 @@ void testIncremental(std::vector<Point2D>& testPoints)
     std::list<Point2D> convexHull;
     incrementalConvexHull.getConvexHull(std::back_inserter(convexHull));
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto algorithmTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) algorithmTime/1000;
-
+    std::cout << timer.delay();
 
     /* CH size */
 
@@ -425,12 +420,10 @@ void testIncremental(std::vector<Point2D>& testPoints)
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     bool error = false;
@@ -465,24 +458,22 @@ void testCGAL(std::vector<Point2D>& testPoints)
     std::cout << std::setw(INDENTSPACE) << std::left;
     std::cout << testPoints.size();
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     std::list<Point2D> convexHull;
     cg3::cgal::getCGALConvexHull2D(testPoints, convexHull);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto algorithmTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) algorithmTime/1000;
+    std::cout << timer.delay();
 
 
     /* CH size */
@@ -493,12 +484,10 @@ void testCGAL(std::vector<Point2D>& testPoints)
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     bool error = false;

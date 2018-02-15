@@ -16,9 +16,6 @@
 
 typedef cg3::Point2Dd Point2Dd;
 
-/* ---- UTILITIES ----- */
-
-std::string getPointString(const Point2Dd& point);
 
 /* ---- COMPARATORS FOR POINTERS ----- */
 
@@ -62,7 +59,7 @@ void RTSample::execute()
     //Iteration
     std::cout << "The range tree contains:" << std::endl << "    ";
     for (const Point2Dd& point : rangeTree2D)
-        std::cout << getPointString(point) << " ";
+        std::cout << point << " ";
     std::cout << std::endl;
 
     //Find object [2,10.1]
@@ -85,14 +82,14 @@ void RTSample::execute()
                 std::back_inserter(rangeQueryResults));
 
     for (RangeTree2D::iterator it : rangeQueryResults) {
-        std::cout << getPointString(*it) << " ";
+        std::cout << *it << " ";
     }
     std::cout << std::endl;
 
     //Iteration with explicit iterators
     std::cout << "The range tree contains:" << std::endl << "    ";
     for (RangeTree2D::iterator it = rangeTree2D.begin(); it != rangeTree2D.end(); it++) {
-        std::cout << getPointString(*it)  << " ";
+        std::cout << *it  << " ";
     }
     std::cout << std::endl;
 
@@ -107,11 +104,11 @@ void RTSample::execute()
     RangeTree2D::iterator minIterator = rangeTree2D.getMin();
     if (minIterator != rangeTree2D.end()) {
         Point2Dd& minPointString = *minIterator;
-        std::cout << "Minimum node is: " << getPointString(minPointString) << std::endl;
+        std::cout << "Minimum node is: " << minPointString << std::endl;
     }
     RangeTree2D::iterator maxIterator = rangeTree2D.getMax();
     if (maxIterator != rangeTree2D.end()) {
-        std::cout << "Maximum node is: " << getPointString(*maxIterator) << std::endl;
+        std::cout << "Maximum node is: " << *maxIterator << std::endl;
     }
 
 
@@ -142,7 +139,7 @@ void RTSample::execute()
     typedef cg3::RangeTree<Point2Dd*, std::string*> RangeTreeWithPointers;
 
     //Adding comparators for pointers
-    std::vector<RangeTreeWithPointers::LessComparator> customPointerComparators;
+    std::vector<RangeTreeWithPointers::DefaultComparator> customPointerComparators;
     customPointerComparators.push_back(&point2DPointerDimensionComparatorX);
     customPointerComparators.push_back(&point2DPointerDimensionComparatorY);
 
@@ -228,15 +225,6 @@ void RTSample::execute()
 }
 
 
-/* ---- UTILITIES IMPLEMENTATION ----- */
-
-std::string getPointString(const Point2Dd& point) {
-    std::stringstream ss;
-    ss << "[" << point.x() << "," << point.y() << "]";
-    return ss.str();
-}
-
-
 
 /* ---- COMPARATORS FOR POINTERS IMPLEMENTATION ----- */
 
@@ -244,13 +232,25 @@ bool point2DPointerDimensionComparatorX(
         Point2Dd* const& o1,
         Point2Dd* const& o2)
 {
-    return o1->x() < o2->x();
+    if (o1->x() < o2->x()) {
+        return true;
+    }
+    if (o2->x() < o1->x()) {
+        return false;
+    }
+    return o1->y() < o2->y();
 }
 
 bool point2DPointerDimensionComparatorY(
         Point2Dd* const& o1,
         Point2Dd* const& o2)
 {
-    return o1->y() < o2->y();
+    if (o1->y() < o2->y()) {
+        return true;
+    }
+    if (o2->y() < o1->y()) {
+        return false;
+    }
+    return o1->x() < o2->x();
 }
 

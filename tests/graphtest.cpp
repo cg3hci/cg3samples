@@ -8,16 +8,18 @@
 
 #include <iostream>
 #include <random>
-#include <chrono>
 #include <assert.h>
 #include <iomanip>
 
 #include <vector>
 
-#include "cg3/data_structures/graphs/graph.h"
-#include "cg3/algorithms/graph_algorithms.h"
+#include <cg3/data_structures/graphs/graph.h>
+#include <cg3/algorithms/graph_algorithms.h>
 
-#include "cg3/utilities/utils.h"
+#include <cg3/utilities/utils.h>
+
+#include <cg3/cg3lib.h>
+#include <cg3/utilities/timer.h>
 
 #define ITERATION 3
 #define INDENTSPACE 12
@@ -34,10 +36,6 @@ namespace GraphTests {
 
 
 /* ----- TYPEDEFS ----- */
-
-typedef std::chrono::high_resolution_clock high_resolution_clock;
-typedef high_resolution_clock::time_point time_point;
-
 
 typedef cg3::Graph<int> IntGraph;
 
@@ -255,10 +253,11 @@ void testDijkstra()
         std::cout << std::setw(INDENTSPACE) << std::left;
         std::cout << testNumbers.size();
 
-        time_point tstart = high_resolution_clock::now();
 
-        time_point t1;
-        time_point t2;
+        cg3::Timer totalTimer("Total");
+        cg3::Timer timer("Step");
+
+        totalTimer.start();
 
 
         int nEdges = 0;
@@ -267,26 +266,24 @@ void testDijkstra()
 
         /* Insert nodes */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         for (int n : testNumbers) {
             graph.addNode(n);
         }
 
-        t2 = high_resolution_clock::now();
+        timer.stop();
 
-
-        auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) insertTime/1000;
+        std::cout << timer.delay();
 
 
 
 
         /* Iteration on nodes */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         int numNodes = 0;
         for (int n : graph.nodeIterator()) {
@@ -294,13 +291,11 @@ void testDijkstra()
             numNodes++;
         }
 
-        t2 = high_resolution_clock::now();
+        timer.stop();
 
-
-        auto nodeIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) nodeIterationTime/1000;
+        std::cout << timer.delay();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
         std::cout << numNodes;
@@ -310,7 +305,7 @@ void testDijkstra()
 
         /* Insert edges (v) */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         for (uint i = 0; nEdges < MAXEDGES && i < testNumbers.size(); i++) {
             for (uint j = 0; nEdges < MAXEDGES && j < testNumbers.size(); j++) {
@@ -320,20 +315,18 @@ void testDijkstra()
             }
         }
 
-        t2 = high_resolution_clock::now();
+        timer.stop();
 
-
-        auto edgeInsertValueTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) edgeInsertValueTime/1000;
+        std::cout << timer.delay();
 
 
 
 
         /* Erase edges using values */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         for (uint i = 0; nEdges > 0 && i < testNumbers.size(); i++) {
             for (uint j = 0; nEdges > 0 && j < testNumbers.size(); j++) {
@@ -342,20 +335,18 @@ void testDijkstra()
             }
         }
 
-        t2 = high_resolution_clock::now();
+        timer.stop();
 
-
-        auto edgeEraseValueTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) edgeEraseValueTime/1000;
+        std::cout << timer.delay();
 
 
 
 
         /* Insert edges (it) */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         for (IntGraph::NodeIterator it1 = graph.nodeIteratorBegin(); nEdges < MAXEDGES && it1 != graph.nodeIteratorEnd(); it1++) {
             for (IntGraph::NodeIterator it2 = graph.nodeIteratorBegin(); nEdges < MAXEDGES && it2 != graph.nodeIteratorEnd(); it2++) {
@@ -365,19 +356,17 @@ void testDijkstra()
             }
         }
 
-        t2 = high_resolution_clock::now();
-
-        auto edgeInsertIteratorTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        timer.stop();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) edgeInsertIteratorTime/1000;
+        std::cout << timer.delay();
 
 
 
 
         /* Erase edges using iterators */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         for (IntGraph::NodeIterator it1 = graph.nodeIteratorBegin(); nEdges > 0 && it1 != graph.nodeIteratorEnd(); it1++) {
             for (IntGraph::NodeIterator it2 = graph.nodeIteratorBegin(); nEdges > 0 && it2 != graph.nodeIteratorEnd(); it2++) {
@@ -386,14 +375,12 @@ void testDijkstra()
             }
         }
 
-        t2 = high_resolution_clock::now();
+        timer.stop();
 
 
-
-        auto edgeEraseIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) edgeEraseIterationTime/1000;
+        std::cout << timer.delay();
 
 
 
@@ -411,7 +398,7 @@ void testDijkstra()
 
         /* Iteration on edges */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         int numEdges = 0;
         for (std::pair<int, int> n : graph.edgeIterator()) {
@@ -419,13 +406,11 @@ void testDijkstra()
             numEdges++;
         }
 
-        t2 = high_resolution_clock::now();
+        timer.stop();
 
-
-        auto edgeIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) edgeIterationTime/1000;
+        std::cout << timer.delay();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
         std::cout << numEdges;
@@ -436,7 +421,7 @@ void testDijkstra()
 
         /* Dijkstra */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         int dijkstraIterations = 0;
         for (int n : testNumbers) {
@@ -447,40 +432,35 @@ void testDijkstra()
                 break;
         }
 
-        t2 = high_resolution_clock::now();
-
-        auto dijkstraTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        timer.stop();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) dijkstraTime/1000;
+        std::cout << timer.delay();
 
 
 
 
         /* Clear */
 
-        t1 = high_resolution_clock::now();
+        timer.start();
 
         graph.clear();
 
-        t2 = high_resolution_clock::now();
-
-        auto clearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        timer.stop();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) clearTime/1000;
+        std::cout << timer.delay();
 
 
 
 
         /* Total */
 
-        time_point tend = high_resolution_clock::now();
-
-        auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+        totalTimer.stop();
 
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << (double) totalTime/1000;
+        std::cout << totalTimer.delay();
+
 
         std::cout << std::endl;
     }

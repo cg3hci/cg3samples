@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#include <cg3/geometry/2d/point2d.h>
+
 #include <cg3/data_structures/trees/bst.h>
 //#include <cg3/data_structures/trees/avlleaf.h>
 //#include <cg3/data_structures/trees/avlinner.h>
@@ -40,6 +42,19 @@ typedef cg3::BST<int, std::string> BSTIntString; //Default BST
 
 
 bool reverseComparator(const int& o1, const int& o2);
+
+// Custom comparator for 2D points
+struct CustomPointComparator {
+    cg3::Point2Dd p;
+
+    CustomPointComparator(cg3::Point2Dd p) {
+        this->p = p;
+    }
+
+    bool operator()(const cg3::Point2Dd& o1, const cg3::Point2Dd& o2) {
+        return p.dot(o1) < p.dot(o2);
+    }
+};
 
 void BSTSample::execute()
 {
@@ -183,9 +198,6 @@ void BSTSample::execute()
     std::cout << std::endl;
 
 
-
-
-
     /* ----- KEY AND VALUE WITH DIFFERENT TYPES ----- */
 
     //BST (int, string) with custom comparator (> instead of <) and different key/value types
@@ -233,6 +245,46 @@ void BSTSample::execute()
     std::cout << std::endl;
 
 
+
+    std::cout << std::endl;
+
+
+    /* ----- CUSTOM COMPARATOR (WITH FIELDS) USAGE ----- */
+
+    //Creating BST with custom struct comparator
+    std::cout << "Creating BST with custom struct comparator..." << std::endl;
+    cg3::BST<cg3::Point2Dd, cg3::Point2Dd, CustomPointComparator> bst3(
+                CustomPointComparator(cg3::Point2Dd(1,0)));
+    //Adding points
+    bst3.insert(cg3::Point2Dd(1,2));
+    bst3.insert(cg3::Point2Dd(2,5));
+    bst3.insert(cg3::Point2Dd(-4,5));
+    bst3.insert(cg3::Point2Dd(8,8));
+
+    //Normal iteration
+    std::cout << "The BST contains:" << std::endl << "    ";
+    for (const cg3::Point2Dd& number : bst3)
+        std::cout << number << " ";
+    std::cout << std::endl;
+
+    //Creating BST with custom lambda comparator
+    std::cout << "Creating BST with custom lambda comparator..." << std::endl;
+    cg3::BST<cg3::Point2Dd> bst4(
+                [](const cg3::Point2Dd& x, const cg3::Point2Dd& y)
+    {
+        return x > y;
+    });
+    //Adding points
+    bst4.insert(cg3::Point2Dd(1,2));
+    bst4.insert(cg3::Point2Dd(2,5));
+    bst4.insert(cg3::Point2Dd(-4,5));
+    bst4.insert(cg3::Point2Dd(8,8));
+
+    //Normal iteration
+    std::cout << "The BST contains:" << std::endl << "    ";
+    for (const cg3::Point2Dd& number : bst4)
+        std::cout << number << " ";
+    std::cout << std::endl;
 
 
     std::cout << std::endl;

@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <random>
-#include <chrono>
 #include <assert.h>
 #include <iomanip>
 
@@ -19,6 +18,9 @@
 #include "cg3/geometry/segment.h"
 
 #include "cg3/data_structures/trees/aabbtree.h"
+
+#include <cg3/cg3lib.h>
+#include <cg3/utilities/timer.h>
 
 #define ITERATION 1
 #define INDENTSPACE 12
@@ -36,10 +38,6 @@ namespace AABBTest {
 typedef cg3::Segment<int> Segment1D;
 typedef cg3::Point2D<int> Point2D;
 typedef cg3::Segment<Point2D> Segment2D;
-
-typedef std::chrono::high_resolution_clock high_resolution_clock;
-typedef high_resolution_clock::time_point time_point;
-
 
 template <int D, class T> using AABBTree = typename cg3::AABBTree<D,T>;
 
@@ -481,25 +479,23 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
     typedef std::set<Segment1D>::iterator Iterator;
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     std::set<Segment1D>* set = new std::set<Segment1D>(testSegments.begin(), testSegments.end());
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -516,7 +512,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -537,12 +533,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -554,7 +548,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     /* Overlap query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& segment : testSegments) {
         std::vector<Segment1D> out;
@@ -581,12 +575,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         foundOverlapConstruction += out.size();
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -601,7 +593,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
     /* Overlap check (construction) */
 
     size_t foundOverlapCheckConstruction = 0;
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (size_t i = 0; i < randomSegments.size()-1; i++) {
         Segment1D& segment = randomSegments.at(i);
@@ -614,12 +606,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapCheckTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapCheckTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -631,7 +621,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *set) {
@@ -643,47 +633,41 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     set->clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(set->size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& segment : testSegments) {
         set->insert(segment);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -701,7 +685,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     /* Overlap query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& segment : testSegments) {
         std::vector<Segment1D> out;
@@ -730,12 +714,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto overlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) overlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -748,7 +730,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *set) {
@@ -759,12 +741,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -772,7 +752,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
@@ -780,12 +760,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         set->erase(number);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -809,7 +787,7 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     /* Overlap query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& segment : testSegments) {
         std::vector<Segment1D> out;
@@ -835,12 +813,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
         foundOverlapErase += out.size();
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -871,12 +847,10 @@ void testBrute1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>& r
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     delete set;
@@ -892,25 +866,23 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree->construction(testSegments);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -927,7 +899,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -948,12 +920,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -964,7 +934,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
     /* Overlap query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& segment : testSegments) {
         std::vector<Iterator> out;
@@ -994,12 +964,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1013,7 +981,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     /* Overlap check (construction) */
 
     size_t foundOverlapCheckConstruction = 0;
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (size_t i = 0; i < randomSegments.size()-1; i++) {
         Segment1D& segment = randomSegments.at(i);
@@ -1023,12 +991,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapCheckTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapCheckTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1040,7 +1006,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *tree) {
@@ -1052,47 +1018,41 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree->clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(tree->size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& testSegment : testSegments) {
         tree->insert(testSegment);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1110,7 +1070,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
     /* Overlap query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& segment : testSegments) {
         std::vector<Iterator> out;
@@ -1139,12 +1099,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto overlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) overlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1156,7 +1114,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment1D& segment : *tree) {
@@ -1167,12 +1125,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1180,7 +1136,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
@@ -1188,12 +1144,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         tree->erase(segment);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -1217,7 +1171,7 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
     /* Overlap query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment1D& segment : testSegments) {
         std::vector<Iterator> out;
@@ -1240,12 +1194,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1278,12 +1230,10 @@ void testAABBTree1D(std::vector<Segment1D>& testSegments, std::vector<Segment1D>
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
 
@@ -1301,25 +1251,23 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
     typedef std::set<Segment2D>::iterator Iterator;
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     std::set<Segment2D>* set = new std::set<Segment2D>(testSegments.begin(), testSegments.end());
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1336,7 +1284,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -1357,12 +1305,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1374,7 +1320,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     /* Overlap query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& segment : testSegments) {
         std::vector<Segment2D> out;
@@ -1401,12 +1347,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         foundOverlapConstruction += out.size();
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
     for (const Segment2D& segment : testSegments) {
@@ -1433,7 +1377,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
     /* Overlap check (construction) */
 
     size_t foundOverlapCheckConstruction = 0;
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (size_t i = 0; i < randomSegments.size()-1; i++) {
         Segment2D& segment = randomSegments.at(i);
@@ -1446,12 +1390,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapCheckTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapCheckTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1463,7 +1405,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *set) {
@@ -1475,47 +1417,41 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     set->clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(set->size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& segment : testSegments) {
         set->insert(segment);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1533,7 +1469,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     /* Overlap query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& segment : testSegments) {
         std::vector<Segment2D> out;
@@ -1562,12 +1498,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto overlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) overlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1580,7 +1514,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *set) {
@@ -1591,12 +1525,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1604,7 +1536,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
@@ -1612,12 +1544,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         set->erase(number);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -1641,7 +1571,7 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     /* Overlap query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& segment : testSegments) {
         std::vector<Segment2D> out;
@@ -1667,12 +1597,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
         foundOverlapErase += out.size();
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1705,12 +1633,10 @@ void testBrute2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>& r
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     delete set;
@@ -1727,26 +1653,23 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     typedef AABBTree<2,Segment2D>::iterator Iterator;
 
 
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point tstart = high_resolution_clock::now();
-
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree->construction(testSegments);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1763,7 +1686,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -1784,12 +1707,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1800,7 +1721,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     /* Overlap query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& segment : testSegments) {
         std::vector<Iterator> out;
@@ -1830,12 +1751,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1850,7 +1769,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     /* Overlap check (construction) */
 
     size_t foundOverlapCheckConstruction = 0;
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (size_t i = 0; i < randomSegments.size()-1; i++) {
         Segment2D& segment = randomSegments.at(i);
@@ -1860,12 +1779,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionOverlapCheckTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionOverlapCheckTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1877,7 +1794,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *tree) {
@@ -1889,47 +1806,41 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree->clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(tree->size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& testSegment : testSegments) {
         tree->insert(testSegment);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1947,7 +1858,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     /* Overlap query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& segment : testSegments) {
         std::vector<Iterator> out;
@@ -1976,12 +1887,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto overlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) overlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1996,7 +1905,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Segment2D& segment : *tree) {
@@ -2007,12 +1916,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -2020,7 +1927,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testSegments.size()/2; i < testSegments.size(); i++) {
@@ -2028,12 +1935,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         tree->erase(segment);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -2057,7 +1962,7 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     /* Overlap query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Segment2D& segment : testSegments) {
         std::vector<Iterator> out;
@@ -2080,12 +1985,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseOverlapQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseOverlapQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -2120,13 +2023,10 @@ void testAABBTree2D(std::vector<Segment2D>& testSegments, std::vector<Segment2D>
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
-
+    std::cout << totalTimer.delay();
 
 
     delete tree;

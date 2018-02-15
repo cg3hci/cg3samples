@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <random>
-#include <chrono>
 #include <assert.h>
 #include <iomanip>
 
@@ -21,8 +20,10 @@
 #include "cg3/data_structures/trees/avlinner.h"
 #include "cg3/data_structures/trees/bstleaf.h"
 #include "cg3/data_structures/trees/avlleaf.h"
-
 #include "cg3/data_structures/trees/rangetree.h"
+
+#include <cg3/cg3lib.h>
+#include <cg3/utilities/timer.h>
 
 #define ITERATION 1
 #define INDENTSPACE 12
@@ -36,10 +37,6 @@ namespace RTTests {
 
 
 /* ----- TYPEDEFS ----- */
-
-typedef std::chrono::high_resolution_clock high_resolution_clock;
-typedef high_resolution_clock::time_point time_point;
-
 
 template <class T> using BSTLeaf = typename cg3::BSTLeaf<T>;
 template <class T> using AVLLeaf = typename cg3::AVLLeaf<T>;
@@ -86,7 +83,7 @@ void testRangeTree2D(std::vector<Point2D>& testNumbers, std::vector<Point2D>& ra
 /* ----- IMPLEMENTATION ----- */
 
 void testCorrectness() {
-    std::vector<RangeTree<Point2D>::LessComparator> customComparators;
+    std::vector<RangeTree<Point2D>::DefaultComparator> customComparators;
     customComparators.push_back(&point2DDimensionComparatorX);
     customComparators.push_back(&point2DDimensionComparatorY);
 
@@ -404,25 +401,23 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
     typedef std::set<int>::iterator Iterator;
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     std::set<int> set(testNumbers.begin(), testNumbers.end());
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -439,7 +434,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -461,12 +456,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -478,7 +471,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     /* Range query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<int> out;
@@ -514,12 +507,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionrangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionrangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -532,7 +523,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -547,48 +538,41 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     set.clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(set.size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& testNumber : testNumbers) {
         set.insert(testNumber);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
-
+    std::cout << timer.delay();
 
 
 
@@ -605,7 +589,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     /* Range query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<int> out;
@@ -641,12 +625,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto rangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) rangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -659,7 +641,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -673,12 +655,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -686,7 +666,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
@@ -694,12 +674,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         set.erase(number);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -723,7 +701,7 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     /* Range query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<int> out;
@@ -758,12 +736,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraserangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraserangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -792,12 +768,10 @@ void testBrute1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers)
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     std::cout << std::endl;
@@ -812,25 +786,24 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
+
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.construction(testNumbers);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -847,7 +820,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -869,12 +842,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -886,7 +857,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Range query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
@@ -912,12 +883,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionrangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionrangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -929,7 +898,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;        
@@ -944,47 +913,41 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(tree.size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& testNumber : testNumbers) {
         tree.insert(testNumber);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1002,7 +965,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Range query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
@@ -1028,12 +991,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto rangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) rangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1045,7 +1006,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;        
@@ -1059,12 +1020,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1072,7 +1031,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
@@ -1080,12 +1039,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         tree.erase(number);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -1109,7 +1066,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Range query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
@@ -1133,12 +1090,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraserangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraserangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1171,12 +1126,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     std::cout << std::endl;
@@ -1184,7 +1137,7 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
 
 
 void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
-    std::vector<RangeTree<int>::LessComparator> customComparators;
+    std::vector<RangeTree<int>::DefaultComparator> customComparators;
     customComparators.push_back(&intComparator);
 
     RangeTree<int> tree(1, customComparators);
@@ -1193,25 +1146,24 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
+
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.construction(testNumbers);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1228,7 +1180,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -1250,12 +1202,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1266,7 +1216,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
     /* Range query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
@@ -1294,12 +1244,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionrangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionrangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1311,7 +1259,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -1326,47 +1274,41 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(tree.size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& testNumber : testNumbers) {
         tree.insert(testNumber);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1384,7 +1326,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
     /* Range query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
@@ -1412,12 +1354,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto rangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) rangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1429,7 +1369,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         int lastNumber = INT32_MIN;
@@ -1443,12 +1383,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1456,7 +1394,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testNumbers.size()/2; i < testNumbers.size(); i++) {
@@ -1464,12 +1402,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         tree.erase(number);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -1493,7 +1429,7 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
     /* Range query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const int& number : testNumbers) {
         std::vector<Iterator> out;
@@ -1519,12 +1455,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraserangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraserangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1555,12 +1489,10 @@ void testRangeTree1D(std::vector<int>& testNumbers, std::vector<int>& randomNumb
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
 
@@ -1575,25 +1507,24 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
     typedef std::set<Point2D>::iterator Iterator;
 
 
-    time_point tstart = high_resolution_clock::now();
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point t1;
-    time_point t2;
+    totalTimer.start();
+
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     std::set<Point2D> set(testPoints.begin(), testPoints.end());
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1609,7 +1540,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -1630,12 +1561,10 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -1647,7 +1576,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
     /* Range query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& point : testPoints) {
         std::vector<Point2D> out;
@@ -1688,12 +1617,10 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionrangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionrangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1706,7 +1633,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Point2D& p : set) {
@@ -1718,47 +1645,41 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     set.clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(set.size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& testPoint : testPoints) {
         set.insert(testPoint);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1776,7 +1697,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
     /* Range query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& point : testPoints) {
         std::vector<Point2D> out;
@@ -1817,12 +1738,10 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto rangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) rangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1835,7 +1754,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
     {
         size_t numOfEntries = 0;
         for (const Point2D& point : set) {
@@ -1846,12 +1765,10 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1859,7 +1776,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testPoints.size()/2; i < testPoints.size(); i++) {
@@ -1867,12 +1784,10 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
         set.erase(point);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -1896,7 +1811,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
     /* Range query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& point : testPoints) {
         std::vector<Point2D> out;
@@ -1934,12 +1849,11 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
             }
         }
     }
-    t2 = high_resolution_clock::now();
 
-    auto eraserangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraserangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -1970,12 +1884,10 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     std::cout << std::endl;
@@ -1983,7 +1895,7 @@ void testBrute2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomP
 
 
 void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& randomPoints) {
-    std::vector<RangeTree<Point2D>::LessComparator> customComparators;
+    std::vector<RangeTree<Point2D>::DefaultComparator> customComparators;
     customComparators.push_back(&point2DDimensionComparatorX);
     customComparators.push_back(&point2DDimensionComparatorY);
 
@@ -1992,26 +1904,24 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
     typedef RangeTree<Point2D>::iterator Iterator;
 
 
+    cg3::Timer totalTimer("Total");
+    cg3::Timer timer("Step");
 
-    time_point tstart = high_resolution_clock::now();
+    totalTimer.start();
 
-    time_point t1;
-    time_point t2;
 
 
     /* Construction */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.construction(testPoints);
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
-
-    auto constructionTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -2028,7 +1938,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
 
     /* Query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     size_t foundConstruction = 0;
 
@@ -2050,12 +1960,10 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -2067,7 +1975,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
 
     /* Range query (construction) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& point : testPoints) {
         std::vector<Iterator> out;
@@ -2096,12 +2004,10 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionrangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionrangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -2113,7 +2019,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Point2D& point : tree) {
@@ -2125,47 +2031,41 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
     }
 
 
-    t2 = high_resolution_clock::now();
-
-    auto constructionIterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionIterationTime/1000;
+    std::cout << timer.delay();
 
 
 
     /* Clear */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     tree.clear();
 
-    t2 = high_resolution_clock::now();
+    timer.stop();
 
     assert(tree.size() == 0);
 
-    auto constructionClearTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) constructionClearTime/1000;
+    std::cout << timer.delay();
 
 
 
 
     /* Insert */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& testPoint : testPoints) {
         tree.insert(testPoint);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto insertTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) insertTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -2183,7 +2083,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
 
     /* Range query */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& point : testPoints) {
         std::vector<Iterator> out;
@@ -2212,12 +2112,10 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto rangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) rangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
     /* Number of results */
@@ -2229,7 +2127,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
 
     /* Iteration */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
         {
         size_t numOfEntries = 0;
         for (const Point2D& point : tree) {
@@ -2240,12 +2138,10 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         assert(numOfEntries == numOfEntriesConstruction);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto iterationTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) iterationTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -2253,7 +2149,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
     /* Erase */
 
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     //Deleting second half of the vector
     for (size_t i = testPoints.size()/2; i < testPoints.size(); i++) {
@@ -2261,12 +2157,10 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         tree.erase(point);
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraseTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraseTime/1000;
+    std::cout << timer.delay();
 
 
     /* Erase check */
@@ -2290,7 +2184,7 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
 
     /* Range query (erase) */
 
-    t1 = high_resolution_clock::now();
+    timer.start();
 
     for (const Point2D& point : testPoints) {
         std::vector<Iterator> out;
@@ -2317,12 +2211,10 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
         }
     }
 
-    t2 = high_resolution_clock::now();
-
-    auto eraserangeQueryTime = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    timer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) eraserangeQueryTime/1000;
+    std::cout << timer.delay();
 
 
 
@@ -2352,12 +2244,10 @@ void testRangeTree2D(std::vector<Point2D>& testPoints, std::vector<Point2D>& ran
 
     /* Total */
 
-    time_point tend = high_resolution_clock::now();
-
-    auto totalTime = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
+    totalTimer.stop();
 
     std::cout << std::setw(INDENTSPACE) << std::left;
-    std::cout << (double) totalTime/1000;
+    std::cout << totalTimer.delay();
 
 
     std::cout << std::endl;
