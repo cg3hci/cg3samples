@@ -52,8 +52,7 @@ void testDijkstra();
 
 void testCorrectness() {
 
-    //Basic usage test
-
+    //Test directed graph
     cg3::Graph<int> graph;
 
     cg3::Graph<int>::NodeIterator n2 = graph.nodeIteratorEnd(), n3 = graph.nodeIteratorEnd(), n4 = graph.nodeIteratorEnd(), nDuplicate = graph.nodeIteratorEnd();
@@ -109,6 +108,23 @@ void testCorrectness() {
     }
 
 
+    //Test copy constructor
+    cg3::Graph<int> graph2(graph);
+
+    graph.clear();
+
+    assert(!graph2.isAdjacent(2, 3));
+    assert(!graph2.isAdjacent(3, 2));
+
+    checkNumber = 2;
+    for (const int& number : graph2.nodeIterator()) {
+        CG3_SUPPRESS_WARNING(number);
+        assert(number == checkNumber);
+        checkNumber++;
+    }
+
+
+    //Test undirected graph
     cg3::Graph<int> undirectedGraph(cg3::GraphType::UNDIRECTED);
     undirectedGraph.addNode(2);
     assert(undirectedGraph.findNode(2) != undirectedGraph.nodeIteratorEnd());
