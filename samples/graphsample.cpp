@@ -118,6 +118,23 @@ void GraphSamples::sampleBasic() {
         std::cout << std::endl;
     }
 
+
+    //Recompact the graph to save memory after node delete operations.
+    //Read description in graph.h for further informations.
+    std::cout << "Recompacting graph..." << std::endl;
+    graph.recompact();
+
+
+    //Print data
+    std::cout << "Graph: " << std::endl;
+    for (const int& node : graph.nodeIterator()) {
+        std::cout << node << " -> adjacent to: ";
+        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+            std::cout << adjacentNode << " ";
+        }
+        std::cout << std::endl;
+    }
+
     //Iteration on graph edges
     std::cout << "Edges of the graph: " << std::endl;
     for (std::pair<const int, const int> pair : graph.edgeIterator()) {

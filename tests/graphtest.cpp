@@ -25,10 +25,9 @@
 #define INDENTSPACE 12
 
 #define INPUTSIZE 1000
-#define RANDOM_MAX (INPUTSIZE*100)
-#define MAXEDGES 100000
+#define RANDOM_MAX (INPUTSIZE*1000)
+#define MAXEDGES INPUTSIZE*10
 #define MAXWEIGHT 100
-#define DIJKSTRAITERATIONS 100
 
 
 
@@ -226,18 +225,28 @@ void testCorrectness() {
 
 /* ----- FUNCTION DECLARATION ----- */
 
+
+
 void printHeader() {
-    std::cout <<         
+    std::cout <<
          std::setw(INDENTSPACE) << std::left << "INPUTSIZE" <<
          std::setw(INDENTSPACE) << std::left << "INS-N" <<
          std::setw(INDENTSPACE) << std::left << "IT-N" <<
-         std::setw(INDENTSPACE) << std::left << "NUM" <<
          std::setw(INDENTSPACE) << std::left << "INS-E-V" <<
          std::setw(INDENTSPACE) << std::left << "ERA-E-V" <<
          std::setw(INDENTSPACE) << std::left << "INS-E-I" <<
          std::setw(INDENTSPACE) << std::left << "ERA-E-I" <<
          std::setw(INDENTSPACE) << std::left << "IT-E" <<
-         std::setw(INDENTSPACE) << std::left << "NUM" <<
+         std::setw(INDENTSPACE) << std::left << "NODES" <<
+         std::setw(INDENTSPACE) << std::left << "EDGES" <<
+         std::setw(INDENTSPACE) << std::left << "DIJKSTRA" <<
+         std::setw(INDENTSPACE) << std::left << "COPY" <<
+         std::setw(INDENTSPACE) << std::left << "DIJKSTRA" <<
+         std::setw(INDENTSPACE) << std::left << "ERA-N-V" <<
+         std::setw(INDENTSPACE) << std::left << "NODES" <<
+         std::setw(INDENTSPACE) << std::left << "EDGES" <<
+         std::setw(INDENTSPACE) << std::left << "DIJKSTRA" <<
+         std::setw(INDENTSPACE) << std::left << "RECOMPACT" <<
          std::setw(INDENTSPACE) << std::left << "DIJKSTRA" <<
          std::setw(INDENTSPACE) << std::left << "CLEAR" <<
          std::setw(INDENTSPACE) << std::left << "TOTAL" <<
@@ -277,6 +286,7 @@ void testDijkstra()
 
 
         int nEdges = 0;
+        int nodesToBeDeleted;
 
 
 
@@ -309,12 +319,11 @@ void testDijkstra()
 
         timer.stop();
 
+        assert(numNodes == (int) graph.numNodes());
+
 
         std::cout << std::setw(INDENTSPACE) << std::left;
         std::cout << timer.delay();
-
-        std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << numNodes;
 
 
 
@@ -323,8 +332,8 @@ void testDijkstra()
 
         timer.start();
 
-        for (uint i = 0; nEdges < MAXEDGES && i < testNumbers.size(); i++) {
-            for (uint j = 0; nEdges < MAXEDGES && j < testNumbers.size(); j++) {
+        for (size_t i = 0; nEdges < MAXEDGES && i < testNumbers.size(); i++) {
+            for (size_t j = 0; nEdges < MAXEDGES && j < testNumbers.size(); j++) {
                 double weight = std::abs((long) distIn(rng)) % MAXWEIGHT;
                 graph.addEdge(testNumbers[i], testNumbers[j], weight);
                 nEdges++;
@@ -344,8 +353,8 @@ void testDijkstra()
 
         timer.start();
 
-        for (uint i = 0; nEdges > 0 && i < testNumbers.size(); i++) {
-            for (uint j = 0; nEdges > 0 && j < testNumbers.size(); j++) {
+        for (size_t i = 0; nEdges > 0 && i < testNumbers.size(); i++) {
+            for (size_t j = 0; nEdges > 0 && j < testNumbers.size(); j++) {
                 graph.deleteEdge(testNumbers[i], testNumbers[j]);
                 nEdges--;
             }
@@ -402,8 +411,8 @@ void testDijkstra()
 
 
         //Re-add the edges
-        for (uint i = 0; nEdges < MAXEDGES && i < testNumbers.size(); i++) {
-            for (uint j = 0; nEdges < MAXEDGES && j < testNumbers.size(); j++) {
+        for (size_t i = 0; nEdges < MAXEDGES && i < testNumbers.size(); i++) {
+            for (size_t j = 0; nEdges < MAXEDGES && j < testNumbers.size(); j++) {
                 double weight = std::abs((long) distIn(rng)) % MAXWEIGHT;
                 graph.addEdge(testNumbers[i], testNumbers[j], weight);
                 nEdges++;
@@ -424,14 +433,18 @@ void testDijkstra()
 
         timer.stop();
 
+        assert(numEdges == (int) graph.numEdges());
 
         std::cout << std::setw(INDENTSPACE) << std::left;
         std::cout << timer.delay();
 
+
+
+        /* Number of components */
         std::cout << std::setw(INDENTSPACE) << std::left;
-        std::cout << numEdges;
-
-
+        std::cout << graph.numNodes();
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << graph.numEdges();
 
 
 
@@ -439,13 +452,9 @@ void testDijkstra()
 
         timer.start();
 
-        int dijkstraIterations = 0;
-        for (int n : testNumbers) {
+        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+            int n = *it;
             cg3::dijkstra(graph, n);
-            dijkstraIterations++;
-
-            if (dijkstraIterations >= DIJKSTRAITERATIONS)
-                break;
         }
 
         timer.stop();
@@ -454,6 +463,125 @@ void testDijkstra()
         std::cout << timer.delay();
 
 
+
+        /* Copy graph */
+
+        timer.start();
+
+        graph = IntGraph(graph);
+
+        timer.stop();
+
+
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << timer.delay();
+
+
+
+        /* Dijkstra */
+
+        timer.start();
+
+        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+            int n = *it;
+            cg3::dijkstra(graph, n);
+        }
+
+        timer.stop();
+
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << timer.delay();
+
+
+
+
+        /* Delete nodes */
+
+        nodesToBeDeleted = INPUTSIZE/2;
+
+        timer.start();
+
+        int stepDelete = testNumbers.size() / nodesToBeDeleted;
+        for (size_t i = 0; i < testNumbers.size(); i += stepDelete) {
+            int n = testNumbers[i];
+
+            graph.deleteNode(n);
+        }
+
+        timer.stop();
+
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << timer.delay();
+
+
+
+
+        /* Reinsert nodes and edges */
+
+        for (int n : testNumbers) {
+            graph.addNode(n);
+        }
+        nEdges = 0;
+        for (size_t i = 0; nEdges < MAXEDGES && i < testNumbers.size(); i++) {
+            for (size_t j = 0; nEdges < MAXEDGES && j < testNumbers.size(); j++) {
+                double weight = std::abs((long) distIn(rng)) % MAXWEIGHT;
+                graph.addEdge(testNumbers[i], testNumbers[j], weight);
+                nEdges++;
+            }
+        }
+
+
+
+        /* Number of components */
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << graph.numNodes();
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << graph.numEdges();
+
+
+
+        /* Dijkstra */
+
+        timer.start();
+
+        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+            int n = *it;
+            cg3::dijkstra(graph, n);
+        }
+
+        timer.stop();
+
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << timer.delay();
+
+
+
+        /* Recompact graph */
+
+        timer.start();
+
+        graph.recompact();
+
+        timer.stop();
+
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << timer.delay();
+
+
+
+        /* Dijkstra */
+
+        timer.start();
+
+        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+            int n = *it;
+            cg3::dijkstra(graph, n);
+        }
+
+        timer.stop();
+
+        std::cout << std::setw(INDENTSPACE) << std::left;
+        std::cout << timer.delay();
 
 
         /* Clear */
@@ -482,13 +610,5 @@ void testDijkstra()
     }
 
 }
-
-
-
-
-
-
-
-
 
 }

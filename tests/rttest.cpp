@@ -878,8 +878,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
             tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeConstruction += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(num1 <= *outIt && *outIt <= num2);
+            }
         }
     }
 
@@ -986,8 +988,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
             tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeInsert += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(num1 <= *outIt && *outIt <= num2);
+            }
         }
     }
 
@@ -1085,8 +1089,10 @@ void testBST(std::vector<int>& testNumbers, std::vector<int>& randomNumbers) {
             tree.rangeQuery(num1, num2, std::back_inserter(out));
             foundRangeErase += out.size();
 
-            for (Iterator outIt : out)
+            for (Iterator outIt : out) {
+                CG3_SUPPRESS_WARNING(outIt);
                 assert(num1 <= *outIt && *outIt <= num2);
+            }
         }
     }
 
