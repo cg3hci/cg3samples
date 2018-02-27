@@ -514,7 +514,7 @@ void testDijkstra()
 
         timer.start();
 
-        int stepDelete = testNumbers.size() / nodesToBeDeleted;
+        size_t stepDelete = testNumbers.size() / nodesToBeDeleted;
         for (size_t i = 0; i < testNumbers.size(); i += stepDelete) {
             int n = testNumbers[i];
 
