@@ -58,8 +58,21 @@ void testCorrectness() {
     CG3_SUPPRESS_WARNING(n4);
     CG3_SUPPRESS_WARNING(nDuplicate);
 
+
+    for (const int& number : graph.nodeIterator()) {
+        CG3_SUPPRESS_WARNING(number);
+    }
+    for (const std::pair<int,int>& edge : graph.edgeIterator()) {
+        CG3_SUPPRESS_WARNING(edge);
+    }
+
     graph.addNode(2);
     assert(graph.findNode(2) != graph.nodeIteratorEnd());
+
+    for (const int& adjNumber : graph.adjacentNodeIterator(2)) {
+        CG3_SUPPRESS_WARNING(adjNumber);
+    }
+
     graph.deleteNode(2);
     assert(graph.findNode(2) == graph.nodeIteratorEnd());
     n2 = graph.addNode(2);
