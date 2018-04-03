@@ -20,7 +20,7 @@
 #include "cg3/algorithms/2d/convexhull2d_incremental.h"
 
 #ifdef CG3_CGAL_DEFINED
-#include "cg3/cgal/2d/cgal_convexhull2d.h"
+#include "cg3/cgal/2d/convexhull2d.h"
 #endif
 
 #include <cg3/cg3lib.h>

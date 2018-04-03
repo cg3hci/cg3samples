@@ -24,16 +24,16 @@ SOURCES += \
     main.cpp
 
 #cg3lib module
-CONFIG += CG3_CORE CG3_DATA_STRUCTURES CG3_DCEL CG3_ALGORITHMS CG3_VIEWER CG3_EIGENMESH CG3_CGAL
+CONFIG += CG3_CORE CG3_DATA_STRUCTURES CG3_ALGORITHMS CG3_MESHES CG3_VIEWER CG3_CGAL
 CG3_VIEWER {
     CONFIG += qt
 }
 include (cg3lib/cg3.pri)
 message($$MODULES)
 
-#uncomment if you want to include test programs
-#CONFIG += TESTS
-#uncomment if you want to include sample programs
+#uncomment if you want to include tests
+CONFIG += TESTS
+#uncomment if you want to include samples
 CONFIG += SAMPLES
 
 DEFINES += "CG3_SAMPLES_HOME='$$_PRO_FILE_PWD_'"
@@ -41,15 +41,15 @@ DEFINES += "CG3_SAMPLES_HOME='$$_PRO_FILE_PWD_'"
 TESTS {
     DEFINES += TESTS
 
-    #uncomment if you want to run BST test programs
+    #uncomment if you want to run BST tests
     DEFINES += BSTTEST
-    #uncomment if you want to run Range tree test programs
+    #uncomment if you want to run Range tree tests
     DEFINES += RTTEST
-    #uncomment if you want to run AABBTree test programs
+    #uncomment if you want to run AABBTree tests
     DEFINES += AABBTEST
-    #uncomment if you want to run convex hull test programs
+    #uncomment if you want to run convex hull tests
     DEFINES += CHTEST
-    #uncomment if you want to run convex hull test programs
+    #uncomment if you want to run convex hull tests
     DEFINES += GRAPHTEST
 
 
@@ -72,21 +72,21 @@ TESTS {
 SAMPLES {
     DEFINES += SAMPLES
 
-    #uncomment if you want to run BST test programs
+    #uncomment if you want to run BST tests
     DEFINES += BSTSAMPLE
-    #uncomment if you want to run Range tree test programs
+    #uncomment if you want to run Range tree tests
     DEFINES += RTSAMPLE
-    #uncomment if you want to run AABBTree test programs
+    #uncomment if you want to run AABBTree tests
     DEFINES += AABBSAMPLE
-    #uncomment if you want to run convex hull test programs
+    #uncomment if you want to run convex hull tests
     DEFINES += CHSAMPLE
-    #uncomment if you want to run convex hull test programs
+    #uncomment if you want to run graph tests
     DEFINES += GRAPHSAMPLE
-    #uncomment if you want to run bipartite graph test programs
+    #uncomment if you want to run bipartite graph tests
     DEFINES += BIPARTITEGRAPHSAMPLE
-    #uncomment if you want to run convex hull 3d test programs
+    #uncomment if you want to run convex hull 3d tests
     DEFINES += CH3DSAMPLE
-    #uncomment if you want to run viewer test programs
+    #uncomment if you want to run viewer tests
     DEFINES += VIEWERSAMPLE
 
     HEADERS += \

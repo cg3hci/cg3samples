@@ -7,6 +7,8 @@ int ViewerSample::viewer(int argc, char *argv[]) {
 
     cg3::viewer::MainWindow gui;  // finestra principale, contiene la canvas di QGLViewer
 
+    CG3_SUPPRESS_WARNING(id);
+
     //Test eigenmeshmanager.pri
 #ifdef CG3_EIGENMESH_DEFINED
     cg3::viewer::EigenMeshManager em(&gui);
