@@ -43,7 +43,8 @@ void GraphSamples::sampleBasic() {
 
     //Add node 1 and 2
     std::cout << "Add node 1 and 2" << std::endl;
-    cg3::Graph<int>::NodeIterator it1 = graph.addNode(1);
+    cg3::Graph<int>::iterator it1 = graph.addNode(1);
+    //"iterator" is a wrapper for NodeIterator
     cg3::Graph<int>::NodeIterator it2 = graph.addNode(2);
 
 
@@ -83,7 +84,7 @@ void GraphSamples::sampleBasic() {
     //Add node 3 and edge (3,2)
     std::cout << "Add node 3 and edge (3,2) with no weight" << std::endl;
     graph.addNode(3);
-    cg3::Graph<int>::NodeIterator it3 = graph.findNode(3); //We can use find to get iterators
+    cg3::Graph<int>::iterator it3 = graph.findNode(3); //We can use find to get iterators
     graph.addEdge(it3,it2);
 
     std::cout << "(3,2) weight is " << graph.getWeight(3,2) << " (default weight)" << std::endl;
@@ -91,7 +92,7 @@ void GraphSamples::sampleBasic() {
 
     //Iteration on graph nodes
     std::cout << "Nodes of the graph: ";
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
@@ -110,9 +111,9 @@ void GraphSamples::sampleBasic() {
 
     //Print data
     std::cout << "Graph: " << std::endl;
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " -> adjacent to: ";
-        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+        for (const int& adjacentNode : graph.adjacentIterator(node)) {
             std::cout << adjacentNode << " ";
         }
         std::cout << std::endl;
@@ -127,9 +128,9 @@ void GraphSamples::sampleBasic() {
 
     //Print data
     std::cout << "Graph: " << std::endl;
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " -> adjacent to: ";
-        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+        for (const int& adjacentNode : graph.adjacentIterator(node)) {
             std::cout << adjacentNode << " ";
         }
         std::cout << std::endl;
@@ -152,7 +153,7 @@ void GraphSamples::sampleBasic() {
 
     //Iteration on graph nodes
     std::cout << "Nodes of the graph: ";
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
@@ -183,8 +184,8 @@ void GraphSamples::sampleDirected() {
     //Note that if you use the iterators in the operations, then
     //you have to be sure that they are pointing to an existing node
     //(that has not been deleted for example)
-    cg3::Graph<int>::NodeIterator it1 = dGraph.addNode(1);
-    cg3::Graph<int>::NodeIterator it2 = dGraph.addNode(2);
+    cg3::Graph<int>::iterator it1 = dGraph.addNode(1);
+    cg3::Graph<int>::iterator it2 = dGraph.addNode(2);
 
 
 
@@ -219,7 +220,7 @@ void GraphSamples::sampleDirected() {
 
     //Iteration on graph nodes
     std::cout << "Nodes of the graph: ";
-    for (const int& node : dGraph.nodeIterator()) {
+    for (const int& node : dGraph) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
@@ -271,8 +272,8 @@ void GraphSamples::sampleDirected() {
 
 
     //Find node
-    cg3::Graph<int>::NodeIterator itFind = dGraph.findNode(2);
-    if (itFind != dGraph.nodeIteratorEnd())
+    cg3::Graph<int>::iterator itFind = dGraph.findNode(2);
+    if (itFind != dGraph.end())
         std::cout << "Node 2 is in the graph." << std::endl;
     else
         std::cout << "Node 2 is not in the graph." << std::endl;
@@ -296,8 +297,8 @@ void GraphSamples::sampleDirected() {
 
 
     //Find node
-    cg3::Graph<int>::NodeIterator itFind2 = dGraph.findNode(2);
-    if (itFind2 != dGraph.nodeIteratorEnd())
+    cg3::Graph<int>::iterator itFind2 = dGraph.findNode(2);
+    if (itFind2 != dGraph.end())
         std::cout << "Node 2 is in the graph." << std::endl;
     else
         std::cout << "Node 2 is not in the graph." << std::endl;
@@ -322,8 +323,8 @@ void GraphSamples::sampleUndirected() {
     //Note that if you use the iterators in the operations, then
     //you have to be sure that they are pointing to an existing node
     //(that has not been deleted for example)
-    cg3::Graph<int>::NodeIterator it1 = uGraph.addNode(1);
-    cg3::Graph<int>::NodeIterator it2 = uGraph.addNode(2);
+    cg3::Graph<int>::iterator it1 = uGraph.addNode(1);
+    cg3::Graph<int>::iterator it2 = uGraph.addNode(2);
 
 
 
@@ -360,7 +361,7 @@ void GraphSamples::sampleUndirected() {
 
     //Iteration on graph nodes
     std::cout << "Nodes of the graph: ";
-    for (const int& node : uGraph.nodeIterator()) {
+    for (const int& node : uGraph) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
@@ -412,8 +413,8 @@ void GraphSamples::sampleUndirected() {
 
 
     //Find node
-    cg3::Graph<int>::NodeIterator itFind = uGraph.findNode(2);
-    if (itFind != uGraph.nodeIteratorEnd())
+    cg3::Graph<int>::iterator itFind = uGraph.findNode(2);
+    if (itFind != uGraph.end())
         std::cout << "Node 2 is in the graph." << std::endl;
     else
         std::cout << "Node 2 is not in the graph." << std::endl;
@@ -437,8 +438,8 @@ void GraphSamples::sampleUndirected() {
 
 
     //Find node
-    cg3::Graph<int>::NodeIterator itFind2 = uGraph.findNode(2);
-    if (itFind2 != uGraph.nodeIteratorEnd())
+    cg3::Graph<int>::iterator itFind2 = uGraph.findNode(2);
+    if (itFind2 != uGraph.end())
         std::cout << "Node 2 is in the graph." << std::endl;
     else
         std::cout << "Node 2 is not in the graph." << std::endl;
@@ -466,8 +467,8 @@ void GraphSamples::sampleWeighted() {
     //Note that if you use the iterators in the operations, then
     //you have to be sure that they are pointing to an existing node
     //(that has not been deleted for example)
-    cg3::Graph<int>::NodeIterator it1 = graph.addNode(1);
-    cg3::Graph<int>::NodeIterator it2 = graph.addNode(2);
+    cg3::Graph<int>::iterator it1 = graph.addNode(1);
+    cg3::Graph<int>::iterator it2 = graph.addNode(2);
 
 
 
@@ -594,7 +595,7 @@ void GraphSamples::sampleWeighted() {
 
     //Iteration on graph nodes
     std::cout << "Nodes of the graph: ";
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
@@ -622,7 +623,7 @@ void GraphSamples::sampleIterators() {
 
     //Iteration on nodes of the empty graph
     std::cout << "Nodes of the graph: ";
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
@@ -655,7 +656,7 @@ void GraphSamples::sampleIterators() {
 
     //Iteration on graph nodes
     std::cout << "Nodes of the graph: ";
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
@@ -673,9 +674,9 @@ void GraphSamples::sampleIterators() {
 
     //Adjacencies
     std::cout << "Adjacencies: " << std::endl;
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " -> ";
-        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+        for (const int& adjacentNode : graph.adjacentIterator(node)) {
             std::cout << adjacentNode << " ";
         }
         std::cout << std::endl;
@@ -686,9 +687,11 @@ void GraphSamples::sampleIterators() {
 
     //Adjacencies with explicit iterators
     std::cout << "Adjacencies (explicit iterators): " << std::endl;
-    for (cg3::Graph<int>::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+    for (cg3::Graph<int>::iterator it = graph.begin(); it != graph.end(); it++) {
         std::cout << *it << " -> ";
-        for (cg3::Graph<int>::AdjacentNodeIterator itAdj = graph.adjacentNodeIteratorBegin(it); itAdj != graph.adjacentNodeIteratorEnd(it); itAdj++) {
+        for (cg3::Graph<int>::AdjacentIterator itAdj = graph.adjacentBegin(it);
+             itAdj != graph.adjacentEnd(it); itAdj++)
+        {
             std::cout << *itAdj << " ";
         }
         std::cout << std::endl;
@@ -700,14 +703,14 @@ void GraphSamples::sampleIterators() {
 
     //Iteration on graph using explicit node iterators
     std::cout << "Nodes of the graph (explicit): ";
-    for (cg3::Graph<int>::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+    for (cg3::Graph<int>::iterator it = graph.begin(); it != graph.end(); it++) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
 
     //Iteration on graph using explicit edge iterators
     std::cout << "Edges of the graph (explicit): ";
-    for (cg3::Graph<int>::EdgeIterator it = graph.edgeIteratorBegin(); it != graph.edgeIteratorEnd(); it++) {
+    for (cg3::Graph<int>::EdgeIterator it = graph.edgeBegin(); it != graph.edgeEnd(); it++) {
         std::pair<const int, const int> edge = *it;
         std::cout << "(" << edge.first << "," << edge.second << ") - ";
     }
@@ -720,30 +723,34 @@ void GraphSamples::sampleIterators() {
 
     //Iteration on adjacent nodes of node "1"
     std::cout << "Node 1 -> ";
-    for (const int& adjacentNode : graph.adjacentNodeIterator(1)) {
+    for (const int& adjacentNode : graph.adjacentIterator(1)) {
         std::cout << adjacentNode << " ";
     }
     std::cout << std::endl;
 
     //Iteration on adjacent nodes of node "2" using iterators
     std::cout << "Node 2 -> ";
-    cg3::Graph<int>::NodeIterator nodeIt2 = graph.findNode(2);
-    for (const int& adjacentNode : graph.adjacentNodeIterator(nodeIt2)) {
+    cg3::Graph<int>::iterator nodeIt2 = graph.findNode(2);
+    for (const int& adjacentNode : graph.adjacentIterator(nodeIt2)) {
         std::cout << adjacentNode << " ";
     }
     std::cout << std::endl;
 
     //Iteration on adjacent nodes of node "3" using explicit iterators
     std::cout << "Node 3 -> ";
-    for (cg3::Graph<int>::AdjacentNodeIterator itAdj = graph.adjacentNodeIteratorBegin(3); itAdj != graph.adjacentNodeIteratorEnd(3); itAdj++) {
+    for (cg3::Graph<int>::AdjacentIterator itAdj = graph.adjacentBegin(3);
+         itAdj != graph.adjacentEnd(3); itAdj++)
+    {
         std::cout << *itAdj << " ";
     }
     std::cout << std::endl;
 
     //Iteration on adjacent nodes of node "4" using explicit iterators with a node iterator
     std::cout << "Node 4 -> ";
-    cg3::Graph<int>::NodeIterator nodeIt4 = graph.findNode(4);
-    for (cg3::Graph<int>::AdjacentNodeIterator itAdj = graph.adjacentNodeIteratorBegin(nodeIt4); itAdj != graph.adjacentNodeIteratorEnd(nodeIt4); itAdj++) {
+    cg3::Graph<int>::iterator nodeIt4 = graph.findNode(4);
+    for (cg3::Graph<int>::AdjacentIterator itAdj = graph.adjacentBegin(nodeIt4);
+         itAdj != graph.adjacentEnd(nodeIt4); itAdj++)
+    {
         std::cout << *itAdj << " ";
     }
     std::cout << std::endl;
@@ -754,16 +761,18 @@ void GraphSamples::sampleIterators() {
 
     //Delete nodes using adjacent node iterators
     std::cout << "Delete nodes adjacent to node 4...";
-    for (cg3::Graph<int>::AdjacentNodeIterator it = graph.adjacentNodeIteratorBegin(nodeIt4); it != graph.adjacentNodeIteratorEnd(nodeIt4);) {
+    for (cg3::Graph<int>::AdjacentIterator it = graph.adjacentBegin(nodeIt4);
+         it != graph.adjacentEnd(nodeIt4);)
+    {
         graph.deleteNode(it++);
     }
     std::cout << std::endl;
 
     //Adjacencies
     std::cout << "Adjacencies: " << std::endl;
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " -> ";
-        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+        for (const int& adjacentNode : graph.adjacentIterator(node)) {
             std::cout << adjacentNode << " ";
         }
         std::cout << std::endl;
@@ -775,17 +784,19 @@ void GraphSamples::sampleIterators() {
 
     //Delete edges using adjacent node iterators
     std::cout << "Delete edges of node 1...";
-    cg3::Graph<int>::NodeIterator nodeIt1 = graph.findNode(1);
-    for (cg3::Graph<int>::AdjacentNodeIterator it = graph.adjacentNodeIteratorBegin(nodeIt1); it != graph.adjacentNodeIteratorEnd(nodeIt1);) {
+    cg3::Graph<int>::iterator nodeIt1 = graph.findNode(1);
+    for (cg3::Graph<int>::AdjacentIterator it = graph.adjacentBegin(nodeIt1);
+         it != graph.adjacentEnd(nodeIt1);)
+    {
         graph.deleteEdge(nodeIt1, it++);
     }
     std::cout << std::endl;
 
     //Adjacencies
     std::cout << "Adjacencies: " << std::endl;
-    for (const int& node : graph.nodeIterator()) {
+    for (const int& node : graph) {
         std::cout << node << " -> ";
-        for (const int& adjacentNode : graph.adjacentNodeIterator(node)) {
+        for (const int& adjacentNode : graph.adjacentIterator(node)) {
             std::cout << adjacentNode << " ";
         }
         std::cout << std::endl;
@@ -845,7 +856,7 @@ void GraphSamples::sampleDijkstra() {
 
     std::cout << std::endl;
 
-    for (const int& node : g.nodeIterator()) {
+    for (const int& node : g) {
         cg3::DijkstraResult<int>::iterator findIt = pathMap0.find(node);
 
         std::cout << "0 to " << node << "\t->\t";

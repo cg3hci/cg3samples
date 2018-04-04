@@ -54,7 +54,7 @@ void testCorrectness() {
     //Test directed graph
     cg3::Graph<int> graph;
 
-    cg3::Graph<int>::NodeIterator n2 = graph.nodeIteratorEnd(), n3 = graph.nodeIteratorEnd(), n4 = graph.nodeIteratorEnd(), nDuplicate = graph.nodeIteratorEnd();
+    cg3::Graph<int>::NodeIterator n2 = graph.nodeEnd(), n3 = graph.nodeEnd(), n4 = graph.nodeEnd(), nDuplicate = graph.nodeEnd();
     CG3_SUPPRESS_WARNING(n4);
     CG3_SUPPRESS_WARNING(nDuplicate);
 
@@ -67,21 +67,21 @@ void testCorrectness() {
     }
 
     graph.addNode(2);
-    assert(graph.findNode(2) != graph.nodeIteratorEnd());
+    assert(graph.findNode(2) != graph.nodeEnd());
 
-    for (const int& adjNumber : graph.adjacentNodeIterator(2)) {
+    for (const int& adjNumber : graph.adjacentIterator(2)) {
         CG3_SUPPRESS_WARNING(adjNumber);
     }
 
     graph.deleteNode(2);
-    assert(graph.findNode(2) == graph.nodeIteratorEnd());
+    assert(graph.findNode(2) == graph.nodeEnd());
     n2 = graph.addNode(2);
     n3 = graph.addNode(3);
     nDuplicate = graph.addNode(3);
 
-    assert(n2 != graph.nodeIteratorEnd());
-    assert(n3 != graph.nodeIteratorEnd());
-    assert(nDuplicate == graph.nodeIteratorEnd());
+    assert(n2 != graph.nodeEnd());
+    assert(n3 != graph.nodeEnd());
+    assert(nDuplicate == graph.nodeEnd());
 
     assert(!graph.isAdjacent(2, 3));
     assert(!graph.isAdjacent(n2, n3));
@@ -139,15 +139,15 @@ void testCorrectness() {
     //Test undirected graph
     cg3::Graph<int> undirectedGraph(cg3::GraphType::UNDIRECTED);
     undirectedGraph.addNode(2);
-    assert(undirectedGraph.findNode(2) != undirectedGraph.nodeIteratorEnd());
+    assert(undirectedGraph.findNode(2) != undirectedGraph.nodeEnd());
     undirectedGraph.deleteNode(2);
-    assert(undirectedGraph.findNode(2) == undirectedGraph.nodeIteratorEnd());
+    assert(undirectedGraph.findNode(2) == undirectedGraph.nodeEnd());
     n2 = undirectedGraph.addNode(2);
     n3 = undirectedGraph.addNode(3);
     nDuplicate = undirectedGraph.addNode(3);
-    assert(n2 != undirectedGraph.nodeIteratorEnd());
-    assert(n3 != undirectedGraph.nodeIteratorEnd());
-    assert(nDuplicate == undirectedGraph.nodeIteratorEnd());
+    assert(n2 != undirectedGraph.nodeEnd());
+    assert(n3 != undirectedGraph.nodeEnd());
+    assert(nDuplicate == undirectedGraph.nodeEnd());
 
     assert(!undirectedGraph.isAdjacent(2, 3));
     assert(!undirectedGraph.isAdjacent(n2, n3));
@@ -187,7 +187,7 @@ void testCorrectness() {
 
 
     int number = 0;
-    for (const int& n : undirectedGraph.adjacentNodeIterator(n4)) {
+    for (const int& n : undirectedGraph.adjacentIterator(n4)) {
         CG3_SUPPRESS_WARNING(n);
         number++;
     }
@@ -210,13 +210,13 @@ void testCorrectness() {
         CG3_SUPPRESS_WARNING(pair);
         number++;
 
-        assert(undirectedGraph.findNode(pair.first) != undirectedGraph.nodeIteratorEnd());
-        assert(undirectedGraph.findNode(pair.second) != undirectedGraph.nodeIteratorEnd());
+        assert(undirectedGraph.findNode(pair.first) != undirectedGraph.nodeEnd());
+        assert(undirectedGraph.findNode(pair.second) != undirectedGraph.nodeEnd());
     }
     assert(number == 2);
 
     number = 0;
-    for (const int& n : undirectedGraph.adjacentNodeIterator(n4)) {
+    for (const int& n : undirectedGraph.adjacentIterator(n4)) {
         CG3_SUPPRESS_WARNING(n);
         number++;
 
@@ -225,7 +225,7 @@ void testCorrectness() {
     assert(number == 1);
 
     number = 0;
-    for (const int& n : undirectedGraph.adjacentNodeIterator(n2)) {
+    for (const int& n : undirectedGraph.adjacentIterator(n2)) {
         CG3_SUPPRESS_WARNING(n);
         number++;
 
@@ -386,8 +386,8 @@ void testDijkstra()
 
         timer.start();
 
-        for (IntGraph::NodeIterator it1 = graph.nodeIteratorBegin(); nEdges < MAXEDGES && it1 != graph.nodeIteratorEnd(); it1++) {
-            for (IntGraph::NodeIterator it2 = graph.nodeIteratorBegin(); nEdges < MAXEDGES && it2 != graph.nodeIteratorEnd(); it2++) {
+        for (IntGraph::NodeIterator it1 = graph.nodeBegin(); nEdges < MAXEDGES && it1 != graph.nodeEnd(); it1++) {
+            for (IntGraph::NodeIterator it2 = graph.nodeBegin(); nEdges < MAXEDGES && it2 != graph.nodeEnd(); it2++) {
                 double weight = std::abs((long) distIn(rng)) % MAXWEIGHT;
                 graph.addEdge(it1, it2, weight);
                 nEdges++;
@@ -406,8 +406,8 @@ void testDijkstra()
 
         timer.start();
 
-        for (IntGraph::NodeIterator it1 = graph.nodeIteratorBegin(); nEdges > 0 && it1 != graph.nodeIteratorEnd(); it1++) {
-            for (IntGraph::NodeIterator it2 = graph.nodeIteratorBegin(); nEdges > 0 && it2 != graph.nodeIteratorEnd(); it2++) {
+        for (IntGraph::NodeIterator it1 = graph.nodeBegin(); nEdges > 0 && it1 != graph.nodeEnd(); it1++) {
+            for (IntGraph::NodeIterator it2 = graph.nodeBegin(); nEdges > 0 && it2 != graph.nodeEnd(); it2++) {
                 graph.deleteEdge(it1, it2);
                 nEdges--;
             }
@@ -465,7 +465,7 @@ void testDijkstra()
 
         timer.start();
 
-        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+        for (IntGraph::NodeIterator it = graph.nodeBegin(); it != graph.nodeEnd(); it++) {
             int n = *it;
             cg3::dijkstra(graph, n);
         }
@@ -495,7 +495,7 @@ void testDijkstra()
 
         timer.start();
 
-        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+        for (IntGraph::NodeIterator it = graph.nodeBegin(); it != graph.nodeEnd(); it++) {
             int n = *it;
             cg3::dijkstra(graph, n);
         }
@@ -557,7 +557,7 @@ void testDijkstra()
 
         timer.start();
 
-        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+        for (IntGraph::NodeIterator it = graph.nodeBegin(); it != graph.nodeEnd(); it++) {
             int n = *it;
             cg3::dijkstra(graph, n);
         }
@@ -586,7 +586,7 @@ void testDijkstra()
 
         timer.start();
 
-        for (IntGraph::NodeIterator it = graph.nodeIteratorBegin(); it != graph.nodeIteratorEnd(); it++) {
+        for (IntGraph::NodeIterator it = graph.nodeBegin(); it != graph.nodeEnd(); it++) {
             int n = *it;
             cg3::dijkstra(graph, n);
         }
