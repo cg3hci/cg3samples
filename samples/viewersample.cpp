@@ -29,7 +29,7 @@ int ViewerSample::viewer(int argc, char *argv[]) {
 #endif
 
     gui.setCurrentIndexToolBox(id); // il window manager sarà quello visualizzato di default
-    gui.updateGlCanvas();
+    gui.update();
     gui.show();
 
     return app.exec();

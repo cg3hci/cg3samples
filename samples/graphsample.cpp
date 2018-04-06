@@ -878,16 +878,18 @@ void GraphSamples::sampleDijkstra() {
 
     std::cout << std::endl;
 
-    //Execute dijkstra (we use std::map<int, cg3::GraphPath<int>> instead of DijkstraResult<int>)
-    std::cout << "Execute Dijkstra algorithm (source is 1)..." << std::endl;
-    std::map<int, cg3::GraphPath<int>> pathMap1 = cg3::dijkstra(g, 1);
+    //Execute dijkstra using source iterator (we use std::map<int, cg3::GraphPath<int>>
+    //instead of DijkstraResult<int>)
+    std::cout << "Execute Dijkstra algorithm (source is 2) using iterators..." << std::endl;
+    cg3::Graph<int>::iterator it2 = g.findNode(2);
+    std::map<int, cg3::GraphPath<int>> pathMap1 = cg3::dijkstra(g, it2);
 
     std::cout << std::endl;
 
     for (const int& node : g.nodeIterator()) {
         std::map<int, cg3::GraphPath<int>>::iterator findIt = pathMap1.find(node);
 
-        std::cout << "1 to " << node << "\t->\t";
+        std::cout << *it2 << " to " << node << "\t->\t";
 
         if (findIt != pathMap1.end()) {
             cg3::GraphPath<int>& graphPath = findIt->second;
@@ -910,7 +912,7 @@ void GraphSamples::sampleDijkstra() {
     //Execute dijkstra to get the shortest path from source to destination.
     //We do not need a map
     cg3::GraphPath<int> path14 = cg3::dijkstra(g, 1, 4);
-    std::cout << "Single path: 1 to 4 -> ";
+    std::cout << "Single path: \t 1 to 4 -> ";
     if (!path14.path.empty()) {
         std::cout << "Cost: " << path14.cost << "\tPath: ";
 
@@ -927,11 +929,30 @@ void GraphSamples::sampleDijkstra() {
     //Execute dijkstra to get the shortest path from source to destination.
     //We do not need a map
     cg3::GraphPath<int> path29 = cg3::dijkstra(g, 2, 9);
-    std::cout << "Single path: 2 to 9 -> ";
+    std::cout << "Single path: \t 2 to 9 -> ";
     if (!path29.path.empty()) {
         std::cout << "Cost: " << path29.cost << "\tPath: ";
 
         for (int pathNode : path29.path) {
+            std::cout << pathNode << " ";
+        }
+    }
+    else {
+        std::cout << "No path found!";
+    }
+
+    std::cout << std::endl;
+
+    //Execute dijkstra to get the shortest path from source to destination using iterators
+    //We do not need a map
+    cg3::Graph<int>::iterator it1 = g.findNode(1);
+    cg3::Graph<int>::iterator it6 = g.findNode(6);
+    cg3::GraphPath<int> path16 = cg3::dijkstra(g, it1, it6);
+    std::cout << "Single path (it): \t 1 to 6 -> ";
+    if (!path16.path.empty()) {
+        std::cout << "Cost: " << path16.cost << "\tPath: ";
+
+        for (int pathNode : path16.path) {
             std::cout << pathNode << " ";
         }
     }

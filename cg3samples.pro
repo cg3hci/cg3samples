@@ -11,7 +11,7 @@ CONFIG(release, debug|release){
 FINAL_RELEASE {
     unix:!macx{
         QMAKE_CXXFLAGS_RELEASE -= -g -O2
-        QMAKE_CXXFLAGS += -Os -DNDEBUG
+        QMAKE_CXXFLAGS += -O3 -DNDEBUG
     }
 }
 
