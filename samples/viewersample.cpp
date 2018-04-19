@@ -28,7 +28,7 @@ int ViewerSample::viewer(int argc, char *argv[]) {
     id = gui.addManager(&dm, "Dcel");
 #endif
 
-    gui.setCurrentIndexToolBox(id); // il window manager sarà quello visualizzato di default
+    gui.setCurrentManager(id); // il window manager sarà quello visualizzato di default
     gui.update();
     gui.show();
 
