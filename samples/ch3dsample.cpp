@@ -21,8 +21,8 @@ void CH3DSamples::execute() {
     std::string p2("/data/convex_hull_airplane.obj");
     fp = p0 + p2;
     std::replace(fp.begin(), fp.end(), '/', '\\');
-    ch.saveOnObjFile(fp);
+    ch.saveOnObj(fp);
     #else
-    ch.saveOnObjFile(CG3_STRINGIFY(CG3_SAMPLES_HOME) "/data/convex_hull_airplane.obj");
+    ch.saveOnObj(CG3_STRINGIFY(CG3_SAMPLES_HOME) "/data/convex_hull_airplane.obj");
     #endif
 }

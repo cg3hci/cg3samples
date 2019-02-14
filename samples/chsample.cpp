@@ -73,10 +73,10 @@ void CHSamples::execute()
 
     //Computing convex hull
     //Template <double> would be not needed
-    cg3::getConvexHull2D<int>(points.begin(), points.end(), std::back_inserter(outputConvexHull));
+    cg3::convexHull2D<int>(points.begin(), points.end(), std::back_inserter(outputConvexHull));
 
     //Alternative with containers
-//    cg3::getConvexHull2D<int>(points, outputConvexHull);
+//    cg3::convexHull2D<int>(points, outputConvexHull);
 
 
     //Set all convex hull points to "x"
@@ -144,7 +144,7 @@ void CHSamples::execute()
 
     //Output convex hull
     std::list<Point2D> outputIncrementalConvexHull;
-    incrementalConvexHull.getConvexHull(std::back_inserter(outputIncrementalConvexHull));
+    incrementalConvexHull.convexHull(std::back_inserter(outputIncrementalConvexHull));
 
     //Set all convex hull points to "x"
     for (std::list<Point2D>::iterator it = outputIncrementalConvexHull.begin(); it != outputIncrementalConvexHull.end(); it++) {

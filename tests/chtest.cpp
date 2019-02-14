@@ -69,11 +69,11 @@ void testCorrectness() {
     std::list<Point2D> convexHullIncremental;
 
     //No data
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 0);
 
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 0);
 
 
@@ -82,12 +82,12 @@ void testCorrectness() {
     convexHull.clear();
     points.push_back(Point2D(0,0));
 
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
     convexHullIncremental.clear();
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 1);
 
 
@@ -97,12 +97,12 @@ void testCorrectness() {
     points.push_back(Point2D(0,0));
     points.push_back(Point2D(0,0));
 
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
     convexHullIncremental.clear();
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 1);
 
 
@@ -113,12 +113,12 @@ void testCorrectness() {
     points.push_back(Point2D(3,5));
     points.push_back(Point2D(3,5));
 
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
     convexHullIncremental.clear();
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 1);
 
 
@@ -132,12 +132,12 @@ void testCorrectness() {
     points.push_back(Point2D(3,5));
     points.push_back(Point2D(3,5));
 
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 1);
 
     convexHullIncremental.clear();
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 1);
 
 
@@ -148,12 +148,12 @@ void testCorrectness() {
     points.push_back(Point2D(0,5));
     points.push_back(Point2D(3,5));
 
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 2);
 
     convexHullIncremental.clear();
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 2);
 
 
@@ -164,12 +164,12 @@ void testCorrectness() {
     points.push_back(Point2D(0,5));
     points.push_back(Point2D(0,10));
 
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 2);
 
     convexHullIncremental.clear();
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 2);
 
 
@@ -180,12 +180,12 @@ void testCorrectness() {
     points.push_back(Point2D(0,5));
     points.push_back(Point2D(1,1));
 
-    cg3::getConvexHull2D(points, convexHull);
+    cg3::convexHull2D(points, convexHull);
     assert(convexHull.size() == 3);
 
     convexHullIncremental.clear();
     ch = cg3::IncrementalConvexHull<double>(points);
-    ch.getConvexHull(std::back_inserter(convexHullIncremental));
+    ch.convexHull(std::back_inserter(convexHullIncremental));
     assert(convexHullIncremental.size() == 3);
 }
 
@@ -332,7 +332,7 @@ void testGrahamScan(std::vector<Point2D>& testPoints)
     timer.start();
 
     std::list<Point2D> convexHull;
-    cg3::getConvexHull2D(testPoints, convexHull);
+    cg3::convexHull2D(testPoints, convexHull);
 
     timer.stop();
 
@@ -404,7 +404,7 @@ void testIncremental(std::vector<Point2D>& testPoints)
         incrementalConvexHull.addPoint(p);
 
     std::list<Point2D> convexHull;
-    incrementalConvexHull.getConvexHull(std::back_inserter(convexHull));
+    incrementalConvexHull.convexHull(std::back_inserter(convexHull));
 
     timer.stop();
 
@@ -467,7 +467,7 @@ void testCGAL(std::vector<Point2D>& testPoints)
     timer.start();
 
     std::list<Point2D> convexHull;
-    cg3::cgal::getCGALConvexHull2D(testPoints, convexHull);
+    cg3::cgal::convexHull2D(testPoints, convexHull);
 
     timer.stop();
 

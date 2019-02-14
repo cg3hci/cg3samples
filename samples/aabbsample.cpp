@@ -204,17 +204,17 @@ double aabbValueExtractor(
     if (valueType == AABBValueType::MIN) {
         switch (dim) {
         case 1:
-            return (double) std::min(segment.getP1().x(), segment.getP2().x());
+            return (double) std::min(segment.p1().x(), segment.p2().x());
         case 2:
-            return (double) std::min(segment.getP1().y(), segment.getP2().y());
+            return (double) std::min(segment.p1().y(), segment.p2().y());
         }
     }
     if (valueType == AABBValueType::MAX) {
         switch (dim) {
         case 1:
-            return (double) std::max(segment.getP1().x(), segment.getP2().x());
+            return (double) std::max(segment.p1().x(), segment.p2().x());
         case 2:
-            return (double) std::max(segment.getP1().y(), segment.getP2().y());
+            return (double) std::max(segment.p1().y(), segment.p2().y());
         }
     }
     assert(false);
@@ -227,15 +227,15 @@ double aabbValueExtractor(
  * or they collide
  */
 bool segment2DIntersectionChecker(const Segment2D& segment1, const Segment2D& segment2) {
-    double s1MinX = std::min(segment1.getP1().x(), segment1.getP2().x());
-    double s2MinX = std::min(segment2.getP1().x(), segment2.getP2().x());
-    double s1MaxX = std::max(segment1.getP1().x(), segment1.getP2().x());
-    double s2MaxX = std::max(segment2.getP1().x(), segment2.getP2().x());
+    double s1MinX = std::min(segment1.p1().x(), segment1.p2().x());
+    double s2MinX = std::min(segment2.p1().x(), segment2.p2().x());
+    double s1MaxX = std::max(segment1.p1().x(), segment1.p2().x());
+    double s2MaxX = std::max(segment2.p1().x(), segment2.p2().x());
 
-    double s1MinY = std::min(segment1.getP1().y(), segment1.getP2().y());
-    double s2MinY = std::min(segment2.getP1().y(), segment2.getP2().y());
-    double s1MaxY = std::max(segment1.getP1().y(), segment1.getP2().y());
-    double s2MaxY = std::max(segment2.getP1().y(), segment2.getP2().y());
+    double s1MinY = std::min(segment1.p1().y(), segment1.p2().y());
+    double s2MinY = std::min(segment2.p1().y(), segment2.p2().y());
+    double s1MaxY = std::max(segment1.p1().y(), segment1.p2().y());
+    double s2MaxY = std::max(segment2.p1().y(), segment2.p2().y());
 
     Point2D a(s1MinX, s1MinY);
     Point2D b(s1MaxX, s1MaxY);
@@ -271,9 +271,9 @@ bool segment2DIntersectionChecker(const Segment2D& segment1, const Segment2D& se
  * returned true
  */
 bool segment2DCustomComparator(const Segment2D& o1, const Segment2D& o2) {
-    if (o1.getP1() < o2.getP1())
+    if (o1.p1() < o2.p1())
         return true;
-    if (o2.getP2() < o1.getP1())
+    if (o2.p2() < o1.p1())
         return false;
-    return o1.getP2() < o2.getP2();
+    return o1.p2() < o2.p2();
 }

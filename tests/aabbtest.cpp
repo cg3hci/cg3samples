@@ -199,23 +199,23 @@ void testProgressive() {
 
 
 bool aabbOverlap(const Segment1D &segment1, const Segment1D &segment2) {
-    double s1Min = std::min(segment1.getP1(), segment1.getP2());
-    double s2Min = std::min(segment2.getP1(), segment2.getP2());
-    double s1Max = std::max(segment1.getP1(), segment1.getP2());
-    double s2Max = std::max(segment2.getP1(), segment2.getP2());
+    double s1Min = std::min(segment1.p1(), segment1.p2());
+    double s2Min = std::min(segment2.p1(), segment2.p2());
+    double s1Max = std::max(segment1.p1(), segment1.p2());
+    double s2Max = std::max(segment2.p1(), segment2.p2());
     return (s1Min <= s2Max && s1Max >= s2Min);
 }
 
 bool aabbOverlap(const Segment2D &segment1, const Segment2D &segment2) {
-    double s1MinX = std::min(segment1.getP1().x(), segment1.getP2().x());
-    double s2MinX = std::min(segment2.getP1().x(), segment2.getP2().x());
-    double s1MaxX = std::max(segment1.getP1().x(), segment1.getP2().x());
-    double s2MaxX = std::max(segment2.getP1().x(), segment2.getP2().x());
+    double s1MinX = std::min(segment1.p1().x(), segment1.p2().x());
+    double s2MinX = std::min(segment2.p1().x(), segment2.p2().x());
+    double s1MaxX = std::max(segment1.p1().x(), segment1.p2().x());
+    double s2MaxX = std::max(segment2.p1().x(), segment2.p2().x());
 
-    double s1MinY = std::min(segment1.getP1().y(), segment1.getP2().y());
-    double s2MinY = std::min(segment2.getP1().y(), segment2.getP2().y());
-    double s1MaxY = std::max(segment1.getP1().y(), segment1.getP2().y());
-    double s2MaxY = std::max(segment2.getP1().y(), segment2.getP2().y());
+    double s1MinY = std::min(segment1.p1().y(), segment1.p2().y());
+    double s2MinY = std::min(segment2.p1().y(), segment2.p2().y());
+    double s1MaxY = std::max(segment1.p1().y(), segment1.p2().y());
+    double s2MaxY = std::max(segment2.p1().y(), segment2.p2().y());
 
     return
             (s1MinX <= s2MaxX && s1MaxX >= s2MinX) &&
@@ -229,13 +229,13 @@ double aabbValueExtractor(const Segment1D& segment, const AABBValueType& valueTy
     if (valueType == AABBValueType::MIN) {
         switch (dim) {
         case 1:
-            return (double) std::min(segment.getP1(), segment.getP2());
+            return (double) std::min(segment.p1(), segment.p2());
         }
     }
     if (valueType == AABBValueType::MAX) {
         switch (dim) {
         case 1:
-            return (double) std::max(segment.getP1(), segment.getP2());
+            return (double) std::max(segment.p1(), segment.p2());
         }
     }
 
@@ -247,17 +247,17 @@ double aabbValueExtractor(const Segment2D& segment, const AABBValueType& valueTy
     if (valueType == AABBValueType::MIN) {
         switch (dim) {
         case 1:
-            return (double) std::min(segment.getP1().x(), segment.getP2().x());
+            return (double) std::min(segment.p1().x(), segment.p2().x());
         case 2:
-            return (double) std::min(segment.getP1().y(), segment.getP2().y());
+            return (double) std::min(segment.p1().y(), segment.p2().y());
         }
     }
     if (valueType == AABBValueType::MAX) {
         switch (dim) {
         case 1:
-            return (double) std::max(segment.getP1().x(), segment.getP2().x());
+            return (double) std::max(segment.p1().x(), segment.p2().x());
         case 2:
-            return (double) std::max(segment.getP1().y(), segment.getP2().y());
+            return (double) std::max(segment.p1().y(), segment.p2().y());
         }
     }
 
@@ -269,23 +269,23 @@ double aabbValueExtractor(const Segment2D& segment, const AABBValueType& valueTy
 
 
 bool segmentIntersection(const Segment1D &segment1, const Segment1D &segment2) {
-    double s1Min = std::min(segment1.getP1(), segment1.getP2());
-    double s2Min = std::min(segment2.getP1(), segment2.getP2());
-    double s1Max = std::max(segment1.getP1(), segment1.getP2());
-    double s2Max = std::max(segment2.getP1(), segment2.getP2());
+    double s1Min = std::min(segment1.p1(), segment1.p2());
+    double s2Min = std::min(segment2.p1(), segment2.p2());
+    double s1Max = std::max(segment1.p1(), segment1.p2());
+    double s2Max = std::max(segment2.p1(), segment2.p2());
     return (s1Min <= s2Max && s1Max >= s2Min);
 }
 
 bool segmentIntersection(const Segment2D &segment1, const Segment2D &segment2) {
-    double s1MinX = std::min(segment1.getP1().x(), segment1.getP2().x());
-    double s2MinX = std::min(segment2.getP1().x(), segment2.getP2().x());
-    double s1MaxX = std::max(segment1.getP1().x(), segment1.getP2().x());
-    double s2MaxX = std::max(segment2.getP1().x(), segment2.getP2().x());
+    double s1MinX = std::min(segment1.p1().x(), segment1.p2().x());
+    double s2MinX = std::min(segment2.p1().x(), segment2.p2().x());
+    double s1MaxX = std::max(segment1.p1().x(), segment1.p2().x());
+    double s2MaxX = std::max(segment2.p1().x(), segment2.p2().x());
 
-    double s1MinY = std::min(segment1.getP1().y(), segment1.getP2().y());
-    double s2MinY = std::min(segment2.getP1().y(), segment2.getP2().y());
-    double s1MaxY = std::max(segment1.getP1().y(), segment1.getP2().y());
-    double s2MaxY = std::max(segment2.getP1().y(), segment2.getP2().y());
+    double s1MinY = std::min(segment1.p1().y(), segment1.p2().y());
+    double s2MinY = std::min(segment2.p1().y(), segment2.p2().y());
+    double s1MaxY = std::max(segment1.p1().y(), segment1.p2().y());
+    double s2MaxY = std::max(segment2.p1().y(), segment2.p2().y());
 
     Point2D a(s1MinX, s1MinY);
     Point2D b(s1MaxX, s1MaxY);
@@ -358,16 +358,16 @@ void doTestsOnInput(std::vector<int> &testNumbers, std::vector<int> &randomNumbe
     for (size_t i = 0; i < testNumbers.size(); i++) {
         Segment1D segment(testNumbers.at(i), testNumbers.at(testNumbers.size()-1-i));
 
-        if (std::abs(segment.getP2() - segment.getP1()) > MAXLENGTH)
-            segment.setP2(segment.getP1() + MAXLENGTH);
+        if (std::abs(segment.p2() - segment.p1()) > MAXLENGTH)
+            segment.setP2(segment.p1() + MAXLENGTH);
 
         testSegment1D.push_back(segment);
     }
     for (size_t i = 0; i < randomNumbers.size(); i++) {
         Segment1D segment(randomNumbers.at(i), randomNumbers.at(randomNumbers.size()-1-i));
 
-        if (std::abs(segment.getP2() - segment.getP1()) > MAXLENGTH)
-            segment.setP2(segment.getP1() + MAXLENGTH);
+        if (std::abs(segment.p2() - segment.p1()) > MAXLENGTH)
+            segment.setP2(segment.p1() + MAXLENGTH);
 
         randomSegment1D.push_back(segment);
     }
