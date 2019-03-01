@@ -39,7 +39,7 @@ void GraphSamples::sampleBasic() {
 
     std::cout << "Create a directed graph..." << std::endl;
     //In constructor, cg3::GraphType::DIRECTED is the default type
-    cg3::Graph<int> graph(cg3::GraphType::DIRECTED);
+    cg3::Graph<int> graph(cg3::Graph<int>::DIRECTED);
 
     //Add node 1 and 2
     std::cout << "Add node 1 and 2" << std::endl;
@@ -314,7 +314,7 @@ void GraphSamples::sampleUndirected() {
 
     //Create graph
     std::cout << "Create undirected graph..." << std::endl;
-    cg3::Graph<int> uGraph(cg3::GraphType::UNDIRECTED); //cg3::GraphType::DIRECTED is the default type
+    cg3::Graph<int> uGraph(cg3::Graph<int>::UNDIRECTED); //cg3::GraphType::DIRECTED is the default type
 
 
 
@@ -456,7 +456,7 @@ void GraphSamples::sampleWeighted() {
 
     //Create graph
     std::cout << "Create undirected graph..." << std::endl;
-    cg3::Graph<int> graph(cg3::GraphType::UNDIRECTED); //cg3::GraphType::DIRECTED is the default type
+    cg3::Graph<int> graph(cg3::Graph<int>::UNDIRECTED); //cg3::GraphType::DIRECTED is the default type
 
 
     double weight;
@@ -817,7 +817,7 @@ void GraphSamples::sampleDijkstra() {
 
     std::cout << "Create a graph of 10 nodes with some edges..." << std::endl;
 
-    cg3::Graph<int> g(cg3::GraphType::UNDIRECTED);
+    cg3::Graph<int> g(cg3::Graph<int>::UNDIRECTED);
 
     //Add nodes
     g.addNode(0);

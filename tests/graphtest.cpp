@@ -137,7 +137,7 @@ void testCorrectness() {
 
 
     //Test undirected graph
-    cg3::Graph<int> undirectedGraph(cg3::GraphType::UNDIRECTED);
+    cg3::Graph<int> undirectedGraph(cg3::Graph<int>::UNDIRECTED);
     undirectedGraph.addNode(2);
     assert(undirectedGraph.findNode(2) != undirectedGraph.nodeEnd());
     undirectedGraph.deleteNode(2);
